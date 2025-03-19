@@ -68,7 +68,7 @@ export default function Header() {
           <PrimaryButton
             onClick={handleLoginClick}
             name="Relatar Amontoados"
-            addClassName="w-full border-6 border-x-green-500"
+            addClassName="w-full"
           />
         </nav>
       </div>

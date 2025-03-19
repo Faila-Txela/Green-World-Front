@@ -1,4 +1,3 @@
-import Sidebar from "../../components/Sidebar";
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Map from "../../components/Map";
 import Relatos from "../../components/Relatos";
@@ -29,7 +28,7 @@ const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
 const Dashboard = () => {
   return (
     <div className="h-screen">
-      <Sidebar />
+      
 
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">

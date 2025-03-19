@@ -67,15 +67,15 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 1 }}
       >
-        <div className="flex-1 text-center md:text-left">
-          <h1 className="text-4xl font-bold text-center p-5">
+        <div className="p-3">
+          <h1 className="text-5xl font-extrabold text-global-color-three leading-tight">
             Luanda mais limpa começa com você!
           </h1>
-          <p className="text-center">
+          <p className="text-lg text-gray-700 mt-4">
             Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!
           </p>
-          <div className="flex justify-center md:justify-center my-4">
-            <PrimaryButton name="Comece a Relatar" addClassName="w-[22rem]" onClick={() => navigate('/Login')} />
+          <div className="flex justify-center my-4">
+            <PrimaryButton name="Comece a Relatar" addClassName="px-20 py-3 text-lg" onClick={() => navigate('/Login')} />
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export default function Home() {
         transition={{ duration: 1, delay: 0.2 }}
       >
         <div className="text-center">
-          <h2 className="text-2xl font-bold">Estado do saneamento em Luanda</h2>
+          <h2 className="text-3xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
           <p className="text-gray-600">
             Tenha as notícias sempre perto de si, sem precisar sair de casa.
           </p>
@@ -120,8 +120,7 @@ export default function Home() {
 
         <Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
 
-         {/* Seção Card */}
-        <div className="min-h-screen w-full bg-gray-50">
+        <div className="">
           <Card />
         </div>
 
@@ -141,7 +140,7 @@ export default function Home() {
       >
         <div className="text-start w-full max-w-xl md:max-w-2xl">
           <p className="text-gray-600 font-semibold text-lg sm:text-xl">FAQ</p>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Perguntas e Respostas Mais Frequentes</h2>
+          <h2 className="text-3xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
         </div>
         
         <div className="w-full max-w-2xl space-y-4">
@@ -165,5 +164,3 @@ export default function Home() {
     </div>
   );
 }
-
-
