@@ -46,7 +46,7 @@ const getMarkerIcon = (estado: string) => {
 
 const Map = () => {
   return (
-    <div className="w-full md:w-[50rem] h-80 mb-16 mt-14">
+    <div className="w-full md:w-[50rem] h-80 mb-16 mt-14 relative z-10">
       <MapContainer center={[-8.83833, 13.2571]} zoom={13} style={{ width: "100%", height: "100%" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

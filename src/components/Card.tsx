@@ -12,7 +12,7 @@ export default function CardCarousel() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.2 }}
       >
-        <h2 className="text-3xl font-bold text-green-700">Benefícios de usar a Green World</h2>
+        <h2 className="text-3xl font-bold text-green-700 p-4">Benefícios de usar a Green World</h2>
         <p className="text-gray-600 mb-10 px-4">
           Descubra como você pode se beneficiar ao contribuir para um ambiente mais limpo.
         </p>

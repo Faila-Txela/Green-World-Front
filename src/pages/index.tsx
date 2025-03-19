@@ -12,6 +12,24 @@ import Card from "../components/Card";
 import Map from "../components/Map";
 import { motion } from "framer-motion"; // Importando framer-motion
 
+function Modal({ item, onClose }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+        <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-red-600">✖</button>
+        <h2 className="text-xl font-bold mb-2">{item.title}</h2>
+        {item.type === "image" ? (
+          <img src={item.src} alt={item.title} className="w-full rounded-md" />
+        ) : (
+          <video src={item.src} controls className="w-full rounded-md" />
+        )}
+        <p className="mt-2 text-gray-700">{item.description}</p>
+        <p className="text-sm text-gray-500">Publicado: {item.time}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
@@ -28,7 +46,13 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lista de FAQs
+  const midiaItens = [
+    { type: "image", src: image2, title: "Coleta Seletiva", description: "A importância da separação correta dos resíduos.", time: "2h atrás" },
+    { type: "video", src: video, title: "Processo de Reciclagem", description: "Como funciona a coleta seletiva em Luanda.", time: "4h atrás" },
+    { type: "image", src: image4, title: "Carta aos Catadores", description: "O papel dos catadores na limpeza urbana.", time: "1 dia atrás" },
+    { type: "video", src: video2, title: "História dos Catadores", description: "A luta diária dos catadores de lixo.", time: "3 dias atrás" },
+  ];
+
   const faqs = [
     {
       question: "Como posso relatar amontoados de lixo?",
@@ -48,19 +72,10 @@ export default function Home() {
     },
   ];
 
-  const midiaItens = [
-    { type: "image", src: image2, title: "Coleta Seletiva", description: "A importância da separação correta dos resíduos.", time: "2h atrás" },
-    { type: "video", src: video, title: "Processo de Reciclagem", description: "Como funciona a coleta seletiva em Luanda.", time: "4h atrás" },
-    { type: "image", src: image4, title: "Carta aos Catadores", description: "O papel dos catadores na limpeza urbana.", time: "1 dia atrás" },
-    { type: "video", src: video2, title: "História dos Catadores", description: "A luta diária dos catadores de lixo.", time: "3 dias atrás" },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col">
-
       <Header />
       
-      {/* Seção Inicial */}
       <motion.div 
         className="min-h-screen inset-shadow-sm rounded-sm flex md:flex-row flex-col items-center gap-6 px-4 pt-20 md:pt-32"
         initial={{ opacity: 0, y: 50 }} 
@@ -80,12 +95,10 @@ export default function Home() {
         </div>
 
         <div className="">
-        {/* Mapa Interativo */}
           <Map />
         </div>
       </motion.div>
 
-      {/* Seção Notícias */}
       <motion.div
         className="min-h-screen flex flex-col items-center justify-center gap-6 p-6"
         initial={{ opacity: 0, y: 50 }} 
@@ -99,7 +112,7 @@ export default function Home() {
           </p>
         </div>
 
-        <section className="columns-2 md:columns-2 gap-4 space-y-4">
+        <section className="columns-2 md:columns-2 gap-2 space-y-6">
           {midiaItens.map((item, index) => (
             <motion.div
               key={index}
@@ -110,26 +123,28 @@ export default function Home() {
               transition={{ duration: 1, delay: index * 0.3 }}
             >
               {item.type === "image" ? (
-                <img className="w-full md:w-96 rounded-md" src={item.src} alt={item.title} />
+                <img className="w-full md:h-70 h-52 md:w-[32rem] rounded-md" src={item.src} alt={item.title} />
               ) : (
-                <video className="w-full md:w-96 rounded-md" src={item.src} autoPlay muted loop playsInline />
+                <video className="w-full md:h-70 md:w-[32rem] rounded-md" src={item.src} autoPlay muted loop playsInline />
               )}
             </motion.div>
           ))}
         </section>
 
         <Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
+      </motion.div>
+      
+      {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />} 
+      
+      <div className="mt-10">
+        <Card />
+      </div>
 
-        <div className="">
-          <Card />
-        </div>
-
-        <div className="relative w-full h-[80vh] bg-cover bg-fixed bg-center" style={{ backgroundImage: `url(${imageFixed})` }}>
+      <div className="relative w-full h-[80vh] bg-cover bg-fixed bg-center" style={{ backgroundImage: `url(${imageFixed})` }}>
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
             <h2 className="text-white text-3xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>
         </div>
-      </motion.div>
 
       {/* FAQ Seção */}
       <motion.div

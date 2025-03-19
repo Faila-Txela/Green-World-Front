@@ -34,7 +34,7 @@ export default function Header() {
     "text-white hover:global-color-primary text-[16px] font-bold hover:text-[#006943]";
 
   return (
-    <header className="flex bg-white fixed px-[5vw] w-full h-max z-50 justify-between items-center shadow-lg">
+    <header className="flex bg-white fixed px-[5vw] w-full h-max z-50 justify-between items-center shadow-lg z-50">
       <div>
         <Logo className="w-16  h-16 md:h-24 md:w-32" />
       </div>
