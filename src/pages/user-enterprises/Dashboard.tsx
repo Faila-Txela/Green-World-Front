@@ -1,91 +1,76 @@
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import Map from "../../components/Map";
-import Relatos from "../../components/Relatos";
-import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+import { IoMdArrowBack } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { FiSettings } from "react-icons/fi";
+import { GoReport } from "react-icons/go";
+import { VscFeedback } from "react-icons/vsc";
+import Principal from "components/Dashboard/Principal";
+import Relatar from "../../pages/user-normal/Relatar";
+import Settings from "components/client/Settings";
+import Feedback from "components/client/Feedback";
+//https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
- //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
+type ComponentKey = "Dashboard" | "Feedback" | "Relatar" | "Settings";
 
-const locationsData = [
-  { name: "Centro da Cidade", relatos: 120 },
-  { name: "Mutamba", relatos: 85 },
-  { name: "Viana", relatos: 65 },
-];
-
-const monthsData = [
-  { name: "Janeiro", coletados: 80 },
-  { name: "Fevereiro", coletados: 45 },
-  { name: "Março", coletados: 10 },
-];
-
-const wasteTypesData = [
-  { name: "Plástico", value: 26 },
-  { name: "Orgânico", value: 38 },
-  { name: "Metal", value: 10 },
-];
-
-const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
 
 const Dashboard = () => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [activeComponente, setActiveComponent] = useState<ComponentKey>("Dashboard");
+
+  // Definir o tipo correto das chaves do ComponentMap
+
+  const ComponentMap = {
+    Dashboard: <div>Dashboard</div>,
+    Feedback: <div>Feedback</div>,
+    Relatar: <div>Relatar</div>,
+    Settings: <div>Settings</div>
+  };
+
   return (
-    <div className="h-screen">
-      
+    <div className="flex">
+      <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
+        {/* Botão para abrir/fechar Sidebar */}
+        <button
+          className="fixed top-4 left-4 z-50 p-2 bg-green-700 text-white rounded-md"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <IoMdArrowBack size={24} /> : <RxHamburgerMenu size={24} />}
+        </button>
 
-      {/* Conteúdo principal */}
-      <div className="flex justify-center items-center flex-col">
-          <div>
-            <Map />
-          </div>
+        {/* Sidebar */}
+        <div className={`bg-green-800 h-screen fixed top-0 left-0 p-5 pt-20 text-white transition-all duration-300 ${isOpen ? "w-64" : "w-20"}`}>
 
-        {/* Gráficos organizados em grid responsivo */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
-          {/* Gráfico de Locais com Mais Relatos */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
-            <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={locationsData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="relatos" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          {/* Menu */}
+          <div className="space-y-5">
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Dashboard")}>
+              <MdOutlineSpaceDashboard size={20} />
+              {isOpen && <span>Dashboard</span>}
+            </div>
 
-          {/* Gráfico de Meses com Mais Recolhas */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
-            <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthsData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="coletados" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Relatar")}>
+              <GoReport size={20} />
+              {isOpen && <span>Relatar</span>}
+            </div>
 
-          {/* Gráfico de Tipos de Lixo Mais Retirados */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
-            <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={wasteTypesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                  {wasteTypesData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Feedback")}>
+              <VscFeedback size={20} />
+              {isOpen && <span>Feedback</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Settings")}>
+              <FiSettings size={20} />
+              {isOpen && <span>Configurações</span>}
+            </div>
           </div>
-        </div>
-        <div className="">
-        <Relatos />
         </div>
       </div>
+      {/* Conteúdo do Componente Ativo */}
+      <div className={isOpen ? "ml-[20vw] p-7 w-full mt-[10px]" : "ml-[6vw] p-7 w-full mt-[10px]" }>{ComponentMap[activeComponente]}</div>
     </div>
   );
 };
