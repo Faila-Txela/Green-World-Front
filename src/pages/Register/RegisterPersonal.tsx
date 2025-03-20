@@ -71,19 +71,19 @@ export default function UserForm() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-3xl p-8 bg-white shadow-xl rounded-2xl">
+      <div className="w-full max-w-2xl p-8 bg-white shadow-xl rounded-2xl">
         <div className="text-center mb-6 flex flex-col items-center justify-center gap-4">
         <Logo className="w-20 h-20"/>
           <h2 className="text-2xl font-bold text-gray-800">Cadastro do Cidadão Comum</h2>
         </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
-          <Link to='/register-enterprise' className="text-lg font-semibold flex items-center justify-center hover:text-green-800">Empresa</Link>
           <Link to='/register-personal' className="text-lg font-semibold flex items-center justify-center underline hover:text-green-800">Cidadão Comum</Link>
+          <Link to='/register-enterprise' className="text-lg font-semibold flex items-center justify-center hover:text-green-800">Empresa</Link>
          </div>
 
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form className="flex flex-col gap-6">
           <InputField label="Nome" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
           <InputField label="Email" type="email" name="email" value={formData.email} onChange={handleChange} icon={<FaEnvelope />} />
 
@@ -112,7 +112,7 @@ export default function UserForm() {
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
           <span><input type="checkbox" name="" id="" /></span>
-          <Link to="" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
+          <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">

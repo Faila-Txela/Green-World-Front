@@ -5,13 +5,14 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
-import Principal from "components/Dashboard/Principal";
-import Relatar from "../../pages/user-normal/Relatar";
-import Settings from "components/client/Settings";
-import Feedback from "components/client/Feedback";
+import Principal from "../../components/Dashboard/Principal";
+import Relatos from "../../components/Relatos";
+import Settings from "../../components/client/Settings";
+import Feedback from "../../components/client/Feedback";
+
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "Dashboard" | "Feedback" | "Relatar" | "Settings";
+type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings";
 
 
 const Dashboard = () => {
@@ -19,12 +20,11 @@ const Dashboard = () => {
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("Dashboard");
 
   // Definir o tipo correto das chaves do ComponentMap
-
   const ComponentMap = {
-    Dashboard: <div>Dashboard</div>,
-    Feedback: <div>Feedback</div>,
-    Relatar: <div>Relatar</div>,
-    Settings: <div>Settings</div>
+    Dashboard: <Principal />,
+    Feedback: <Feedback />,
+    Relatos: <Relatos />,
+    Settings: <Settings />
   };
 
   return (
@@ -50,7 +50,7 @@ const Dashboard = () => {
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Relatar")}>
+              onClick={() => setActiveComponent("Relatos")}>
               <GoReport size={20} />
               {isOpen && <span>Relatar</span>}
             </div>

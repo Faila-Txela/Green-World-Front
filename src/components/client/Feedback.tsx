@@ -1,10 +1,8 @@
-import Sidebar from "../Sidebar"
 import image from '../../assets/growing.png'
 
 function Feedback() {
   return (
     <div>
-     <Sidebar />
 
      <div className="h-screen flex justify-center items-center">
      <div className=''>

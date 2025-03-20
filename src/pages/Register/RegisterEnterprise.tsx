@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import CustomSelector from "../../components/custom/selector";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 import { FaUser, FaEnvelope, FaLock, FaAddressCard, FaEyeSlash, FaEye } from "react-icons/fa";
 import { HiMiniIdentification } from "react-icons/hi2";
 import Logo from "../../assets/Logo";
-import PrimaryButton from "../../components/ui/PrimaryButton";
 
 interface UserFormData {
   nome: string;
@@ -62,27 +61,26 @@ export default function UserForm() {
     console.log("Dados enviados:", formData);
   };
 
-  const [selectEnterprise, setSelectEnterprise] = useState<string>();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-3xl p-8 bg-white shadow-xl rounded-2xl">
+      <div className="w-full max-w-2xl p-8 bg-white shadow-xl rounded-2xl">
         <div className="text-center mb-6 flex flex-col items-center justify-center gap-4">
         <Logo className="w-20 h-20"/>
           <h2 className="text-2xl font-bold text-gray-800">Cadastro da Empresa</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
-          <Link to='/register-enterprise' className="text-lg font-semibold flex items-center justify-center underline hover:text-green-800">Empresa</Link>
           <Link to='/register-personal' className="text-lg font-semibold flex items-center justify-center hover:text-green-800">Cidadão Comum</Link>
+          <Link to='/register-enterprise' className="text-lg font-semibold flex items-center justify-center underline hover:text-green-800">Empresa</Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <InputField label="Nome da Empresa" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
           <InputField label="Email da Empresa" type="email" name="email" value={formData.email} onChange={handleChange} icon={<FaEnvelope />} />
           
-          <div className="relative w-full">
+          <div className="relative w-full  ">
             <InputField 
               label="Senha" 
               type={isShowPassword ? "text" : "password"} 
@@ -100,43 +98,31 @@ export default function UserForm() {
               {isShowPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </button>
           </div>
+
           <InputField label="NIF" type="text" name="nif" value={formData.nif} onChange={handleChange} icon={<HiMiniIdentification />} />
           
-          <div className="flex gap-3 items-center">
-              <div className="">
-              <InputField label="Endereço" type="text" name="endereco" value={formData.endereco} onChange={handleChange} icon={<FaAddressCard />} />
-              </div>
-            <div className="">
-              <label htmlFor="tipoEmpresa" className="text-sm font-medium text-gray-700 mb-1 block">Tipo de Empresa</label>
-              <CustomSelector
-                className="mb-1 w-full md:w-[14rem] h-12"
-                onChange={(e) => setSelectEnterprise(e)}
-                value={selectEnterprise}
-                items={[
-                  { label: "Aterros sanitários", value: "1" },
-                  { label: "Catadores", value: "2" },
-                  { label: "Reciclagem", value: "3" }
-                ]}
-              />
-            </div>
-          </div>
+          <InputField label="Endereço" type="text" name="endereco" value={formData.endereco} onChange={handleChange} icon={<FaAddressCard />} />
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span><input type="checkbox" name="" id="" /></span>
-            <Link to="" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
+            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">
-            <PrimaryButton addClassName="" name="Cadastrar" />
+            <PrimaryButton 
+            addClassName=""
+             onClick={handleSubmit} 
+             name="Cadastrar" />
           </div>
+
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
             <span>Já tem uma conta?</span>
             <Link to="/Login" className="text-[#068a5b] text-base hover:underline transition duration-500">Entrar</Link>
           </div>
+          
         </form>
       </div>
     </div>
   );
 }
-
 

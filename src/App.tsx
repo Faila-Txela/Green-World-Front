@@ -7,10 +7,11 @@ import Login from './pages/Login'
 import Empresas from './pages/user-enterprises/Enterprises'
 import Dashboard from './pages/user-enterprises/Dashboard';
 import Feedback from './components/client/Feedback';
-import Relatar from './pages/user-normal/Relatar'
+import Relatos from './components/Relatos';
 import NotFound from './pages/Not-found'
 import RegisterEnterprise from './pages/Register/RegisterEnterprise'
 import News from './pages/News'
+import Terms from './components/client/Terms'
 import RegisterPersonal from './pages/Register/RegisterPersonal'
 
  export default function App() {
@@ -27,7 +28,8 @@ import RegisterPersonal from './pages/Register/RegisterPersonal'
       <Route path="login" element={<Login />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="feedback" element={<Feedback />} />
-      <Route path="relatar" element={<Relatar />} />
+      <Route path="relatar" element={<Relatos />} />
+      <Route path="terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>
