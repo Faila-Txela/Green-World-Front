@@ -5,7 +5,7 @@ import Home from './pages'
 import Contacts from './pages/Contacts';
 import Login from './pages/Login'
 import Empresas from './pages/user-enterprises/Enterprises'
-import Dashboard from './pages/user-enterprises/Dashboard';
+import Dashboard from './pages/user-enterprises/Sidebar';
 import Feedback from './components/client/Feedback';
 import Relatos from './components/Relatos';
 import NotFound from './pages/Not-found'

@@ -16,14 +16,15 @@ const getMarkerIcon = (estado: string) => {
   switch (estado) {
     case 'alto':
       return new L.Icon({
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg',
+        iconUrl: '/amico.svg',
         iconSize: [25, 25],
         iconAnchor: [12, 25],
         popupAnchor: [0, -25]
       });
     case 'médio':
       return new L.Icon({
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg',
+        iconUrl: '/garbage.svg',
+        iconSize: [40, 40], // Aumentando o tamanho 
         iconAnchor: [12, 25],
         popupAnchor: [0, -25]
       });

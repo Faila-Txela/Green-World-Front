@@ -94,8 +94,8 @@ export default function Relatos() {
         </div>
 
         {/* Botão de Envio */}
-        <div className="flex justify-center">
-          <PrimaryButton name="Enviar Relato" addClassName="w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105" />
+        <div className="flex justify-center w-full">
+          <PrimaryButton name="Enviar Relato" addClassName="mt-4 bg-green-600 hover:bg-green-700 text-white transition duration-300 ease-in-out transform hover:scale-105" />
         </div>
       </form>
 

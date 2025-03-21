@@ -1,7 +1,8 @@
 
+
 function Settings() {
   return (
-    <div>I'm comming😏...</div>
+    <div className="flex items-center justify-center">I'm comming😏...</div>
   )
 }
 

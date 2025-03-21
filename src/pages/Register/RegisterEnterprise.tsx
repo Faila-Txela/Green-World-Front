@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { FaUser, FaEnvelope, FaLock, FaAddressCard, FaEyeSlash, FaEye } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaEyeSlash, FaEye, FaPhone, FaCity } from "react-icons/fa";
 import { HiMiniIdentification } from "react-icons/hi2";
+//import CustomSelector from "../../components/custom/selector";
 import Logo from "../../assets/Logo";
+import { useQuery } from "@tanstack/react-query";
+import { provinciaService } from "../../modules/service/api/provincia";
 
 interface UserFormData {
   nome: string;
   email: string;
   senha: string;
   tipo_empresa: string;
-  endereco: string;
+  bairro: string;
+  municipio: string;  
+  phone: string;
   nif: string;
 }
 
@@ -42,6 +47,7 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
 );
 
 export default function UserForm() {
+  const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({
     nome: "",
@@ -49,19 +55,40 @@ export default function UserForm() {
     senha: "",
     nif: "",
     tipo_empresa: "",
-    endereco: "",
+    phone: "",
+    bairro: "",
+    municipio: ""
   });
+
+  // const { data: provincias, error: provinciaError } = useQuery({
+  //   queryKey: ["provincias"],
+  //   queryFn: () => provinciaService.getAll()
+  // });
+
+  // if (provinciaError) {
+  //   console.error("Erro ao buscar as provincias", provinciaError)
+  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Dados enviados:", formData);
-  };
-
-  //const navigate = useNavigate();
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log("Dados enviados:", formData);
+      const telefone = formData.phone;
+      const bairro = formData.bairro;
+      
+      try{
+        //const endereco = await addressService.create(formData);
+        //const response = await empresaService.create();
+        // if (response.status === 201) {
+        //   navigate("/login");
+        // }
+      } catch (error){
+        console.error("Erro ao enviar os dados de cadastro ❌", error)
+      }
+    };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -100,8 +127,27 @@ export default function UserForm() {
           </div>
 
           <InputField label="NIF" type="text" name="nif" value={formData.nif} onChange={handleChange} icon={<HiMiniIdentification />} />
-          
-          <InputField label="Endereço" type="text" name="endereco" value={formData.endereco} onChange={handleChange} icon={<FaAddressCard />} />
+
+          <InputField label="Telefone da Empresa" type="phone" name="phone" value={formData.phone} onChange={handleChange} icon={<FaPhone />} />
+
+          <InputField label="Bairro" type="text" name="bairro" value={formData.bairro} onChange={handleChange} icon={<FaCity />} />
+
+          <InputField label="Município" type="text" name="municipio" value={formData.municipio} onChange={handleChange} icon={<FaCity />} />
+
+          <select name="" id="">
+            <option value="">Luanda</option>
+            <option value="">Moxico</option>
+            <option value="">Benguela</option>
+            <option value="">Cuanza</option>
+            <option value="">Norte</option>
+            <option value="">Sul</option>
+          </select>
+
+          <select name="" id="">
+            <option value="">Aterros sanitários</option>
+            <option value="">Catadores</option>
+            <option value="">Recicladores</option>
+          </select>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span><input type="checkbox" name="" id="" /></span>
@@ -125,4 +171,3 @@ export default function UserForm() {
     </div>
   );
 }
-

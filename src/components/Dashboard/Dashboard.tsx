@@ -1,6 +1,5 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Map from "../Map"
-import Relatos from "../Relatos";
 import "leaflet/dist/leaflet.css";
 
 
@@ -80,7 +79,6 @@ export default function Principal() {
           </div>
         </div>
         <div className="">
-          <Relatos />
         </div>
       </div>
     </div>
