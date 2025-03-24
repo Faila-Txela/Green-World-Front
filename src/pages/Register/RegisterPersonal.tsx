@@ -72,9 +72,10 @@ export default function UserForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="w-full max-w-2xl p-8 bg-white shadow-xl rounded-2xl">
-        <div className="text-center mb-6 flex flex-col items-center justify-center gap-4">
-        <Logo className="w-20 h-20"/>
-          <h2 className="text-2xl font-bold text-gray-800">Cadastro do Cidadão Comum</h2>
+        <div className="text-center mb-6 flex flex-col items-center justify-center gap-2">
+        <Logo className="w-20 h-20" />
+          <h2 className="text-2xl font-bold text-gray-800">Cadastro do Cidadão</h2>
+          <p><b className="text-red-700">*</b>Campos obrigatórios</p>
         </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">

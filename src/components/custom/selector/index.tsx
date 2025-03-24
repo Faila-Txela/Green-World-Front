@@ -48,7 +48,7 @@ export default function CustomSelector({
     <Select onValueChange={onChange} {...rest}>
       <SelectTrigger
         className={clsx(
-          "text-sm min-w-[120px] 2xl:text-lg 2xl:h-11",
+          "text-base min-w-[120px] 3xl:text-lg 2xl:h-11",
           className
         )}
       >

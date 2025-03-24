@@ -8,7 +8,7 @@ function Terms() {
 
         <div className="min-h-screen flex flex-col items-center justify-center p-6">
             <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-8 mt-24">
-                <h1 className="text-3xl font-bold text-center text-green-800 mb-6">Termos de Uso</h1>
+                <h1 className="text-3xl font-bold text-center text-green-800 mb-6">Termos de Uso e Política de Privacidade</h1>
 
                 <ul className="space-y-6">
                     <li>

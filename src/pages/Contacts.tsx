@@ -1,12 +1,47 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Headers/Header";
 import Footer from "../components/Footers/Footer";
 import image from '../assets/contactos.jpg'
 import { FiPhone } from "react-icons/fi";
+import axios from "../lib/axios";
 import { MdOutlineEmail } from "react-icons/md";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import TextArea from "../components/ui/TextArea";
 
 export default function Contacts() {
+  const navigate = useNavigate()
+  const [email,setEmail] = useState("")
+  const [nome,setNome] = useState("")
+  const [mensagem,setMensagem] = useState("")
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
+  const handleNomeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setNome(e.target.value);
+  const handleMensagemChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setMensagem(e.target.value);
+
+    const Enter = async () => {
+      if (!email || !nome || !mensagem) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+      }
+  
+      try {
+        const { data, status } = await axios.post("/login", {nome, email, mensagem});
+        if (status === 200) {
+          navigate("/terms");
+          localStorage.setItem("user", JSON.stringify(data.data))
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error("Erro ao enviar a mensagem:", error);
+      } 
+    };
+
+
   return (
     <div className="max-h-screen">
       <Header />
@@ -40,30 +75,30 @@ export default function Contacts() {
             <p className="text-center text-[14px] mt-2 md:text-lg text-gray-600">Envie suas dúvidas para nós</p>
           </div>
 
-          <form action="" name="contact" className="gap-2 shadow-lg bg-white rounded-lg p-6">
+          <form action="/enviar-contacto" onClick={(e) => {e.preventDefault()} } id="contact-form" name="contact" method="POST" className="gap-2 shadow-lg bg-white rounded-lg p-6">
             <div className="flex flex-col items-center mb-4">
               <div className="w-full">
                 <label htmlFor="fullName" className="block font-medium mb-2 required">Nome completo</label>
-                <input type="text" id="fullName" required maxLength={255} pattern="[a-zA-ZÀ-ÖØ-öø-ÿÑñáéíóúÁÉÍÓÚüÜ]+([ '-][a-zA-ZÀ-ÖØ-öø-ÿÑñáéíóúÁÉÍÓÚüÜ]+)*" placeholder="Nome completo" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" />
+                <input type="text" id="fullName" name="nome" onChange={handleNomeChange} required maxLength={255} pattern="[a-zA-ZÀ-ÖØ-öø-ÿÑñáéíóúÁÉÍÓÚüÜ]+([ '-][a-zA-ZÀ-ÖØ-öø-ÿÑñáéíóúÁÉÍÓÚüÜ]+)*" placeholder="Nome completo" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" />
               </div>
             </div>
 
             <div className="flex flex-col items-center mb-4">
               <div className="w-full">
                 <label htmlFor="email" className="block font-medium mb-2 required">Email</label>
-                <input type="email" id="email" required maxLength={255} pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" placeholder="Email" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" />
+                <input type="email" id="email" name="email" onChange={handleEmailChange} required maxLength={255} pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" placeholder="Email" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" />
               </div>
             </div>
 
             <div className="flex flex-col items-center mb-4">
               <div className="w-full">
                 <label htmlFor="mensagem" className="block font-medium mb-2 required">Mensagem</label>
-                <TextArea id={""} className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" placeholder={"Mensagem"} />
+                <TextArea name="mensagem" id="mensagem" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" placeholder={"Mensagem"} />
               </div>
             </div>
 
             <div className="flex items-center justify-center mb-8">
-              <PrimaryButton name="Enviar" addClassName="md:w-80 w-[16rem]" />
+              <PrimaryButton  name="Enviar" addClassName="md:w-80 w-[16rem]" />
             </div>
           </form>
         </div>

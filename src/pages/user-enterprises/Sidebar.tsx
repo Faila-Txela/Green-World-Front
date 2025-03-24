@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
@@ -8,10 +9,11 @@ import Principal from "../../components/Dashboard/Dashboard";
 import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
+import Terms from "../../components/client/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings";
+type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
 
 
 const Sidebar = () => {
@@ -28,7 +30,8 @@ const Sidebar = () => {
     Dashboard: <Principal />,
     Feedback: <Feedback />,
     Relatos: <Relatos />,
-    Settings: <Settings />
+    Settings: <Settings />,
+    Terms: <Terms />
   };
 
   return (
@@ -64,6 +67,12 @@ const Sidebar = () => {
               <FiSettings size={20} />
               {isSidebarOpen && <span>Configurações</span>}
             </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition ">
+            <FiSettings size={20} />
+            <Link to="/Terms">Termos</Link>
+            </div>
+
           </div>
         </div>
       </div>
@@ -74,5 +83,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-

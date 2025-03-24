@@ -48,7 +48,7 @@ export default function Login() {
       } else {
         alert(data.error);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Erro no login:", error);
     } finally {
       setLoading(false);

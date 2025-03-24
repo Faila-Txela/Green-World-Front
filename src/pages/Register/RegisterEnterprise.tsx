@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { FaUser, FaEnvelope, FaLock, FaEyeSlash, FaEye, FaPhone, FaCity } from "react-icons/fa";
 import { HiMiniIdentification } from "react-icons/hi2";
-//import CustomSelector from "../../components/custom/selector";
+import CustomSelector from "../../components/custom/selector";
+import { SiSitepoint } from "react-icons/si";
 import Logo from "../../assets/Logo";
 import { useQuery } from "@tanstack/react-query";
 import { provinciaService } from "../../modules/service/api/provincia";
@@ -17,6 +18,7 @@ interface UserFormData {
   municipio: string;  
   phone: string;
   nif: string;
+  site: string;
 }
 
 const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false }: {
@@ -49,11 +51,16 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
 export default function UserForm() {
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [selectProvince, setSelectProvince] = useState()
+  const [selectType, setSelectType] = useState()
+  const [email, setEmail] = useState("");
+  const [mensagem, setMensagem] = useState("");
   const [formData, setFormData] = useState<UserFormData>({
     nome: "",
     email: "",
     senha: "",
     nif: "",
+    site: "",
     tipo_empresa: "",
     phone: "",
     bairro: "",
@@ -126,7 +133,9 @@ export default function UserForm() {
             </button>
           </div>
 
-          <InputField label="NIF" type="text" name="nif" value={formData.nif} onChange={handleChange} icon={<HiMiniIdentification />} />
+          <InputField label="NIF" type="text" name="nif" value={formData.nif} onChange={handleChange} icon={<HiMiniIdentification />} /> 
+
+          <InputField label="Site da Empresa" type="url" name="site" value={formData.site} onChange={handleChange} icon={<SiSitepoint />} />
 
           <InputField label="Telefone da Empresa" type="phone" name="phone" value={formData.phone} onChange={handleChange} icon={<FaPhone />} />
 
@@ -134,20 +143,50 @@ export default function UserForm() {
 
           <InputField label="Município" type="text" name="municipio" value={formData.municipio} onChange={handleChange} icon={<FaCity />} />
 
-          <select name="" id="">
-            <option value="">Luanda</option>
-            <option value="">Moxico</option>
-            <option value="">Benguela</option>
-            <option value="">Cuanza</option>
-            <option value="">Norte</option>
-            <option value="">Sul</option>
-          </select>
+        <div>
+          <label
+            htmlFor="localidade"
+            className="font-semibold text-gray-700 mb-2"
+          >
+            Sua Localidade <b className="text-red-700">*</b>
+          </label>
+          <CustomSelector
+            onChange={(e) => setSelectProvince}
+            value={selectProvince}
+            items={[
+              { label: "Luanda", value: "1" },
+              { label: "Camama", value: "2" },
+              { label: "Rangel", value: "3" },
+              { label: "Maianga", value: "4" },
+              { label: "Mussulo", value: "5" },
+              { label: "Belas", value: "6" },
+              { label: "Viana", value: "7" },
+              { label: "Cazenga", value: "8" },
+              { label: "Hoji-Ya-Henda", value: "9" },
+              { label: "Samba", value: "10" },
+              { label: "Mutamba", value: "11" },
+              { label: "Ngola Kiluange", value: "12" },
+            ]}
+          />
+        </div>
 
-          <select name="" id="">
-            <option value="">Aterros sanitários</option>
-            <option value="">Catadores</option>
-            <option value="">Recicladores</option>
-          </select>
+        <div>
+          <label
+            htmlFor="typeEnterprise"
+            className="font-semibold text-gray-700 mb-2"
+          >
+            Tipo de Empresa <b className="text-red-700">*</b>
+          </label>
+          <CustomSelector
+            onChange={(e) => setSelectType}
+            value={selectType}
+            items={[
+              { label: "Recicladores", value: "1" },
+              { label: "Catadores", value: "2" },
+              { label: "Aterros sanitários", value: "3" }
+            ]}
+          />
+        </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span><input type="checkbox" name="" id="" /></span>

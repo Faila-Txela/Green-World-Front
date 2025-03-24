@@ -9,20 +9,23 @@ export default function Relatos() {
   const [selectPriority, setSelectPriority] = useState<string>();
 
   return (
-    <div className="flex flex-col justify-center items-center h-full gap-4">
+    <div className="flex justify-center p-12">
 
-      {/* Cabeçalho */}
-      <div className="flex flex-col bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl text-center">
+      {/* Conteúdo */}
+        <div className="flex flex-col justify-center items-center p-6 shadow-lg bg-white">
+          {/* Cabeçalho */}
+        <div className="flex flex-col bg-white p-12 rounded-lg w-full max-w-lg text-center gap-2">
         <h2 className="text-3xl font-semibold text-green-800 mb-3">Relate um Amontoado de Lixo</h2>
         <p className="text-gray-700 text-sm mb-3">Ajude-nos a manter nossa cidade limpa. Preencha os campos abaixo para reportar um acúmulo de lixo.</p>
         <p className="text-gray-700 text-sm"><b className="text-red-700">*</b> Campos obrigatórios</p>
       </div>
 
       {/* Formulário */}
-      <form className="flex flex-col gap-6 mt-5 rounded-lg shadow-lg w-full max-w-lg p-6 bg-white">
+      <form className="flex flex-col gap-6 mt-5 rounded-lg w-full">
 
         {/* Localidade */}
-        <div>
+          <div className="grid grid-cols-2 gap-4">
+          <div>
           <label
             htmlFor="localidade"
             className="text-body font-semibold text-gray-700 mb-2"
@@ -66,6 +69,7 @@ export default function Relatos() {
             ]}
           />
         </div>
+          </div>
 
         {/* Descrição */}
         <div>
@@ -94,7 +98,7 @@ export default function Relatos() {
         </div>
 
         {/* Botão de Envio */}
-        <div className="flex justify-center w-full">
+        <div className="">
           <PrimaryButton name="Enviar Relato" addClassName="mt-4 bg-green-600 hover:bg-green-700 text-white transition duration-300 ease-in-out transform hover:scale-105" />
         </div>
       </form>
@@ -104,6 +108,7 @@ export default function Relatos() {
         <p>Após o envio, sua solicitação será processada e você receberá um feedback sobre a situação do seu relato.</p>
         <p className="mt-2 text-sm">Obrigado por ajudar a manter nossa cidade limpa!</p>
       </div>
+          </div>
 
     </div>
   );

@@ -6,10 +6,10 @@ import axios from "../../lib/axios";
 interface DashHeaderProps {
   toggleSidebar: () => void;
   isSidebarOpen: boolean;
-  onLogout: () => void; // Adicionando a função de logout como prop
+  //onLogout: () => void; // Adicionando a função de logout como prop
 }
 
-const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, onLogout }) => {
+const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen}) => {
   
   const handleLogout = async () => {
     try {
@@ -22,7 +22,7 @@ const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, o
       });
 
       if (response.status === 200) { 
-        onLogout(); 
+        //onLogout(); 
       } else {
         console.error("Erro ao tentar terminar a sessão");
       }
@@ -32,15 +32,15 @@ const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, o
   };
 
   const handleChangeTheme = () => {
-    console.log("Tema alterado");
+    alert("Tema alterado💯");
   };
 
   const handleChangeLanguage = () => {
-    console.log("Idioma alterado");
+    alert("Idioma alterado💯");
   };
 
   const handleChangeProfilePic = () => {
-    console.log("Foto de perfil alterada");
+    alert("Foto de perfil alterada💯");
   };
 
   return (
