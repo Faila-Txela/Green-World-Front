@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock, FaUserTag, FaUniversity, FaIdCard, FaEyeSlash, FaEye } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaUniversity, FaIdCard, FaEyeSlash, FaEye } from "react-icons/fa";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Logo from "../../assets/Logo";
 import { userService } from "../../modules/service/api/user";
@@ -35,10 +35,19 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
   </div>
 );
 
+interface User {
+  nome: string;
+  email: string;
+  senha: string;
+  tipoUser_id?: string;
+  iban: string;
+  nome_titular: string;
+}
+
 export default function UserForm() {
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [formData, setFormData] = useState<user>({
+  const [formData, setFormData] = useState<User>({
     nome: "",
     email: "",
     senha: "",
@@ -49,10 +58,11 @@ export default function UserForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((formData) => ({ ...formData, [e.target.name]: e.target.value }));
+    setFormData((formData) => ({ ...formData, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault();
     console.log("Dados enviados:", formData);
     
@@ -60,13 +70,17 @@ export default function UserForm() {
       const typeId = await typeUserService.getTypeIdByDeafault();
       const userData = {...formData, tipoUser_id: typeId}
 
-      const response = await userService.craete(userData);
-     if (response.status === 201) {
-      navigate("/login")
-     }
+    const response = await userService.create(userData);
+     // console.log("Tipo de usuário ID:", typeId)
+
+      if (response.status === 201) {
+       navigate("/login")
+      }
+
     } catch (error){
       console.error("Erro ao enviar os dados de cadastro ❌", error)
     }
+
   };
 
   return (
@@ -75,7 +89,6 @@ export default function UserForm() {
         <div className="text-center mb-6 flex flex-col items-center justify-center gap-2">
         <Logo className="w-20 h-20" />
           <h2 className="text-2xl font-bold text-gray-800">Cadastro do Cidadão</h2>
-          <p><b className="text-red-700">*</b>Campos obrigatórios</p>
         </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
