@@ -5,7 +5,7 @@ import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
-import Principal from "../../components/Dashboard/PersonalDashboard";
+import Principal from "../../components/Dashboard/EnterpriseDashboard";
 import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
@@ -16,7 +16,7 @@ import Terms from "../../components/client/Terms";
 type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
 
 
-const Sidebar = () => {
+const SidebarEnterprise = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("Dashboard");
 
@@ -82,4 +82,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarEnterprise;

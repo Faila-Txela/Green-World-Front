@@ -4,56 +4,73 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png";
+import Toast from "../../components/Toast";
 import axios from "../../lib/axios";
 
 export default function PersonalLogin() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [animate, setAnimate] = useState(false); // Controle da animação
-  const [loading, setLoading] = useState(false); // Controle de loading para o botão de entrar
+  const [animate, setAnimate] = useState(false); 
+  const [loading, setLoading] = useState(false); 
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setAnimate(true);
-  }, []);
-
-  const isEmailValid = (email: string) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
   const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSenha(e.target.value);
 
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
+
+       // Validação do email
+    const isEmailValid = (email: string) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+  };
+
+  // Função para o botão de navegar até á Dashboard do cidadão comum
   const Enter = async () => {
     if (!email || !senha) {
-      alert("Preencha todos os campos corretamente.");
+      setToast({message: "Preencha todos os campos", type: "error"})
       return;
     }
 
     if (!isEmailValid(email)) {
-      alert("Email inválido.");
+      console.error("Email inválido.");
+      setToast({message: "Email inválido", type: "error"})
       return;
     }
 
     try {
       setLoading(true); // Ativa o estado de carregamento
       const { data, status } = await axios.post("/login", {email, senha});
+
       if (status === 200) {
-        navigate("/PersonalDashboard");
+        setToast({message: "Login feito com sucesso", type: "success"})
         localStorage.setItem("user", JSON.stringify(data.data))
+        setTimeout(() => navigate("/personalDashboard"), 2000)
       } else {
-        alert(data.error);
+        //console.error(data.error);
+        setToast({ message: "Erro ao fazer login.", type: "error" });
       }
-    } catch (error) {
+     } 
+     catch (error: any) {
       console.error("Erro no login:", error);
+    
+      if (error.response ) {
+        const errorStatus = error.response.status;
+        if (errorStatus === 401) {
+          setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
+        }
+      }
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex-row items-center justify-center h-screen gap-6">
@@ -138,7 +155,10 @@ export default function PersonalLogin() {
             />
           </div>
         </form>
-      </div>
+         {/* Exibe o Toast se houver mensagem */}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+
+    </div>
     </div>
   );
 }

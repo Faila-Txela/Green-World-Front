@@ -85,7 +85,7 @@ export default function Footer() {
         <Skeleton width="100%" height="20px" />
       ) : (
         <div className="flex justify-center w-full border-t border-white/30 mt-6 pt-4 gap-2">
-          <Link to="" className="text-green-600 hover:underline transition duration-500">Termos e política de privacidade da Green World</Link>
+          <Link to="/Terms" className="text-green-600 hover:underline transition duration-500">Termos e política de privacidade da Green World</Link>
           <p>|</p>
           <p>Green World © 2025 - Direitos reservados</p>
         </div>

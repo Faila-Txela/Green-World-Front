@@ -10,12 +10,12 @@ export default {
   theme: {
     extend: {
       animation: {
-        'float': 'float 1.2s ease-in-out alternate infinite',
+        "slide-in": "slideIn .5 ease-out",
       },
       keyframes:{
         float: {
-          '0%': { transform: 'translateY(0)'},
-          '100%': { transform: 'translateY(36px)'}
+          '0%': { transform: 'translateY(-100%)', opcaity: "0"},
+          '100%': { transform: 'translateY(0)', opcaity: "1"}
         }
       },
       colors: {

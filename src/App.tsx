@@ -9,11 +9,12 @@ import Empresas from './pages/user-enterprises/Enterprises'
 import Dashboard from './pages/user-enterprises/Sidebar';
 import Feedback from './components/client/Feedback';
 import Relatos from './components/Relatos';
-import NotFound from './pages/Not-found'
+import RegisterPersonal from './pages/ComumUser/RegisterPersonal'
 import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise'
 import News from './pages/News'
+import NotFound from './pages/Not-found'
 import Terms from './components/client/Terms'
-import RegisterPersonal from './pages/ComumUser/RegisterPersonal'
+
 
  export default function App() {
 

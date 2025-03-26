@@ -4,55 +4,62 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png"
+import Toast from "../../components/Toast";
 import axios from "../../lib/axios";
 
 export default function EnterpriseLogin() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [animate, setAnimate] = useState(false); // Controle da animação
-  const [loading, setLoading] = useState(false); // Controle de loading para o botão de entrar
+  const [animate, setAnimate] = useState(false); 
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setAnimate(true);
-  }, []);
-
-  const isEmailValid = (email: string) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
   const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSenha(e.target.value);
 
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
+
+   // Função para validação de email
+   const isEmailValid = (email: string) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+  };
+
+  // Função para o botão de navegar até á Dashboard das empresas
   const Enter = async () => {
     if (!email || !senha) {
-      alert("Preencha todos os campos corretamente.");
+      setToast({ message: "Preencha todos os dados", type: "error" })
       return;
     }
 
     if (!isEmailValid(email)) {
-      alert("Email da empresa inválido.");
+      alert("Email inválido.");
       return;
     }
 
     try {
       setLoading(true); // Ativa o estado de carregamento
       const { data, status } = await axios.post("/login", {email, senha});
+
       if (status === 200) {
-        navigate("/EnterpriseDashboard");
+        setToast({ message: "Login feito com sucesso", type: "success" })
         localStorage.setItem("user", JSON.stringify(data.data))
+        navigate("/EnterpriseDashboard");
       } else {
-        alert(data.error);
+       // alert(data.error);
+      setToast({ message: "Erro ao fazer login", type: "error" })
+        }
+      }catch (error) {
+        console.error("Erro no login:", error);
+        setToast({ message: "Erro no servidor. Tente novamente", type: "error" })
+      }finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Erro no login:", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -138,6 +145,8 @@ export default function EnterpriseLogin() {
             />
           </div>
         </form>
+         {/* Exibe o Toast se houver mensagem */}
+           {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import { provinciaService } from "../../modules/service/api/provincia";
 import { empresaService } from "../../modules/service/api/enpresa";
 import { addressService } from "../../modules/service/api/address";
 import { typeUserService } from "../../modules/service/api/typeUser";
+import Toast from "../../components/Toast";
 import axios from "../../lib/axios";
 
 const InputField = ({
@@ -83,6 +84,7 @@ export default function EnterpriseForm() {
   const [municipio, setMunicipio] = useState<string>("");
   const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
   const [typeGarbage, setTypeGarbage] = useState<string>("");
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const [formData, setFormData] = useState<EnterpriseFormData>({
     nome: "",
@@ -128,9 +130,9 @@ export default function EnterpriseForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Dados enviados:", formData);
-
-    try {
+    setToast({ message: "Empresa cadastrada com sucesso!", type: "success" })
     
+    try {
       const empresaData = {
         ...formData,
       };
@@ -140,10 +142,11 @@ export default function EnterpriseForm() {
       
       console.log("Resposta do servidor:", response);
       if (response.status === 201) {
-        navigate("/enterprise-login");
+        setTimeout(() => navigate("/enterprise-login"), 2000)
       }
     } catch (error) {
-      console.log("❌ Erro ao cadastrar empresa:", error);
+      console.log("❌ Erro ao cadastrar sua empresa:", error);
+      setToast({ message: "Erro ao cadastrar sua empresa", type: "error" })
     }
   };
 
@@ -158,6 +161,7 @@ export default function EnterpriseForm() {
     fetchMunicipio(provincia);
 
   }, [provincia]);
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -350,6 +354,8 @@ export default function EnterpriseForm() {
             </Link>
           </div>
         </form>
+              {/* Exibe o Toast se houver mensagem */}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </div>
     </div>
   );

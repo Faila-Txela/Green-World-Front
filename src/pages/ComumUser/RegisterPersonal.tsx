@@ -5,6 +5,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import Logo from "../../assets/Logo";
 import { userService } from "../../modules/service/api/user";
 import { useQuery } from "@tanstack/react-query";
+import Toast from "../../components/Toast";
 import { typeUserService } from "../../modules/service/api/typeUser";
 
 
@@ -50,6 +51,7 @@ interface User {
 export default function UserForm() {
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [formData, setFormData] = useState<User>({
     nome: "",
     email: "",
@@ -67,21 +69,21 @@ export default function UserForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     
     e.preventDefault();
-    console.log("Dados enviados:", formData);
+    //console.log("Dados enviados:", formData);
+    setToast({ message: "Cadastro feito com sucesso!", type: "success" })
     
     try{
       const typeId = await typeUserService.getTypeIdByDeafault();
       const userData = {...formData, tipoUser_id: typeId}
 
     const response = await userService.create(userData);
-     // console.log("Tipo de usuário ID:", typeId)
-
       if (response.status === 201) {
-       navigate("/personal-login")
+       setTimeout(() => navigate("/personal-login"), 2000)
       }
 
     } catch (error){
       console.error("Erro ao enviar os dados de cadastro ❌", error)
+      setToast({ message: "Erro ao enviar os dados de cadastro", type: "error" })
     }
 
   };
@@ -143,6 +145,8 @@ export default function UserForm() {
           </div>
 
         </form>
+           {/* Exibe o Toast se houver mensagem */}
+          {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </div>
     </div>
   );
