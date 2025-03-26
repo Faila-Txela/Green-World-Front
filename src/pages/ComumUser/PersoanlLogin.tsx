@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import Input from "../components/ui/Input";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import background from "../assets/Authentication-rafiki.png";
-import axios from "../lib/axios";
+import Input from "../../components/ui/Input";
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import background from "../../assets/Authentication-rafiki.png";
+import axios from "../../lib/axios";
 
-export default function Login() {
+export default function PersonalLogin() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -43,7 +43,7 @@ export default function Login() {
       setLoading(true); // Ativa o estado de carregamento
       const { data, status } = await axios.post("/login", {email, senha});
       if (status === 200) {
-        navigate("/dashboard");
+        navigate("/PersonalDashboard");
         localStorage.setItem("user", JSON.stringify(data.data))
       } else {
         alert(data.error);
@@ -70,7 +70,7 @@ export default function Login() {
           onClick={(e) => e.preventDefault()}
           className="flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white shadow-md rounded-lg"
         >
-          <h3 className="text-2xl font-semibold text-[#068a5b]">Login</h3>
+          <h3 className="text-2xl font-semibold text-[#068a5b]">Login dos Cidadãos</h3>
 
           <div className="flex flex-col w-full gap-3">
             <label htmlFor="email" className="p-1">

@@ -8,11 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import { typeUserService } from "../../modules/service/api/typeUser";
 
 
-const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false }: {
+const InputField = ({ label, type, name, value, onChange, autoComplete, icon, extraPaddingRight = false }: {
   label: string;
   type: string;
   name: keyof user;
+  autoComplete?: string;
   value: string;
+
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon: JSX.Element;
   extraPaddingRight?: boolean; 
@@ -29,6 +31,7 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
         value={value}
         onChange={onChange}
         required
+        autoComplete={autoComplete}
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
       />
     </div>
@@ -74,7 +77,7 @@ export default function UserForm() {
      // console.log("Tipo de usuário ID:", typeId)
 
       if (response.status === 201) {
-       navigate("/login")
+       navigate("/personal-login")
       }
 
     } catch (error){
@@ -97,9 +100,9 @@ export default function UserForm() {
          </div>
 
 
-        <form className="flex flex-col gap-6">
-          <InputField label="Nome" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
-          <InputField label="Email" type="email" name="email" value={formData.email} onChange={handleChange} icon={<FaEnvelope />} />
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <InputField label="Nome" autoComplete="on" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
+          <InputField label="Email" type="email" autoComplete="on" name="email" value={formData.email} onChange={handleChange} icon={<FaEnvelope />} />
 
           {/* Campo de senha com ajuste de padding */}
           <div className="relative">
@@ -131,13 +134,12 @@ export default function UserForm() {
 
           <div className="col-span-1 md:col-span-2 mt-4">
             <PrimaryButton 
-            onClick={handleSubmit}
             addClassName="" name="Cadastrar"/>
           </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
           <span>Já tem uma conta?</span>
-            <Link to="/Login" className="text-[#068a5b] text-base hover:underline transition duration-500">Entrar</Link>
+            <Link to="/personal-login" className="text-[#068a5b] text-base hover:underline transition duration-500">Entrar</Link>
           </div>
 
         </form>

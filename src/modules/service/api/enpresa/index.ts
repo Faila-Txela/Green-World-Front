@@ -12,7 +12,7 @@ class EmpresaService {
   async getTipoEmpresaIdByNome() {
     try {
       const response = await axios.get(`/type/empresa`)
-      return response.data.id;
+      return response.data;
     } catch (error) {
       console.error("Erro ao buscar tipoEmpresaId:", error);
       throw error;

@@ -9,7 +9,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate("/Login");
+    navigate("/personal-login");
   };
 
   const toggleMobileMenu = () => {

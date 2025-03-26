@@ -11,7 +11,6 @@ import {
   FaCity,
 } from "react-icons/fa";
 import { HiMiniIdentification } from "react-icons/hi2";
-import CustomSelector from "../../components/custom/selector";
 import { SiSitepoint } from "react-icons/si";
 import Logo from "../../assets/Logo";
 import { useQuery } from "@tanstack/react-query";
@@ -29,6 +28,7 @@ const InputField = ({
   onChange,
   icon,
   extraPaddingRight = false,
+  autoComplete,
 }: {
   label: string;
   type: string;
@@ -37,6 +37,7 @@ const InputField = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon: JSX.Element;
   extraPaddingRight?: boolean;
+  autoComplete?: string;
 }) => (
   <div className="relative">
     <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
@@ -50,6 +51,7 @@ const InputField = ({
         type={type}
         name={name}
         value={value}
+        autoComplete={autoComplete}
         onChange={onChange}
         required
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
@@ -79,6 +81,9 @@ export default function EnterpriseForm() {
   const [provincia, setProvincia] = useState<string>("");
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
   const [municipio, setMunicipio] = useState<string>("");
+  const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
+  const [typeGarbage, setTypeGarbage] = useState<string>("");
+
   const [formData, setFormData] = useState<EnterpriseFormData>({
     nome: "",
     email: "",
@@ -108,6 +113,13 @@ export default function EnterpriseForm() {
     }
   };
 
+  const fetchTypeGarbages = async () => {
+    const response = await axios.get("/tipo-empresa");
+    if (response.status === 200) {
+      setTypeGarbages(response.data);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((formData) => ({ ...formData, [name]: value }));
@@ -118,38 +130,26 @@ export default function EnterpriseForm() {
     console.log("Dados enviados:", formData);
 
     try {
-      const typeId = await typeUserService.getTypeIdByDeafault();
-      const userData = {
-        ...formData,
-        tipoUser_id: typeId,
-        iban: "",
-        nome_titular: formData.nome,
-      };
-      const enderecoId = await addressService.getEnderecoIdByBairro(
-        formData.bairro,
-        formData.municipio,
-        formData.provinciaId
-      );
-      const tipoEmpresaId = await empresaService.getTipoEmpresaIdByNome();
-
+    
       const empresaData = {
         ...formData,
-        enderecoId,
-        tipoEmpresaId: tipoEmpresaId,
       };
 
-      const response = await empresaService.create(empresaData);
+      const {data} = await addressService.create(empresaData.bairro, municipio, provincia, empresaData.phone)
+      const response = await empresaService.create({email: empresaData.email, enderecoId:data.id, nif: empresaData.nif, nome: empresaData.nome, senha: empresaData.senha, tipoEmpresa_id: typeGarbage, site: empresaData.site});
+      
       console.log("Resposta do servidor:", response);
-
       if (response.status === 201) {
-        navigate("/login");
+        navigate("/enterprise-login");
       }
     } catch (error) {
-      console.log("Erro ao cadastrar empresa ❌:", error);
+      console.log("❌ Erro ao cadastrar empresa:", error);
     }
   };
+
   useEffect(() => {
     fetchProvincias();
+    fetchTypeGarbages();
   }, []);
 
   useEffect(() => {
@@ -189,6 +189,7 @@ export default function EnterpriseForm() {
             label="Nome da Empresa"
             type="text"
             name="nome"
+            autoComplete="on"
             value={formData.nome}
             onChange={handleChange}
             icon={<FaUser />}
@@ -197,6 +198,7 @@ export default function EnterpriseForm() {
             label="Email da Empresa"
             type="email"
             name="email"
+            autoComplete="on"
             value={formData.email}
             onChange={handleChange}
             icon={<FaEnvelope />}
@@ -226,6 +228,7 @@ export default function EnterpriseForm() {
             label="Telefone da Empresa"
             type="phone"
             name="phone"
+            autoComplete="on"
             value={formData.phone}
             onChange={handleChange}
             icon={<FaPhone />}
@@ -235,6 +238,7 @@ export default function EnterpriseForm() {
             label="Bairro"
             type="text"
             name="bairro"
+            autoComplete="on"
             value={formData.bairro}
             onChange={handleChange}
             icon={<FaCity />}
@@ -244,6 +248,7 @@ export default function EnterpriseForm() {
               label="NIF"
               type="text"
               name="nif"
+              autoComplete="on"
               value={formData.nif}
               onChange={handleChange}
               icon={<HiMiniIdentification />}
@@ -268,9 +273,10 @@ export default function EnterpriseForm() {
             <select
             className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
               value={municipio}
+              autoComplete="on"
               onChange={(e) => setMunicipio(e.target.value)}
             >
-              <option value="" className="text-base">Selecione a provincia</option>
+              <option value="" key="" className="">Selecione o município</option>
               {municipios.map((municipio) => (
                 <option value={municipio.id}>{municipio.nome}</option>
               ))}
@@ -287,11 +293,33 @@ export default function EnterpriseForm() {
             <select
             className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
               value={provincia}
+              autoComplete="on"
               onChange={(e) => setProvincia(e.target.value)}
             >
-              <option className="text-base" value="">Selecione a provincia</option>
+              <option className="" key="" value="">Selecione a provincia</option>
               {provincias.map((provincia) => (
                 <option value={provincia.id}>{provincia.nome}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="tipoEmpresa"
+              className="font-semibold mb-2 block text-gray-600"
+            >
+              Que tipo você trabalha ?
+            </label>
+
+            <select
+            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+              value={typeGarbage}
+              autoComplete="on"
+              onChange={(e) => setTypeGarbage(e.target.value)}
+            >
+              <option value="" key="" className="">Selecione a sua área de actuação</option>
+              {typeGarbages.map((typeGarbage) => (
+                <option value={typeGarbage.id}>{typeGarbage.nome}</option>
               ))}
             </select>
           </div>
@@ -315,7 +343,7 @@ export default function EnterpriseForm() {
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
             <span>Já tem uma conta?</span>
             <Link
-              to="/Login"
+              to="/enterprise-login"
               className="text-[#068a5b] text-base hover:underline transition duration-500"
             >
               Entrar

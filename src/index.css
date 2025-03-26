@@ -23,8 +23,8 @@
 html {
   font-family: 'Quicksand', serif;
 }
-/* 
-:root{
+ 
+/* :root{
   --bg-color: #ffffff;
   --text-color: #000000;
 }
@@ -38,4 +38,4 @@ body{
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background .5s, color .5s;
-}  */
+}   */
