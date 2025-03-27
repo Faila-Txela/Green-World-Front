@@ -85,6 +85,10 @@ export default function EnterpriseForm() {
   const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
   const [typeGarbage, setTypeGarbage] = useState<string>("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const { name, value } = e.target;
+    setFormData((formData) => ({ ...formData, [name]: value }));
+  };
 
   const [formData, setFormData] = useState<EnterpriseFormData>({
     nome: "",
@@ -97,7 +101,7 @@ export default function EnterpriseForm() {
     bairro: "",
     nif: "",
     site: "",
-    provinciaId: "",
+    provinciaId: ""
   });
 
   const fetchProvincias = async () => {
@@ -120,11 +124,6 @@ export default function EnterpriseForm() {
     if (response.status === 200) {
       setTypeGarbages(response.data);
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((formData) => ({ ...formData, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -265,6 +264,26 @@ export default function EnterpriseForm() {
               onChange={handleChange}
               icon={<SiSitepoint />}
             />
+  
+          <div>
+            <label
+              htmlFor="provincia"
+              className="block text-gray-600 font-semibold mb-2"
+            >
+              Sua Provincia
+            </label>
+            <select
+            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+              value={provincia}
+              autoComplete="on"
+              onChange={(e) => setProvincia(e.target.value)}
+            >
+              <option className="" key="" value="">Selecione a provincia</option>
+              {provincias.map((provincia) => (
+                <option value={provincia.id}>{provincia.nome}</option>
+              ))}
+            </select>
+          </div>
 
           <div>
             <label
@@ -283,26 +302,6 @@ export default function EnterpriseForm() {
               <option value="" key="" className="">Selecione o município</option>
               {municipios.map((municipio) => (
                 <option value={municipio.id}>{municipio.nome}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label
-              htmlFor="provincia"
-              className="block text-gray-600 font-semibold mb-2"
-            >
-              Sua Provincia
-            </label>
-            <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={provincia}
-              autoComplete="on"
-              onChange={(e) => setProvincia(e.target.value)}
-            >
-              <option className="" key="" value="">Selecione a provincia</option>
-              {provincias.map((provincia) => (
-                <option value={provincia.id}>{provincia.nome}</option>
               ))}
             </select>
           </div>

@@ -16,7 +16,7 @@ import Terms from "../../components/client/Terms";
 type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
 
 
-const SidebarEnterprise = () => {
+const PersonalSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("Dashboard");
 
@@ -82,4 +82,4 @@ const SidebarEnterprise = () => {
   );
 };
 
-export default SidebarEnterprise;
+export default PersonalSidebar;

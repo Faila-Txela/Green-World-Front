@@ -18,7 +18,7 @@ export default function Toast({ message, type = "success", onClose }: ToastProps
 
   return (
     <div
-      className={`fixed bottom-5 right-5 flex items-center gap-3 px-6 py-4 text-white rounded-lg shadow-xl transition-transform tarnsfrom animate-slide-in 
+      className={`fixed bottom-5 right-5 flex items-center gap-3 px-6 py-4  rounded-lg shadow-xl transition-transform tarnsfrom animate-slide-in 
         ${type === "success" ? "bg-green-600 border-l-4 border-green-400" : "bg-red-600 border-l-4 border-red-400"}
         animate-slide-in`}
     >

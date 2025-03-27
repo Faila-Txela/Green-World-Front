@@ -3,13 +3,14 @@ import "@radix-ui/themes/styles.css";
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages'
 import Contacts from './pages/Contacts';
-import PersonalLogin from './pages/ComumUser/PersoanlLogin';
+import PersonalLogin from './pages/user-personal/PersoanlLogin';
 import EnterpriseLogin from './pages/user-enterprises/EnterpriseLogin';
 import Empresas from './pages/user-enterprises/Enterprises'
-import Dashboard from './pages/user-enterprises/Sidebar';
+import PersonalSidebar from './pages/user-personal/SidebarPersonal';
+import EnterpriseSidebar from './pages/user-enterprises/SidebarEnterprise';
 import Feedback from './components/client/Feedback';
 import Relatos from './components/Relatos';
-import RegisterPersonal from './pages/ComumUser/RegisterPersonal'
+import RegisterPersonal from './pages/user-personal/RegisterPersonal'
 import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise'
 import News from './pages/News'
 import NotFound from './pages/Not-found'
@@ -29,7 +30,8 @@ import Terms from './components/client/Terms'
       <Route path="register-personal" element={<RegisterPersonal />} />
       <Route path="personal-login" element={<PersonalLogin />} />
       <Route path="enterprise-login" element={<EnterpriseLogin />} />
-      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="enterprise-dashboard" element={<EnterpriseSidebar />} />
+      <Route path="personal-dashboard" element={<PersonalSidebar />} />
       <Route path="feedback" element={<Feedback />} />
       <Route path="relatar" element={<Relatos />} />
       <Route path="terms" element={<Terms />} />

@@ -51,7 +51,7 @@ export default function PersonalLogin() {
       if (status === 200) {
         setToast({message: "Login feito com sucesso", type: "success"})
         localStorage.setItem("user", JSON.stringify(data.data))
-        setTimeout(() => navigate("/personalDashboard"), 2000)
+        setTimeout(() => navigate("/personal-dashboard"), 2000)
       } else {
         //console.error(data.error);
         setToast({ message: "Erro ao fazer login.", type: "error" });

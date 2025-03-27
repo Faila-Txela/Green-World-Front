@@ -15,10 +15,9 @@ export default function Footer() {
   );
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 4000);
-  }, []);
 
-  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 3000);
+
     if (darkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");

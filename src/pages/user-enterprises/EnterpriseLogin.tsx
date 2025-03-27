@@ -44,19 +44,25 @@ export default function EnterpriseLogin() {
 
     try {
       setLoading(true); // Ativa o estado de carregamento
-      const { data, status } = await axios.post("/login", {email, senha});
+      const { data, status } = await axios.post("/empresas/login", {email, senha});
 
       if (status === 200) {
         setToast({ message: "Login feito com sucesso", type: "success" })
         localStorage.setItem("user", JSON.stringify(data.data))
-        navigate("/EnterpriseDashboard");
+        navigate("/enterprise-dashboard");
       } else {
        // alert(data.error);
       setToast({ message: "Erro ao fazer login", type: "error" })
         }
-      }catch (error) {
+      }catch (error: any) {
         console.error("Erro no login:", error);
-        setToast({ message: "Erro no servidor. Tente novamente", type: "error" })
+
+        if (error.response ) {
+          const errorStatus = error.response.status;
+          if (errorStatus === 401) {
+            setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
+          }
+        }
       }finally {
         setLoading(false);
       }

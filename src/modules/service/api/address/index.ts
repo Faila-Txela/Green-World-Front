@@ -9,7 +9,8 @@ class AddressService {
             return response.data.id;
         }
         catch (error) {
-            console.error("Erro ao buscar endereco", error);
+            console.error("Erro ao buscar endereço", error);
+            
             throw error;
         }
     }

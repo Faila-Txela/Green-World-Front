@@ -1,12 +1,28 @@
+import { useEffect, useState } from "react";
 import UploadArea from "../components/upload-area/single";
 import CustomSelector from "../components/custom/selector";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Textarea from "../components/ui/TextArea";
-import { useState } from "react";
+import Toast from "./Toast";
+import axios from "axios";
+
 
 export default function Relatos() {
-  const [selectedProvince, setSelectedProvince] = useState<string>();
   const [selectPriority, setSelectPriority] = useState<string>();
+  const [provincias, setProvincias] = useState<Provincia[]>([]);
+  const [provincia, setProvincia] = useState<string>("");
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+    const fetchProvincias = async () => {
+      const response = await axios.get("/provincia");
+      if (response.status === 200) {
+        setProvincias(response.data);
+      }
+    };
+
+     useEffect(() => {
+       fetchProvincias();
+     }, []);
 
   return (
     <div className="flex justify-center p-12">
@@ -24,33 +40,26 @@ export default function Relatos() {
       <form className="flex flex-col gap-6 mt-5 rounded-lg w-full">
 
         {/* Localidade */}
-          <div className="grid grid-cols-2 gap-4">
-          <div>
-          <label
-            htmlFor="localidade"
-            className="text-body font-semibold text-gray-700 mb-2"
-          >
-            Sua Localidade <b className="text-red-700">*</b>
-          </label>
-          <CustomSelector
-            onChange={(e) => setSelectedProvince(e)}
-            value={selectedProvince}
-            items={[
-              { label: "Luanda", value: "1" },
-              { label: "Camama", value: "2" },
-              { label: "Rangel", value: "3" },
-              { label: "Maianga", value: "4" },
-              { label: "Mussulo", value: "5" },
-              { label: "Belas", value: "6" },
-              { label: "Viana", value: "7" },
-              { label: "Cazenga", value: "8" },
-              { label: "Hoji-Ya-Henda", value: "9" },
-              { label: "Samba", value: "10" },
-              { label: "Mutamba", value: "11" },
-              { label: "Ngola Kiluange", value: "12" },
-            ]}
-          />
-        </div>
+        <div className="grid grid-cols-2 gap-4">
+        <div>
+            <label
+              htmlFor="provincia"
+              className="block text-gray-600 font-semibold mb-2"
+            >
+              Sua Provincia
+            </label>
+            <select
+            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+              value={provincia}
+              autoComplete="on"
+              onChange={(e) => setProvincia(e.target.value)}
+            >
+              <option className="" key="" value="">Selecione a provincia</option>
+              {provincias.map((provincia) => (
+                <option value={provincia.id}>{provincia.nome}</option>
+              ))}
+            </select>
+          </div>
 
         {/* Prioridade */}
         <div>
@@ -99,7 +108,7 @@ export default function Relatos() {
 
         {/* Botão de Envio */}
         <div className="">
-          <PrimaryButton name="Enviar Relato" addClassName="mt-4 bg-green-600 hover:bg-green-700 text-white transition duration-300 ease-in-out transform hover:scale-105" />
+          <PrimaryButton name="Enviar Relato" addClassName="" />
         </div>
       </form>
 
@@ -108,7 +117,10 @@ export default function Relatos() {
         <p>Após o envio, sua solicitação será processada e você receberá um feedback sobre a situação do seu relato.</p>
         <p className="mt-2 text-sm">Obrigado por ajudar a manter nossa cidade limpa!</p>
       </div>
-          </div>
+      </div>
+
+       {/* Exibe o Toast se houver mensagem */}
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
     </div>
   );
