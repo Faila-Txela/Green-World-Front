@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 
 
 
-export default function PersonalDashboard() {
+export default function EnterpriseDashboard() {
   const locationsData = [
     { name: "Centro da Cidade", relatos: 120 },
     { name: "Mutamba", relatos: 85 },

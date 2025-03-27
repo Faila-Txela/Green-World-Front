@@ -12,7 +12,19 @@ import Card from "../components/Card";
 import Map from "../components/Map";
 import { motion } from "framer-motion"; // Importando framer-motion
 
-function Modal({ item, onClose }) {
+interface ModalProps {
+  item: {
+    type: "image" | "video" | "item"
+    src: string
+    title: string
+    item: string
+    description: string
+    time: string
+  };
+  onClose: () => void
+}
+
+  function Modal({ item, onClose }: ModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
@@ -32,8 +44,8 @@ function Modal({ item, onClose }) {
 
 export default function Home() {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedFAQ, setSelectedFAQ] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<ModalProps['item'] | null>(null);
+  const [selectedFAQ, setSelectedFAQ] = useState<number | null>(null);
   const [scrolling, setScrolling] = useState(false);
 
   const handleScroll = () => {
