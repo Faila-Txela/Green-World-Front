@@ -1,7 +1,7 @@
 import './index.css'
 import "@radix-ui/themes/styles.css";
 import { Routes, Route } from 'react-router-dom'
-//import PrivateRoute from '../src/routes/PrivateRoute'
+import PrivateRoute from '../src/routes/PrivateRoute'
 import Home from './pages'
 import Contacts from './pages/Contacts';
 import PersonalLogin from './pages/user-personal/PersoanlLogin';
@@ -14,9 +14,14 @@ import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise'
 import News from './pages/News'
 import NotFound from './pages/Not-found'
 import Terms from './components/client/Terms'
+import PersonalDashboard from 'components/Dashboards/PersonalDashboard';
 
 
  export default function App() {
+
+  function isAuthenticated() {
+    return localStorage.getItem('token') !== null;
+  }
 
   return (
     <>
@@ -32,6 +37,10 @@ import Terms from './components/client/Terms'
       <Route path="enterprise-dashboard" element={<EnterpriseSidebar />} />
       <Route path="personal-dashboard" element={<PersonalSidebar />} />
       <Route path="terms" element={<Terms />} />
+
+      <Route path="/personal-dashboard" element={<PrivateRoute auth={isAuthenticated()}>
+                <PersonalDashboard />
+              </PrivateRoute>} />
 
       {/* Rotas privadas */}
       {/* <Route path="/enterprises" element={<PrivateRoute element={<Empresas />} />} />
