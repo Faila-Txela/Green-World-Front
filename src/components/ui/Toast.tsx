@@ -18,11 +18,11 @@ export default function Toast({ message, type = "success", onClose }: ToastProps
 
   return (
     <div
-      className={`fixed bottom-5 right-5 flex items-center gap-3 px-6 py-4  rounded-lg shadow-xl transition-transform tarnsfrom animate-slide-in 
+      className={`fixed bottom-5 right-5 flex items-center gap-3 px-6 py-3 text-white rounded-lg shadow-xl transition-transform tarnsfrom animate-slide-in 
         ${type === "success" ? "bg-green-600 border-l-4 border-green-400" : "bg-red-600 border-l-4 border-red-400"}
         animate-slide-in`}
     >
-      {type === "success" ? <FaCheckCircle size={24} /> : <FaTimesCircle size={24} />}
+      {type === "success" ? <FaCheckCircle size={22} /> : <FaTimesCircle size={22} />}
       <span className="text-lg font-medium">{message}</span>
       <button className="ml-4 text-white hover:text-gray-300" onClick={onClose}>✖</button>
     </div>

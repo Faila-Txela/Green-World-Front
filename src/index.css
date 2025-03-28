@@ -16,7 +16,7 @@
   /* Ocultar scrollbar para IE e Edge */
   .scrollbar-hide {
       -ms-overflow-style: none; /* IE e Edge */
-      scrollbar-width: none; /* Firefox */
+       /* Firefox */
   }
 }
 
@@ -38,4 +38,4 @@ body{
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background .5s, color .5s;
-}   */
+}  */ 

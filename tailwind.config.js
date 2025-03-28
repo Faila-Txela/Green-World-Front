@@ -1,11 +1,10 @@
 
-/** @type {import('tailwindcss').Config} */
-import { keyframes } from 'framer-motion';
+/** @type {import('tailwindcss').Config} */                           
 import tailwindScrollbarHide from 'tailwind-scrollbar-hide';
 
 export default {
   content: ["./index.html", 
-    "./src/**/*.{js,ts,jsx,tsx}"],
+    "./src/**/*.{js,ts,jsx,tsx,html}"],
 
   theme: {
     extend: {
@@ -13,7 +12,7 @@ export default {
         "slide-in": "slideIn .5 ease-out",
       },
       keyframes:{
-        float: {
+        slideIn: {
           '0%': { transform: 'translateY(-100%)', opcaity: "0"},
           '100%': { transform: 'translateY(0)', opcaity: "1"}
         }

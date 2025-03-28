@@ -5,15 +5,14 @@ import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
-import Principal from "../../components/Dashboard/PersonalDashboard";
-import Relatos from "../../components/Relatos";
+import Principal from "../../components/Dashboards/PersonalDashboard";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
 import Terms from "../../components/client/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "Dashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
+type ComponentKey = "Dashboard" | "Feedback" | "Settings" | "Terms";
 
 
 const EnterpriseSidebar = () => {
@@ -29,7 +28,6 @@ const EnterpriseSidebar = () => {
   const ComponentMap = {
     Dashboard: <Principal />,
     Feedback: <Feedback />,
-    Relatos: <Relatos />,
     Settings: <Settings />,
     Terms: <Terms />
   };
@@ -48,12 +46,6 @@ const EnterpriseSidebar = () => {
               onClick={() => setActiveComponent("Dashboard")}>
               <MdOutlineSpaceDashboard size={20} />
               {isSidebarOpen && <span>Dashboard</span>}
-            </div>
-
-            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Relatos")}>
-              <GoReport size={20} />
-              {isSidebarOpen && <span>Relatar</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"

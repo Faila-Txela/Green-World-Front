@@ -11,11 +11,11 @@ export default function EnterpriseDashboard() {
     { name: "Viana", relatos: 65 },
   ];
   
-//   const monthsData = [
-//     { name: "Janeiro", coletados: 80 },
-//     { name: "Fevereiro", coletados: 45 },
-//     { name: "Março", coletados: 10 },
-//   ];
+   const monthsData = [
+     { name: "Janeiro", coletados: 80 },
+     { name: "Fevereiro", coletados: 45 },
+     { name: "Março", coletados: 10 },
+   ];
   
   const wasteTypesData = [
     { name: "Plástico", value: 26 },
@@ -29,6 +29,7 @@ export default function EnterpriseDashboard() {
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">
         <div>
+           <h2 className="flex h-screen">Mapa com as localidades com mais relatas</h2>
           <Map />
         </div>
 
@@ -47,6 +48,20 @@ export default function EnterpriseDashboard() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+
+           {/* Gráfico de Meses com Mais Recolhas */}
+          <div className="bg-white p-4 shadow rounded-xl w-full">
+            <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={monthsData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="coletados" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div> 
 
           {/* Gráfico de Tipos de Lixo Mais Retirados */}
           <div className="bg-white p-4 shadow rounded-xl w-full">

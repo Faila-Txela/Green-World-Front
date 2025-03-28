@@ -4,7 +4,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png";
-import Toast from "../../components/Toast";
+import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 
 export default function PersonalLogin() {
@@ -25,7 +25,7 @@ export default function PersonalLogin() {
     setAnimate(true);
   }, []);
 
-       // Validação do email
+   // Validação do email
     const isEmailValid = (email: string) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
@@ -46,7 +46,7 @@ export default function PersonalLogin() {
 
     try {
       setLoading(true); // Ativa o estado de carregamento
-      const { data, status } = await axios.post("/login", {email, senha});
+      const { data, status } = await axios.post("user/login", {email, senha});
 
       if (status === 200) {
         setToast({message: "Login feito com sucesso", type: "success"})

@@ -6,7 +6,7 @@ import axios from "../../lib/axios";
 interface DashHeaderProps {
   toggleSidebar: () => void;
   isSidebarOpen: boolean;
-  //onLogout: () => void; // Adicionando a função de logout como prop
+  //onLogout: () => void;
 }
 
 const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen}) => {

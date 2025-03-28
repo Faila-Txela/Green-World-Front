@@ -1,3 +1,4 @@
+import { Autocomplete } from "@react-google-maps/api";
 import PropTypes from "prop-types"
 
 interface InputProps {
@@ -6,11 +7,11 @@ interface InputProps {
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   placeholder: string;
-  autoComplete: string;
+  autoComplete?: string;
   addClassName: string;
 }
 
-export default function Input({ id, type, placeholder, autoComplete, addClassName, onChange }: InputProps) {
+export default function Input({ id, type, placeholder, addClassName, onChange }: InputProps) {
   return (
     <div>
       <input
@@ -19,7 +20,7 @@ export default function Input({ id, type, placeholder, autoComplete, addClassNam
         type={type}
         onChange={onChange}
         placeholder={placeholder}
-        autoComplete={autoComplete} />
+       />
     </div>
   )
 };
@@ -28,8 +29,8 @@ Input.propTypes = {
   id: PropTypes.string,
   type: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   autoComplete: PropTypes.string,
+  placeholder: PropTypes.string.isRequired,
   addClassName: PropTypes.string,
   onchange: PropTypes.func,
 }

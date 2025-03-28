@@ -4,8 +4,7 @@ import { FaUser, FaEnvelope, FaLock, FaUniversity, FaIdCard, FaEyeSlash, FaEye }
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Logo from "../../assets/Logo";
 import { userService } from "../../modules/service/api/user";
-import { useQuery } from "@tanstack/react-query";
-import Toast from "../../components/Toast";
+import Toast from "../../components/ui/Toast";
 import { typeUserService } from "../../modules/service/api/typeUser";
 
 
@@ -32,7 +31,8 @@ const InputField = ({ label, type, name, value, onChange, autoComplete, icon, ex
         value={value}
         onChange={onChange}
         required
-        autoComplete={autoComplete}
+        placeholder={`Enter your ${label.toLowerCase()}`}
+        title={label}
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
       />
     </div>
@@ -82,7 +82,7 @@ export default function UserForm() {
       }
 
     } catch (error){
-      console.error("Erro ao enviar os dados de cadastro ❌", error)
+      //console.error("Erro ao enviar os dados de cadastro ❌", error)
       setToast({ message: "Erro ao enviar os dados de cadastro", type: "error" })
     }
 
@@ -112,6 +112,7 @@ export default function UserForm() {
               label="Senha" 
               type={isShowPassword ? "text" : "password"} 
               name="senha" 
+              autoComplete="on"
               value={formData.senha} 
               onChange={handleChange} 
               icon={<FaLock />} 
@@ -126,11 +127,14 @@ export default function UserForm() {
           </button>
           </div>
 
-          <InputField label="IBAN" type="text" name="iban" value={formData.iban} onChange={handleChange} icon={<FaUniversity />} />
-          <InputField label="Nome do Titular" type="text" name="nome_titular" value={formData.nome_titular} onChange={handleChange} icon={<FaIdCard />} />
+          <InputField label="IBAN" type="text" name="iban" autoComplete="on" value={formData.iban} onChange={handleChange} icon={<FaUniversity />} />
+          <InputField label="Nome do Titular" type="text" name="nome_titular" autoComplete="on" value={formData.nome_titular} onChange={handleChange} icon={<FaIdCard />} />
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
-          <span><input type="checkbox" name="" id="" /></span>
+          <span>
+            <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
+            <label htmlFor="terms" className="sr-only">Agree to terms and privacy policy</label>
+          </span>
           <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
           </div>
 

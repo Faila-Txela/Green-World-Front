@@ -13,12 +13,9 @@ import {
 import { HiMiniIdentification } from "react-icons/hi2";
 import { SiSitepoint } from "react-icons/si";
 import Logo from "../../assets/Logo";
-import { useQuery } from "@tanstack/react-query";
-import { provinciaService } from "../../modules/service/api/provincia";
 import { empresaService } from "../../modules/service/api/enpresa";
 import { addressService } from "../../modules/service/api/address";
-import { typeUserService } from "../../modules/service/api/typeUser";
-import Toast from "../../components/Toast";
+import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 
 const InputField = ({
@@ -52,9 +49,10 @@ const InputField = ({
         type={type}
         name={name}
         value={value}
-        autoComplete={autoComplete}
         onChange={onChange}
         required
+        title={`Enter your ${label.toLowerCase()}`}
+        placeholder={`Enter your ${label.toLowerCase()}`}
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
       />
     </div>
@@ -213,6 +211,7 @@ export default function EnterpriseForm() {
               label="Senha"
               type={isShowPassword ? "text" : "password"}
               name="senha"
+              autoComplete="on"
               value={formData.senha}
               onChange={handleChange}
               icon={<FaLock />}
@@ -260,6 +259,7 @@ export default function EnterpriseForm() {
               label="Site da Empresa"
               type="url"
               name="site"
+              autoComplete="on"
               value={formData.site}
               onChange={handleChange}
               icon={<SiSitepoint />}
@@ -277,6 +277,7 @@ export default function EnterpriseForm() {
               value={provincia}
               autoComplete="on"
               onChange={(e) => setProvincia(e.target.value)}
+              title="Selecione sua província"
             >
               <option className="" key="" value="">Selecione a provincia</option>
               {provincias.map((provincia) => (
@@ -298,6 +299,7 @@ export default function EnterpriseForm() {
               value={municipio}
               autoComplete="on"
               onChange={(e) => setMunicipio(e.target.value)}
+              title="Selecione seu município"
             >
               <option value="" key="" className="">Selecione o município</option>
               {municipios.map((municipio) => (
@@ -319,6 +321,7 @@ export default function EnterpriseForm() {
               value={typeGarbage}
               autoComplete="on"
               onChange={(e) => setTypeGarbage(e.target.value)}
+              title="Selecione a sua área de actuação"
             >
               <option value="" key="" className="">Selecione a sua área de actuação</option>
               {typeGarbages.map((typeGarbage) => (
@@ -328,8 +331,12 @@ export default function EnterpriseForm() {
           </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
+
             <span>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" name="terms" id="terms" />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                I agree to the terms and privacy policy
+              </label>
             </span>
             <Link
               to="/Terms"
@@ -337,6 +344,7 @@ export default function EnterpriseForm() {
             >
               Concordo com os termos e política de privacidade da Green World
             </Link>
+
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">

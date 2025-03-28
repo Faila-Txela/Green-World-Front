@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from 'tailwindcss';
-import axios from 'axios';
 
 // https://vite.dev/config/
 

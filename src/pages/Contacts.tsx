@@ -8,36 +8,41 @@ import axios from "../lib/axios";
 import { MdOutlineEmail } from "react-icons/md";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import TextArea from "../components/ui/TextArea";
+import Toast from "../components/ui/Toast";
+
 
 export default function Contacts() {
   const navigate = useNavigate()
   const [email,setEmail] = useState("")
   const [nome,setNome] = useState("")
   const [mensagem,setMensagem] = useState("")
-
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
+  setEmail(e.target.value);
   const handleNomeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setNome(e.target.value);
+  setNome(e.target.value);
   const handleMensagemChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setMensagem(e.target.value);
+  setMensagem(e.target.value);
 
-    const Enter = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault()
       if (!email || !nome || !mensagem) {
         alert("Preencha todos os campos corretamente.");
         return;
       }
   
       try {
-        const { data, status } = await axios.post("/login", {nome, email, mensagem});
+        const { data, status } = await axios.post("/contacto", {nome, email, mensagem});
         if (status === 200) {
-          navigate("/terms");
           localStorage.setItem("user", JSON.stringify(data.data))
+          setToast({ message: "Mensagem enviada com sucesso", type: "success" })
+          setTimeout(() => navigate("/terms"), 2000)
         } else {
           alert(data.error);
         }
       } catch (error) {
-        console.error("Erro ao enviar a mensagem:", error);
+        //console.error("Erro ao enviar a mensagem:", error);
+        setToast({ message: "Erro ao enviar sua mensagem", type: "error" })
       } 
     };
 
@@ -75,7 +80,7 @@ export default function Contacts() {
             <p className="text-center text-[14px] mt-2 md:text-lg text-gray-600">Envie suas dúvidas para nós</p>
           </div>
 
-          <form action="/enviar-contacto" onClick={(e) => {e.preventDefault()} } id="contact-form" name="contact" method="POST" className="gap-2 shadow-lg bg-white rounded-lg p-6">
+          <form action="" id="contact-form" name="contact" className="gap-2 shadow-lg bg-white rounded-lg p-6">
             <div className="flex flex-col items-center mb-4">
               <div className="w-full">
                 <label htmlFor="fullName" className="block font-medium mb-2 required">Nome completo</label>

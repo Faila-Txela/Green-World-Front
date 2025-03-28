@@ -5,7 +5,7 @@ import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
-import Principal from "../../components/Dashboard/EnterpriseDashboard";
+import Principal from "../../components/Dashboards/EnterpriseDashboard";
 import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
@@ -23,7 +23,6 @@ const PersonalSidebar = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   // Definir o tipo correto das chaves do ComponentMap
   const ComponentMap = {

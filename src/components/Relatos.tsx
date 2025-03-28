@@ -1,28 +1,27 @@
 import { useEffect, useState } from "react";
 import UploadArea from "../components/upload-area/single";
-import CustomSelector from "../components/custom/selector";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Textarea from "../components/ui/TextArea";
-import Toast from "./Toast";
+import Toast from "../components/ui/Toast";
 import axios from "axios";
 
 
 export default function Relatos() {
-  const [selectPriority, setSelectPriority] = useState<string>();
+  const [priority, setPriority] = useState<string>();
   const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [provincia, setProvincia] = useState<string>("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
-    const fetchProvincias = async () => {
-      const response = await axios.get("/provincia");
-      if (response.status === 200) {
-        setProvincias(response.data);
-      }
-    };
+    // const fetchProvincias = async () => {
+    //   const response = await axios.get("/provincia");
+    //   if (response.status === 200) {
+    //     setProvincias(response.data);
+    //   }
+    // };
 
-     useEffect(() => {
-       fetchProvincias();
-     }, []);
+    //  useEffect(() => {
+    //    fetchProvincias();
+    //  }, []);
 
   return (
     <div className="flex justify-center p-12">
@@ -30,10 +29,10 @@ export default function Relatos() {
       {/* Conteúdo */}
         <div className="flex flex-col justify-center items-center p-6 shadow-lg bg-white">
           {/* Cabeçalho */}
-        <div className="flex flex-col bg-white p-12 rounded-lg w-full max-w-lg text-center gap-2">
+        <div className="flex flex-col bg-white p-12 rounded-lg w-full max-w-lg gap-2">
         <h2 className="text-3xl font-semibold text-green-800 mb-3">Relate um Amontoado de Lixo</h2>
-        <p className="text-gray-700 text-sm mb-3">Ajude-nos a manter nossa cidade limpa. Preencha os campos abaixo para reportar um acúmulo de lixo.</p>
-        <p className="text-gray-700 text-sm"><b className="text-red-700">*</b> Campos obrigatórios</p>
+        <p className="text-gray-700 text-sm mb-3 text-center">Ajude-nos a manter nossa cidade limpa. Preencha os campos abaixo para reportar um acúmulo de lixo.</p>
+        <p className="text-gray-700 text-sm text-center"><b className="text-red-700">*</b> Campos obrigatórios</p>
       </div>
 
       {/* Formulário */}
@@ -49,10 +48,9 @@ export default function Relatos() {
               Sua Provincia
             </label>
             <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={provincia}
-              autoComplete="on"
+              className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
               onChange={(e) => setProvincia(e.target.value)}
+              aria-label="Selecione sua provincia"
             >
               <option className="" key="" value="">Selecione a provincia</option>
               {provincias.map((provincia) => (
@@ -60,24 +58,26 @@ export default function Relatos() {
               ))}
             </select>
           </div>
+        </div>
 
         {/* Prioridade */}
         <div>
-          <label
-            htmlFor="prioridade"
-            className="text-body font-semibold text-gray-700 mb-2"
-          >
-            Prioridade <b className="text-red-700">*</b>
-          </label>
-          <CustomSelector
-            onChange={(e) => setSelectPriority(e)}
-            value={selectPriority}
-            items={[
-              { label: "Baixa", value: "baixa" },
-              { label: "Elevada", value: "elevada" },
-            ]}
-          />
-        </div>
+            <label
+              htmlFor="provincia"
+              className="block text-gray-600 font-semibold mb-2"
+            >
+              Qual é a prioridade
+            </label>
+            <select
+              className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              aria-label="Selecione a prioridade"
+            >
+              <option className="" key="" value="">Selecione a prioridade</option>
+                <option value="BAIXA"></option>
+                <option value="ALTA"></option>
+            </select>
           </div>
 
         {/* Descrição */}
@@ -107,9 +107,7 @@ export default function Relatos() {
         </div>
 
         {/* Botão de Envio */}
-        <div className="">
           <PrimaryButton name="Enviar Relato" addClassName="" />
-        </div>
       </form>
 
       {/* Feedback interativo */}

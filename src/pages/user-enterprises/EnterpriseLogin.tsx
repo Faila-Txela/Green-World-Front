@@ -4,7 +4,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png"
-import Toast from "../../components/Toast";
+import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 
 export default function EnterpriseLogin() {
@@ -49,9 +49,9 @@ export default function EnterpriseLogin() {
       if (status === 200) {
         setToast({ message: "Login feito com sucesso", type: "success" })
         localStorage.setItem("user", JSON.stringify(data.data))
-        navigate("/enterprise-dashboard");
+        setTimeout(() => navigate("/enterprise-dashboard"), 2000)
       } else {
-       // alert(data.error);
+       // console(data.error);
       setToast({ message: "Erro ao fazer login", type: "error" })
         }
       }catch (error: any) {
