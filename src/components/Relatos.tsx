@@ -1,27 +1,61 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UploadArea from "../components/upload-area/single";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Textarea from "../components/ui/TextArea";
 import Toast from "../components/ui/Toast";
+import { relatarService } from "../modules/service/api/relatar";
 import axios from "axios";
 
 
+interface RelatarFormData {
+  descricao: string;
+  latitude: string;
+  longitude: string;
+  userId: string;
+}
+
 export default function Relatos() {
+  const navigate = useNavigate();
   const [priority, setPriority] = useState<string>();
   const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [provincia, setProvincia] = useState<string>("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [formData, setFormData] = useState<RelatarFormData>({
+    descricao: "",
+    latitude: "",
+    longitude: "",
+    userId: ""
+  });
 
-    // const fetchProvincias = async () => {
-    //   const response = await axios.get("/provincia");
-    //   if (response.status === 200) {
-    //     setProvincias(response.data);
-    //   }
-    // };
+  const fetchProvincias = async () => {
+    const response = await axios.get("/provincia");
+    if (response.status === 200) {
+      setProvincias(response.data);
+    }
+  };
 
-    //  useEffect(() => {
-    //    fetchProvincias();
-    //  }, []);
+  const handleRelatar = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log("Relato feito com sucesso",formData)
+    try {
+      const relatarData = {
+        ...formData,
+      };
+
+      const response = await relatarService.create({ descricao: relatarData.descricao, latitude: relatarData.latitude, longitude: relatarData.longitude, userId: relatarData.userId });
+      console.log("Resposta do servidor", response);
+      if (response.status === 200) {
+        setTimeout(() => navigate("/terms"), 2000);
+      }
+    } catch (error) {
+      console.log("Erro ao enviar os seus dados para análise", error);
+    }
+  };
+  
+     useEffect(() => {
+       fetchProvincias();
+     }, []);
 
   return (
     <div className="flex justify-center p-12">
@@ -36,7 +70,7 @@ export default function Relatos() {
       </div>
 
       {/* Formulário */}
-      <form className="flex flex-col gap-6 mt-5 rounded-lg w-full">
+      <form className="flex flex-col gap-6 mt-5 rounded-lg w-full" >
 
         {/* Localidade */}
         <div className="grid grid-cols-2 gap-4">
@@ -75,8 +109,8 @@ export default function Relatos() {
               aria-label="Selecione a prioridade"
             >
               <option className="" key="" value="">Selecione a prioridade</option>
-                <option value="BAIXA"></option>
-                <option value="ALTA"></option>
+                <option value="BAIXA">Baixa</option>
+                <option value="ALTA">Alta</option>
             </select>
           </div>
 

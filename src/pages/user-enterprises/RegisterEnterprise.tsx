@@ -25,8 +25,7 @@ const InputField = ({
   value,
   onChange,
   icon,
-  extraPaddingRight = false,
-  autoComplete,
+  extraPaddingRight = false
 }: {
   label: string;
   type: string;
@@ -205,7 +204,6 @@ export default function EnterpriseForm() {
             icon={<FaEnvelope />}
           />
 
-          {/* Campo de senha com ajuste de padding */}
           <div className="relative">
             <InputField
               label="Senha"

@@ -14,7 +14,6 @@ import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise'
 import News from './pages/News'
 import NotFound from './pages/Not-found'
 import Terms from './components/client/Terms'
-import PersonalDashboard from 'components/Dashboards/PersonalDashboard';
 
 
  export default function App() {
@@ -39,7 +38,7 @@ import PersonalDashboard from 'components/Dashboards/PersonalDashboard';
       <Route path="terms" element={<Terms />} />
 
       <Route path="/personal-dashboard" element={<PrivateRoute auth={isAuthenticated()}>
-                <PersonalDashboard />
+                <PersonalSidebar />
               </PrivateRoute>} />
 
       {/* Rotas privadas */}
