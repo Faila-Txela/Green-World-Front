@@ -1,5 +1,5 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import Map from "../Map"
+import MapComponent from "../Map";
 import "leaflet/dist/leaflet.css";
 
 
@@ -11,6 +11,12 @@ export default function PersonalDashboard() {
     { name: "Viana", relatos: 65 },
   ];
   
+   const monthsData = [
+     { name: "Janeiro", coletados: 80 },
+     { name: "Fevereiro", coletados: 45 },
+     { name: "Março", coletados: 10 },
+   ];
+  
   const wasteTypesData = [
     { name: "Plástico", value: 26 },
     { name: "Orgânico", value: 38 },
@@ -19,15 +25,16 @@ export default function PersonalDashboard() {
   
   const COLORS = ["#FF0000", "#964B00", "#FFBB28"];  
   return (
-    <div>
+    <div className="">
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">
         <div>
-          <Map />
+           <h2 className="mt-12 font-semibold text-2xl">Mapa dos locais com mais relatas</h2>
+          <MapComponent />
         </div>
 
         {/* Gráficos organizados em grid responsivo */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 mt-20">
           {/* Gráfico de Locais com Mais Relatos */}
           <div className="bg-white p-4 shadow rounded-xl w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
@@ -41,6 +48,20 @@ export default function PersonalDashboard() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+
+           {/* Gráfico de Meses com Mais Recolhas */}
+          <div className="bg-white p-4 shadow rounded-xl w-full">
+            <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={monthsData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="coletados" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div> 
 
           {/* Gráfico de Tipos de Lixo Mais Retirados */}
           <div className="bg-white p-4 shadow rounded-xl w-full">

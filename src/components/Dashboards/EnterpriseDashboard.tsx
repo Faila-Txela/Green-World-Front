@@ -1,8 +1,8 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import Map from "../Map"
+import MapComponent from "../Map";
 import "leaflet/dist/leaflet.css";
 
-
+//eyJhbGciOiJIUzI1NiJ9.eyJhIjoiYWNfaWI5dHY0eXkiLCJqdGkiOiIyZjBlZjIzNiJ9.xUM68ikF9MBHfhxuJb0gNI_RMwFk1vbDCrbWKv00Tlo (token de acesso da API da carto dos mapas)
 
 export default function EnterpriseDashboard() {
   const locationsData = [
@@ -10,12 +10,6 @@ export default function EnterpriseDashboard() {
     { name: "Mutamba", relatos: 85 },
     { name: "Viana", relatos: 65 },
   ];
-  
-   const monthsData = [
-     { name: "Janeiro", coletados: 80 },
-     { name: "Fevereiro", coletados: 45 },
-     { name: "Março", coletados: 10 },
-   ];
   
   const wasteTypesData = [
     { name: "Plástico", value: 26 },
@@ -27,11 +21,11 @@ export default function EnterpriseDashboard() {
   return (
     <div>
       {/* Conteúdo principal */}
-      <div className="flex justify-center items-center flex-col">
-        <div>
-           <h2 className="flex h-screen">Mapa com as localidades com mais relatas</h2>
-          <Map />
-        </div>
+      <div className="">
+      <h2 className="mt-12 font-semibold text-2xl">Mapa com as localidades com mais relatas</h2>
+          <div className="flex flex-col items-center justify-center">
+          <MapComponent />
+          </div>
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
@@ -49,20 +43,6 @@ export default function EnterpriseDashboard() {
             </ResponsiveContainer>
           </div>
 
-           {/* Gráfico de Meses com Mais Recolhas */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
-            <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthsData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="coletados" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div> 
-
           {/* Gráfico de Tipos de Lixo Mais Retirados */}
           <div className="bg-white p-4 shadow rounded-xl w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
@@ -79,7 +59,7 @@ export default function EnterpriseDashboard() {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="">
+        <div>
         </div>
       </div>
     </div>

@@ -1,8 +1,15 @@
-import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from 'leaflet'; // Importando o Leaflet para personalizar os ícones
+import React, { useEffect } from 'react';
+import Feature from 'ol/Feature';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import Point from 'ol/geom/Point';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import XYZ from 'ol/source/XYZ';
+import VectorSource from 'ol/source/Vector';
+import Icon from 'ol/style/Icon';
+import Style from 'ol/style/Style';
 
-// Dados das localizações com mais informações para estados de lixo
 const locationsData = [
   { name: "Viana", meses: "Março", relatos: 65, lat: -8.864, lon: 13.56, estado: 'alto' },
   { name: "Alvalade", meses: "Abril", relatos: 30, lat: -8.852, lon: 13.259, estado: 'médio' },
@@ -11,65 +18,61 @@ const locationsData = [
   { name: "Samba", meses: "Março", relatos: 50, lat: -8.885, lon: 13.270, estado: 'médio' },
 ];
 
-// Função para definir os ícones com base no estado da região
-const getMarkerIcon = (estado: string) => {
+const getIconUrl = (estado: string) => {
   switch (estado) {
-    case 'alto':
-      return new L.Icon({
-        iconUrl: '/amico.svg',
-        iconSize: [25, 25],
-        iconAnchor: [12, 25],
-        popupAnchor: [0, -25]
-      });
-    case 'médio':
-      return new L.Icon({
-        iconUrl: '/garbage.svg',
-        iconSize: [40, 40], // Aumentando o tamanho 
-        iconAnchor: [12, 25],
-        popupAnchor: [0, -25]
-      });
-    case 'baixo':
-      return new L.Icon({
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg',
-        iconSize: [25, 25],
-        iconAnchor: [12, 25],
-        popupAnchor: [0, -25]
-      });
-    default:
-      return new L.Icon({
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg',
-        iconSize: [25, 25],
-        iconAnchor: [12, 25],
-        popupAnchor: [0, -25]
-      });
+    case 'alto': return '/amico.svg';
+    case 'médio': return '/garbage.svg';
+    case 'baixo': return 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg';
+    default: return 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg';
   }
 };
 
-const Map = () => {
-  return (
-    <div className="w-full md:w-[50rem] h-80 mb-16 mt-14 relative z-10">
-      <MapContainer center={[-8.83833, 13.2571]} zoom={13} style={{ width: "100%", height: "100%" }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors'
-        />
-        {locationsData.map((location, index) => (
-          <Marker
-            key={index}
-            position={[location.lat, location.lon]}
-            icon={getMarkerIcon(location.estado)} 
-          >
-            <Popup>
-              <strong>{location.name}</strong>
-              <p>Relatos: {location.relatos}</p>
-              <p>Meses com mais relatos: {location.meses}</p>
-              <p>Estado da região: {location.estado === 'alto' ? 'Alto' : location.estado === 'médio' ? 'Médio' : 'Baixo'}</p>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </div>
-  );
+const MapComponent: React.FC = () => {
+  useEffect(() => {
+    const features = locationsData.map(location => {
+      const feature = new Feature({
+        geometry: new Point([location.lon, location.lat]),
+        name: location.name,
+        relatos: location.relatos,
+        meses: location.meses,
+        estado: location.estado,
+      });
+
+      feature.setStyle(new Style({
+        image: new Icon({
+          src: getIconUrl(location.estado),
+          scale: 0.1,
+        }),
+      }));
+
+      return feature;
+    });
+
+    const vectorSource = new VectorSource({ features });
+
+    const vectorLayer = new VectorLayer({ source: vectorSource });
+
+    const rasterLayer = new TileLayer({
+      source: new XYZ({
+        url: 'https://{a-d}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?apiKey=apiKey=eyJhbGciOiJIUzI1NiJ9.eyJhIjoiYWNfaWI5dHY0eXkiLCJqdGkiOiIyZjBlZjIzNiJ9.xUM68ikF9MBHfhxuJb0gNI_RMwFk1vbDCrbWKv00Tlo',
+      }),
+    });
+
+    const map = new Map({
+      target: 'map',
+      layers: [rasterLayer, vectorLayer],
+      view: new View({
+        center: [13.2571, -8.83833],
+        zoom: 10,
+        projection: 'EPSG:4326',
+      }),
+    });
+
+    return () => map.setTarget();
+  }, []);
+
+  return <div id="map" className="" style={{ width: '150vh', height: '400px' }} />;
+
 };
 
-export default Map;
+export default MapComponent;

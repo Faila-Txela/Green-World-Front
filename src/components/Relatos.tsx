@@ -28,34 +28,34 @@ export default function Relatos() {
     userId: ""
   });
 
-  const fetchProvincias = async () => {
-    const response = await axios.get("/provincia");
-    if (response.status === 200) {
-      setProvincias(response.data);
-    }
-  };
+  // const fetchProvincias = async () => {
+  //   const response = await axios.get("/provincia");
+  //   if (response.status === 200) {
+  //     setProvincias(response.data);
+  //   }
+  // };
 
-  const handleRelatar = async (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Relato feito com sucesso",formData)
-    try {
-      const relatarData = {
-        ...formData,
-      };
+  // const handleRelatar = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   console.log("Relato feito com sucesso",formData)
+  //   try {
+  //     const relatarData = {
+  //       ...formData,
+  //     };
 
-      const response = await relatarService.create({ descricao: relatarData.descricao, latitude: relatarData.latitude, longitude: relatarData.longitude, userId: relatarData.userId });
-      console.log("Resposta do servidor", response);
-      if (response.status === 200) {
-        setTimeout(() => navigate("/terms"), 2000);
-      }
-    } catch (error) {
-      console.log("Erro ao enviar os seus dados para análise", error);
-    }
-  };
+  //     const response = await relatarService.create({ descricao: relatarData.descricao, latitude: relatarData.latitude, longitude: relatarData.longitude, userId: relatarData.userId });
+  //     console.log("Resposta do servidor", response);
+  //     if (response.status === 200) {
+  //       setTimeout(() => navigate("/terms"), 2000);
+  //     }
+  //   } catch (error) {
+  //     console.log("Erro ao enviar os seus dados para análise", error);
+  //   }
+  // };
   
-     useEffect(() => {
-       fetchProvincias();
-     }, []);
+  //    useEffect(() => {
+  //      fetchProvincias();
+  //    }, []);
 
   return (
     <div className="flex justify-center p-12">

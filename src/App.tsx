@@ -33,8 +33,8 @@ import Terms from './components/client/Terms'
       <Route path="register-personal" element={<RegisterPersonal />} />
       <Route path="personal-login" element={<PersonalLogin />} />
       <Route path="enterprise-login" element={<EnterpriseLogin />} />
-      <Route path="enterprise-dashboard" element={<EnterpriseSidebar />} />
-      <Route path="personal-dashboard" element={<PersonalSidebar />} />
+      <Route path="personal-dashboard" element={<EnterpriseSidebar />} />
+      <Route path="enterprise-dashboard" element={<PersonalSidebar />} />
       <Route path="terms" element={<Terms />} />
 
       <Route path="/personal-dashboard" element={<PrivateRoute auth={isAuthenticated()}>

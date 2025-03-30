@@ -8,9 +8,12 @@ import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import imageFixed from '../assets/pexels-tomfisk-3174349.jpg';
+import globe from '../assets/video/globe.gif'
 import Card from "../components/Card";
-import Map from "../components/Map";
-import { motion } from "framer-motion"; // Importando framer-motion
+import MapComponent from "../components/Map";
+import { motion } from "framer-motion"; 
+
+ //https://www.google.com/search?sca_esv=8568c3189e4a4419&sxsrf=AHTn8zpPPsJib0eVvJPPadQG3atKLKjSMw:1743267080151&q=api%27s+gratuitas+para+usar+mapas+em+projetos+react+js&spell=1&sa=X&ved=2ahUKEwipqb7436-MAxUhVEEAHUkKMc0QBSgAegQIDRAB&biw=1536&bih=738&dpr=1.25
 
 interface ModalProps {
   item: {
@@ -107,7 +110,8 @@ export default function Home() {
         </div>
 
         <div className="">
-          <Map />
+           <MapComponent /> 
+         {/* <img src={globe} className="w-full  rounded-md" /> */}
         </div>
       </motion.div>
 

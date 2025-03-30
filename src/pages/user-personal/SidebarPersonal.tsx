@@ -5,7 +5,7 @@ import { FiSettings } from "react-icons/fi";
 import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
-import Principal from "../../components/Dashboards/EnterpriseDashboard";
+import Principal from "../../components/Dashboards/PersonalDashboard";
 import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";

@@ -311,7 +311,7 @@ export default function EnterpriseForm() {
               htmlFor="tipoEmpresa"
               className="font-semibold mb-2 block text-gray-600"
             >
-              Que tipo você trabalha ?
+              Com que você trabalha ?
             </label>
 
             <select
@@ -331,17 +331,17 @@ export default function EnterpriseForm() {
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
 
             <span>
-              <input type="checkbox" name="terms" id="terms" />
-              <label htmlFor="terms" className="text-sm text-gray-600">
+              <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
+              <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
                 I agree to the terms and privacy policy
               </label>
-            </span>
-            <Link
+              {/* <Link
               to="/Terms"
               className="text-[#068a5b] text-sm hover:underline transition duration-500"
             >
               Concordo com os termos e política de privacidade da Green World
-            </Link>
+            </Link> */}
+            </span>
 
           </div>
 

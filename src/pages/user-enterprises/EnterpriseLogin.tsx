@@ -56,6 +56,7 @@ export default function EnterpriseLogin() {
         }
       }catch (error: any) {
         console.error("Erro no login:", error);
+        setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" })
 
         if (error.response ) {
           const errorStatus = error.response.status;

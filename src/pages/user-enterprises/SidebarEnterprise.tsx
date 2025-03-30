@@ -2,22 +2,21 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
-import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
-import Principal from "../../components/Dashboards/PersonalDashboard";
+import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
 import Terms from "../../components/client/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "Dashboard" | "Feedback" | "Settings" | "Terms";
+type ComponentKey = "EnterpriseDashboard" | "Feedback" | "Settings" | "Terms";
 
 
 const EnterpriseSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeComponente, setActiveComponent] = useState<ComponentKey>("Dashboard");
+  const [activeComponente, setActiveComponent] = useState<ComponentKey>("EnterpriseDashboard");
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -26,7 +25,7 @@ const EnterpriseSidebar = () => {
 
   // Definir o tipo correto das chaves do ComponentMap
   const ComponentMap = {
-    Dashboard: <Principal />,
+    EnterpriseDashboard: <EnterpriseDashboard />,
     Feedback: <Feedback />,
     Settings: <Settings />,
     Terms: <Terms />
@@ -43,7 +42,7 @@ const EnterpriseSidebar = () => {
         <div className={`bg-green-800 h-screen fixed top-0 left-0 p-5 pt-20 text-white transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-20"}`}>
           <div className="space-y-5">
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Dashboard")}>
+              onClick={() => setActiveComponent("EnterpriseDashboard")}>
               <MdOutlineSpaceDashboard size={20} />
               {isSidebarOpen && <span>Dashboard</span>}
             </div>
