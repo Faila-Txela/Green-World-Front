@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
+import { GoReport } from "react-icons/go";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
 import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
+import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
 import Terms from "../../components/client/Terms";
@@ -14,14 +16,13 @@ import Terms from "../../components/client/Terms";
 type ComponentKey = "EnterpriseDashboard" | "Feedback" | "Settings" | "Terms";
 
 
-const EnterpriseSidebar = () => {
+const PersonalSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("EnterpriseDashboard");
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   // Definir o tipo correto das chaves do ComponentMap
   const ComponentMap = {
@@ -73,4 +74,4 @@ const EnterpriseSidebar = () => {
   );
 };
 
-export default EnterpriseSidebar;
+export default PersonalSidebar;

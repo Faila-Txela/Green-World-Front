@@ -8,39 +8,64 @@ import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 
 export default function PersonalLogin() {
+  const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [senhaError, setSenhaError] = useState("");
   const [animate, setAnimate] = useState(false); 
   const [loading, setLoading] = useState(false); 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-  const navigate = useNavigate();
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setSenha(e.target.value);
+  
 
+     // Validação do email
+     const isEmailValid = (email: string) => {
+      const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      return regex.test(email);
+    };
+
+    /* Validação dos campos de email */ 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    setEmail(e.target.value);
+     if(!isEmailValid(e.target.value)){
+      setEmailError("Email inválido.")
+     }
+     else{
+      setEmailError("")
+     }
+  }
+
+    /* Validação dos campos de senha */ 
+  const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    setSenha(e.target.value);
+    if (e.target.value.length < 6) {
+      setEmailError("A senha deve conter no máximo 6 caracteres.")
+    }
+    else{
+      setSenhaError("")
+    }
+  }
 
   useEffect(() => {
     setAnimate(true);
   }, []);
 
-   // Validação do email
-    const isEmailValid = (email: string) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
   // Função para o botão de navegar até á Dashboard do cidadão comum
   const Enter = async () => {
     if (!email || !senha) {
-      setToast({message: "Preencha todos os campos", type: "error"})
+      setToast({message: "Preencha todos os campos.", type: "error"})
       return;
     }
 
     if (!isEmailValid(email)) {
-      console.error("Email inválido.");
-      setToast({message: "Email inválido", type: "error"})
+      //console.error("Email inválido.");
+      setToast({message: "Email inválido. Tente novamente", type: "error"})
+      return;
+    }
+
+    if (senha.length < 6) {
+      setToast({ message: "A senha deve ter pelo menos 6 caracteres.", type: "error" });
       return;
     }
 
@@ -58,7 +83,7 @@ export default function PersonalLogin() {
       }
      } 
      catch (error: any) {
-      console.error("Erro no login:", error);
+      //console.error("❌ Erro no login:", error);
     
       if (error.response ) {
         const errorStatus = error.response.status;
@@ -102,6 +127,7 @@ export default function PersonalLogin() {
               onChange={handleEmailChange}
               addClassName="w-full border-2 focus:border-green-400 p-2 rounded-md"
             />
+            {emailError && <span className="text-red-500 text-sm">{emailError}</span>}
 
             <label htmlFor="senha" className="p-1">
               Sua senha
@@ -116,6 +142,8 @@ export default function PersonalLogin() {
                 onChange={handleSenhaChange}
                 addClassName="w-full border-2 focus:border-green-400 rounded-md"
               />
+              {senhaError && <span className="text-red-500 text-sm">{senhaError}</span>}
+              
               <button
                 type="button"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2"

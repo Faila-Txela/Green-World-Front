@@ -110,7 +110,7 @@ export default function EnterpriseForm() {
 
   const fetchMunicipio = async (id: string) => {
     const response = await axios.get(`/municipio/provincia/${id}`);
-    console.log(response.data);
+    //console.log(response.data);
     if (response.status === 200) {
       setMunicipios(response.data);
     }
@@ -125,7 +125,7 @@ export default function EnterpriseForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Dados enviados:", formData);
+    //console.log("Dados enviados:", formData);
     setToast({ message: "Empresa cadastrada com sucesso!", type: "success" })
     
     try {
@@ -136,13 +136,13 @@ export default function EnterpriseForm() {
       const {data} = await addressService.create(empresaData.bairro, municipio, provincia, empresaData.phone)
       const response = await empresaService.create({email: empresaData.email, enderecoId:data.id, nif: empresaData.nif, nome: empresaData.nome, senha: empresaData.senha, tipoEmpresa_id: typeGarbage, site: empresaData.site});
       
-      console.log("Resposta do servidor:", response);
+      //console.log("Resposta do servidor:", response);
       if (response.status === 201) {
         setTimeout(() => navigate("/enterprise-login"), 2000)
       }
     } catch (error) {
-      console.log("❌ Erro ao cadastrar sua empresa:", error);
-      setToast({ message: "Erro ao cadastrar sua empresa", type: "error" })
+      //console.log("❌ Erro ao cadastrar sua empresa:", error);
+      setToast({ message: "❌ Erro ao cadastrar sua empresa", type: "error" })
     }
   };
 
@@ -184,7 +184,7 @@ export default function EnterpriseForm() {
           </Link>
         </div>
 
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit} action="Admindashboard">
           <InputField
             label="Nome da Empresa"
             type="text"

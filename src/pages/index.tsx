@@ -105,7 +105,7 @@ export default function Home() {
             Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!
           </p>
           <div className="flex my-4">
-            <PrimaryButton name="Comece a Relatar" addClassName="px-20 py-3 text-lg" onClick={() => navigate('/Login')} />
+            <PrimaryButton name="Comece a Relatar" addClassName="px-20 py-3 text-lg" onClick={() => navigate('/personal-login')} />
           </div>
         </div>
 

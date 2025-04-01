@@ -8,10 +8,6 @@ export default function Enterprises() {
 
   const navigate = useNavigate();
 
-  const registerEnterprise = () => {
-    navigate('/register-enterprise');
-  };
-
   return(
     <div className="bg-gray-50">
       <Header />
@@ -30,7 +26,7 @@ export default function Enterprises() {
           <p className="text-lg text-gray-600 mb-6">
             Ao registrar sua empresa na nossa plataforma, você terá acesso a ferramentas inovadoras para monitorar, reportar e ajudar na limpeza de pontos críticos de lixo. Contribua para um mundo mais verde e inteligente com um simples clique.
           </p>
-            <PrimaryButton name='Registre sua empresa' addClassName='' />
+            <PrimaryButton name='Registre sua empresa' addClassName='' onClick={() => navigate("/register-enterprise")} />
         </div>
         
         {/* Imagem */}
@@ -65,25 +61,25 @@ export default function Enterprises() {
             Ao registrar sua empresa na Green World, você se junta a um movimento global de transformação sustentável. Além de atuar em ações concretas de preservação, você ganha benefícios exclusivos para sua organização:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md duration-300 transform hover:scale-105">
               <h3 className="font-semibold text-xl text-gray-800 mb-4">Acesso à Tecnologia de Geolocalização</h3>
               <p className="text-gray-600">
                 Utilize nossa plataforma inovadora para identificar pontos críticos de lixo e desenvolver ações rápidas e eficazes para solucioná-los.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md duration-300 transform hover:scale-105">
               <h3 className="font-semibold text-xl text-gray-800 mb-4">Contribuição Ambiental Visível</h3>
               <p className="text-gray-600">
                 Seja uma empresa responsável e ganhe visibilidade por suas ações ambientais, participando ativamente na limpeza e sustentabilidade urbana.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md duration-300 transform hover:scale-105">
               <h3 className="font-semibold text-xl text-gray-800 mb-4">Impacto Positivo para sua Marca</h3>
               <p className="text-gray-600">
                 Associe sua marca a causas ambientais de grande impacto e fortaleça sua reputação no mercado com uma postura proativa em relação à preservação.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md duration-300 transform hover:scale-105">
               <h3 className="font-semibold text-xl text-gray-800 mb-4">Parcerias Estratégicas</h3>
               <p className="text-gray-600">
                 Colabore com outras empresas e ONGs para a implementação de projetos ambientais de grande alcance, promovendo mudanças significativas.

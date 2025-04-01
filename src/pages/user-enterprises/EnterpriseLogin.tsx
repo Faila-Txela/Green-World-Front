@@ -55,7 +55,7 @@ export default function EnterpriseLogin() {
       setToast({ message: "Erro ao fazer login", type: "error" })
         }
       }catch (error: any) {
-        console.error("Erro no login:", error);
+        //console.error("Erro no login:", error);
         setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" })
 
         if (error.response ) {

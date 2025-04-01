@@ -83,7 +83,7 @@ export default function UserForm() {
 
     } catch (error){
       //console.error("Erro ao enviar os dados de cadastro ❌", error)
-      setToast({ message: "Erro ao enviar os dados de cadastro", type: "error" })
+      setToast({ message: "❌ Erro ao enviar os dados de cadastro", type: "error" })
     }
 
   };

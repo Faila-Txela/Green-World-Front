@@ -3,22 +3,22 @@ import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
-import { GoReport } from 'react-icons/go';
 import DashHeader from "../../components/Headers/DashHeader";
-import PersonalDashboard from "../../components/Dashboards/PersonalDashboard";
-import Relatos from "../../components/Relatos";
-import Settings from "../../components/client/Settings";
+import AdminDashboard from "../../components/Dashboards/AdminDashboard";
+import Settings from "../../components/client/AdminSettings";
 import Feedback from "../../components/client/Feedback";
+import Provincia from "../../components/client/provincia";
+import Municipio from "../../components/client/municipio";
 import Terms from "../../components/client/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
+type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Settings" | "Terms";
 
 
-const EnterpriseSidebar = () => {
+const AdminSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeComponente, setActiveComponent] = useState<ComponentKey>("PersonalDashboard");
+  const [activeComponente, setActiveComponent] = useState<ComponentKey>("AdminDashboard");
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -27,9 +27,10 @@ const EnterpriseSidebar = () => {
 
   // Definir o tipo correto das chaves do ComponentMap
   const ComponentMap = {
-    PersonalDashboard: <PersonalDashboard />,
+    AdminDashboard: <AdminDashboard />,
     Feedback: <Feedback />,
-    Relatos: <Relatos />,
+    Provincias: <Provincia />,
+    Municipios: <Municipio />,
     Settings: <Settings />,
     Terms: <Terms />
   };
@@ -45,7 +46,7 @@ const EnterpriseSidebar = () => {
         <div className={`bg-green-800 h-screen fixed top-0 left-0 p-5 pt-20 text-white transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-20"}`}>
           <div className="space-y-5">
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("PersonalDashboard")}>
+              onClick={() => setActiveComponent("AdminDashboard")}>
               <MdOutlineSpaceDashboard size={20} />
               {isSidebarOpen && <span>Dashboard</span>}
             </div>
@@ -57,9 +58,15 @@ const EnterpriseSidebar = () => {
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Relatos")}>
-              <GoReport size={20} />
-              {isSidebarOpen && <span>Relatar</span>}
+              onClick={() => setActiveComponent("Provincias")}>
+              <FiSettings size={20} />
+              {isSidebarOpen && <span>Provincías</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Municipios")}>
+              <FiSettings size={20} />
+              {isSidebarOpen && <span>Municípios</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
@@ -82,4 +89,4 @@ const EnterpriseSidebar = () => {
   );
 };
 
-export default EnterpriseSidebar;
+export default AdminSidebar;

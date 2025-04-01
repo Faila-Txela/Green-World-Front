@@ -7,13 +7,14 @@ import Contacts from './pages/Contacts';
 import PersonalLogin from './pages/user-personal/PersoanlLogin';
 import EnterpriseLogin from './pages/user-enterprises/EnterpriseLogin';
 import Empresas from './pages/user-enterprises/Enterprises'
-import PersonalSidebar from './pages/user-personal/SidebarPersonal';
-import EnterpriseSidebar from './pages/user-enterprises/SidebarEnterprise';
+import PersonalSidebar from './pages/user-enterprises/SidebarEnterprise';
+import EnterpriseSidebar from './pages/user-personal/SidebarPersonal';
 import RegisterPersonal from './pages/user-personal/RegisterPersonal'
-import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise'
-import News from './pages/News'
-import NotFound from './pages/Not-found'
-import Terms from './components/client/Terms'
+import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise';
+import SidebarAdmin from './pages/admin/SidebarAdmin';
+import News from './pages/News';
+import NotFound from './pages/Not-found';
+import Terms from './components/client/Terms';
 
 
  export default function App() {
@@ -35,6 +36,7 @@ import Terms from './components/client/Terms'
       <Route path="enterprise-login" element={<EnterpriseLogin />} />
       <Route path="personal-dashboard" element={<EnterpriseSidebar />} />
       <Route path="enterprise-dashboard" element={<PersonalSidebar />} />
+      <Route path="admin" element={<SidebarAdmin />} />
       <Route path="terms" element={<Terms />} />
 
       <Route path="/personal-dashboard" element={<PrivateRoute auth={isAuthenticated()}>
