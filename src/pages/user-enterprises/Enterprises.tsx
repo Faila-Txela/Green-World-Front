@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Headers/Header';
 import Footer from '../../components/Footers/Footer';
+import PrimaryButton from '../../components/ui/PrimaryButton';
 import image from '../../assets/Law firm-bro.png';
 
 export default function Enterprises() {
@@ -29,11 +30,7 @@ export default function Enterprises() {
           <p className="text-lg text-gray-600 mb-6">
             Ao registrar sua empresa na nossa plataforma, você terá acesso a ferramentas inovadoras para monitorar, reportar e ajudar na limpeza de pontos críticos de lixo. Contribua para um mundo mais verde e inteligente com um simples clique.
           </p>
-          <button 
-            onClick={registerEnterprise} 
-            className="px-6 py-3 bg-green-800 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-all">
-            Registre sua Empresa
-          </button>
+            <PrimaryButton name='Registre sua empresa' addClassName='' />
         </div>
         
         {/* Imagem */}

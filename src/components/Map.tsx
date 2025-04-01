@@ -71,7 +71,7 @@ const MapComponent: React.FC = () => {
     return () => map.setTarget();
   }, []);
 
-  return <div id="map" className="" style={{ width: '150vh', height: '400px' }} />;
+  return <div id="map" className="" style={{ width: '100vh', height: '400px' }} />;
 
 };
 

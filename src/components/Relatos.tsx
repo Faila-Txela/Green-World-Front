@@ -17,6 +17,7 @@ interface RelatarFormData {
 
 export default function Relatos() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
   const [priority, setPriority] = useState<string>();
   const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [provincia, setProvincia] = useState<string>("");
@@ -27,6 +28,36 @@ export default function Relatos() {
     longitude: "",
     userId: ""
   });
+
+  const handleRelatar = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    
+     if (!formData.descricao ||  !provincia || !priority) {
+      setToast({ message: "Preencha todos os campos", type: "error" })
+      return
+     }
+     else{
+      setToast({ message: " well done!", type: "success" })
+     }
+
+    setLoading(false)
+
+    const response = { status: 200 }; // Replace with actual API response in real implementation
+    if (response.status === 200) {
+      setToast({ message: "", type: "success" })
+      setTimeout(() => navigate("/terms"), 2000)
+    } else{
+      setToast({ message: "Erro ao enviar o seu relato.", type: "error" })
+    }
+  }
+
+  const handleSucess = () => {
+    if (window.confirm("Seu relato foi enviado com sucesso!")) {
+      navigate("/terms")
+    }
+  }
+  
 
   // const fetchProvincias = async () => {
   //   const response = await axios.get("/provincia");
@@ -70,7 +101,7 @@ export default function Relatos() {
       </div>
 
       {/* Formulário */}
-      <form className="flex flex-col gap-6 mt-5 rounded-lg w-full" >
+      <form className="flex flex-col gap-6 mt-5 rounded-lg w-full" onSubmit={handleRelatar} >
 
         {/* Localidade */}
         <div className="grid grid-cols-2 gap-4">
@@ -153,6 +184,8 @@ export default function Relatos() {
 
        {/* Exibe o Toast se houver mensagem */}
         {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+
+          {loading && <div className="loader">Carregando...</div>} 
 
     </div>
   );

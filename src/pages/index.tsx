@@ -88,7 +88,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-100 h-96">
       <Header />
       
       <motion.div 
@@ -98,13 +98,13 @@ export default function Home() {
         transition={{ duration: 1 }}
       >
         <div className="p-3">
-          <h1 className="text-5xl font-extrabold text-global-color-three leading-tight">
+          <h1 className="text-5xl font-extrabold font-mono text-global-color-three leading-tight">
             Luanda mais limpa começa com você!
           </h1>
           <p className="text-lg text-gray-700 mt-4">
             Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!
           </p>
-          <div className="flex justify-center my-4">
+          <div className="flex my-4">
             <PrimaryButton name="Comece a Relatar" addClassName="px-20 py-3 text-lg" onClick={() => navigate('/Login')} />
           </div>
         </div>
@@ -164,32 +164,32 @@ export default function Home() {
 
       {/* FAQ Seção */}
       <motion.div
-        className="p-6 md:px-16 flex flex-col md:flex-row justify-center items-center mt-14 mb-16 gap-8"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <div className="text-start w-full max-w-xl md:max-w-2xl">
-          <p className="text-gray-600 font-semibold text-lg sm:text-xl">FAQ</p>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
+  className="p-6 md:px-16 flex flex-col md:flex-row justify-center items-center mt-14 mb-16 gap-8"
+  initial={{ opacity: 0, y: 50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+>
+  <div className="text-start w-full max-w-xl md:max-w-2xl">
+    <p className="text-gray-600 font-semibold text-lg sm:text-xl">FAQ</p>
+    <h2 className="text-3xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
+  </div>
+  
+  <div className="w-full max-w-2xl space-y-4">
+    {faqs.map((faq, index) => (
+      <div key={index} className="border-b border-gray-300">
+        <div
+          className="py-4 text-lg sm:text-xl font-medium cursor-pointer hover:text-green-600"
+          onClick={() => setSelectedFAQ(selectedFAQ === index ? null : index)}
+        >
+          <span className="font-bold">{index + 1}.</span> {faq.question}
         </div>
-        
-        <div className="w-full max-w-2xl space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-gray-300">
-              <div
-                className="py-4 text-lg sm:text-xl font-medium cursor-pointer hover:text-green-600"
-                onClick={() => setSelectedFAQ(selectedFAQ === index ? null : index)}
-              >
-                {faq.question}
-              </div>
-              {selectedFAQ === index && (
-                <p className="text-gray-600 mt-2 text-sm sm:text-base">{faq.answer}</p>
-              )}
-            </div>
-          ))}
-        </div>
-      </motion.div>
+        {selectedFAQ === index && (
+          <p className="text-gray-600 mt-2 text-sm sm:text-base">{faq.answer}</p>
+        )}
+      </div>
+    ))}
+  </div>
+</motion.div>
 
       <Footer />
     </div>
