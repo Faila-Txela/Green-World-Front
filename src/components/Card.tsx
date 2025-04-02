@@ -37,11 +37,11 @@ export default function CardCarousel() {
             ].map((card, index) => (
               <motion.div
                 key={index}
-                className="bg-white h-36 shadow-lg rounded-lg p-6 text-center mx-3 sm:max-w-full hover:text-green-800"
+                className="bg-white h-36 shadow-lg rounded-lg p-4 text-center mx-3 sm:max-w-full hover:text-green-800"
                 whileHover={{ scale: 1.05 }}
               >
                 <h3 className="font-medium text-xl mt-4">{card.title}</h3>
-                <p className="text-gray-600 mt-2">{card.desc}</p>
+                <p className="text-gray-600">{card.desc}</p>
               </motion.div>
             ))}
           </div>

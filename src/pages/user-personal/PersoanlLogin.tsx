@@ -81,7 +81,7 @@ export default function PersonalLogin() {
       }
      } 
      catch (error: any) {
-      //console.error("❌ Erro no login:", error);
+      console.error("❌ Erro no login:", error);
       setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" })
     
       if (error.response ) {

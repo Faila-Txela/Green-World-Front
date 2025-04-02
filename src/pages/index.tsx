@@ -8,9 +8,8 @@ import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import imageFixed from '../assets/pexels-tomfisk-3174349.jpg';
-import globe from '../assets/video/globe.gif'
+import map from '../assets/map1.png'
 import Card from "../components/Card";
-import MapComponent from "../components/Map";
 import { motion } from "framer-motion"; 
 
  //https://www.google.com/search?sca_esv=8568c3189e4a4419&sxsrf=AHTn8zpPPsJib0eVvJPPadQG3atKLKjSMw:1743267080151&q=api%27s+gratuitas+para+usar+mapas+em+projetos+react+js&spell=1&sa=X&ved=2ahUKEwipqb7436-MAxUhVEEAHUkKMc0QBSgAegQIDRAB&biw=1536&bih=738&dpr=1.25
@@ -88,11 +87,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 h-96">
+    <div className="min-h-screen flex flex-col">
       <Header />
       
       <motion.div 
-        className="min-h-screen inset-shadow-sm rounded-sm flex md:flex-row flex-col items-center gap-6 px-4 pt-20 md:pt-32"
+        className="mt-36 min-h-screen bg-gray-50  flex md:flex-row flex-col items-center gap-6 md:pt-22 p-4"
         initial={{ opacity: 0, y: 50 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 1 }}
@@ -109,9 +108,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="">
-           <MapComponent /> 
-         {/* <img src={globe} className="w-full  rounded-md" /> */}
+        <div className="inline-block p-6 border-l-global-color-secondary rounded shadow-2xl">
+           <img src={map} className="w-full" alt="imagemDeMapa"  /> 
         </div>
       </motion.div>
 
@@ -160,7 +158,7 @@ export default function Home() {
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
             <h2 className="text-white text-3xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>
-        </div>
+      </div>
 
       {/* FAQ Seção */}
       <motion.div

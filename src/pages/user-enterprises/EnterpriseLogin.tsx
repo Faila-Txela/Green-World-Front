@@ -79,7 +79,7 @@ export default function EnterpriseLogin() {
         setToast({ message: "Erro ao fazer login.", type: "error" });
       }
     } catch (error: any) {
-      setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
+      setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" });
 
       if (error.response) {
         const errorStatus = error.response.status;
