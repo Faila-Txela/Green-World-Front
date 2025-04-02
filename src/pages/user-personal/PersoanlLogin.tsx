@@ -11,36 +11,35 @@ export default function PersonalLogin() {
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("")
   const [senha, setSenha] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [senhaError, setSenhaError] = useState("");
   const [animate, setAnimate] = useState(false); 
   const [loading, setLoading] = useState(false); 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   
-
      // Validação do email
      const isEmailValid = (email: string) => {
       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return regex.test(email);
     };
 
-    /* Validação dos campos de email */ 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    // Validação do campo do email
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-     if(!isEmailValid(e.target.value)){
+    if (!isEmailValid(e.target.value)) {
       setEmailError("Email inválido.")
-     }
-     else{
+    }
+    else{
       setEmailError("")
-     }
+    }
   }
-
-    /* Validação dos campos de senha */ 
-  const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    
+   // Validação do campo da senha
+  const handleSenhaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSenha(e.target.value);
     if (e.target.value.length < 6) {
-      setEmailError("A senha deve conter no máximo 6 caracteres.")
+      setSenhaError("A senha deve conter no máximo 6 caracteres.")
     }
     else{
       setSenhaError("")
@@ -59,13 +58,12 @@ export default function PersonalLogin() {
     }
 
     if (!isEmailValid(email)) {
-      //console.error("Email inválido.");
-      setToast({message: "Email inválido. Tente novamente", type: "error"})
+      setToast({message: "Email inválido. Tente novamente.", type: "error"})
       return;
     }
 
     if (senha.length < 6) {
-      setToast({ message: "A senha deve ter pelo menos 6 caracteres.", type: "error" });
+      setToast({message: "A senha deve conter no máximo 6 caracteres.", type: "error"})
       return;
     }
 
@@ -74,7 +72,7 @@ export default function PersonalLogin() {
       const { data, status } = await axios.post("user/login", {email, senha});
 
       if (status === 200) {
-        setToast({message: "Login feito com sucesso", type: "success"})
+        setToast({message: "Login feito com sucesso!", type: "success"})
         localStorage.setItem("user", JSON.stringify(data.data))
         setTimeout(() => navigate("/personal-dashboard"), 2000)
       } else {
@@ -84,6 +82,7 @@ export default function PersonalLogin() {
      } 
      catch (error: any) {
       //console.error("❌ Erro no login:", error);
+      setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" })
     
       if (error.response ) {
         const errorStatus = error.response.status;
@@ -103,14 +102,14 @@ export default function PersonalLogin() {
         <div className="hidden sm:flex items-center justify-center w-[60vh]">
           <img
             src={background}
-            className={`w-[30rem] h-[30rem] self-center flip-rtl babybear:hidden transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
+            className={`w-[30rem] h-[30rem] self-center flip-rtl babybear:hidden transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
             alt="loginImagem"
           />
         </div>
 
         <form
           onClick={(e) => e.preventDefault()}
-          className="flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white shadow-md rounded-lg"
+          className={`flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
         >
           <h3 className="text-2xl font-semibold text-[#068a5b]">Login dos Cidadãos</h3>
 
@@ -143,7 +142,7 @@ export default function PersonalLogin() {
                 addClassName="w-full border-2 focus:border-green-400 rounded-md"
               />
               {senhaError && <span className="text-red-500 text-sm">{senhaError}</span>}
-              
+
               <button
                 type="button"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2"

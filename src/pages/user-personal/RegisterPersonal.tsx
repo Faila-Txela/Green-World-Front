@@ -66,11 +66,43 @@ export default function UserForm() {
     setFormData((formData) => ({ ...formData, [name]: value }));
   };
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     //console.log("Dados enviados:", formData);
     setToast({ message: "Cadastro feito com sucesso!", type: "success" })
+
+    // Validações
+  if (!formData.nome.trim()) {
+    setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
+    return;
+  }
+
+  if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
+    return;
+  }
+
+  if (!formData.senha.trim() || formData.senha.length < 6) {
+    setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
+    return;
+  }
+
+  if (!formData.iban.trim()) {
+    setToast({ message: "O IBAN é obrigatório", type: "error" });
+    return;
+  }
+
+  if (!formData.nome_titular.trim()) {
+    setToast({ message: "O nome de titular é obrigatório", type: "error" });
+    return;
+  }
+
+  if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
+    setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
+    return;
+  }
     
     try{
       const typeId = await typeUserService.getTypeIdByDeafault();
@@ -133,7 +165,7 @@ export default function UserForm() {
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
           <span>
             <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
-            <label htmlFor="terms" className="sr-only">Agree to terms and privacy policy</label>
+            
           </span>
           <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
           </div>

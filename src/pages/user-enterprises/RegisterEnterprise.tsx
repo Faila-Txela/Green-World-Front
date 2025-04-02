@@ -127,6 +127,52 @@ export default function EnterpriseForm() {
     e.preventDefault();
     //console.log("Dados enviados:", formData);
     setToast({ message: "Empresa cadastrada com sucesso!", type: "success" })
+
+    // Validações
+  if (!formData.nome.trim()) {
+    setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
+    return;
+  }
+
+  if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
+    return;
+  }
+
+  if (!formData.senha.trim() || formData.senha.length < 6) {
+    setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
+    return;
+  }
+
+  if (!formData.phone.trim() || !/^\d{9,}$/.test(formData.phone)) {
+    setToast({ message: "Por favor, insira um número de telefone válido!", type: "error" });
+    return;
+  }
+
+  if (!formData.nif.trim()) {
+    setToast({ message: "O NIF da empresa é obrigatório!", type: "error" });
+    return;
+  }
+
+  if (!provincia) {
+    setToast({ message: "Selecione uma província!", type: "error" });
+    return;
+  }
+
+  if (!municipio) {
+    setToast({ message: "Selecione um município!", type: "error" });
+    return;
+  }
+
+  if (!typeGarbage) {
+    setToast({ message: "Selecione a área de atuação da empresa!", type: "error" });
+    return;
+  }
+
+  if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
+    setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
+    return;
+  }
     
     try {
       const empresaData = {
@@ -329,20 +375,10 @@ export default function EnterpriseForm() {
           </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
-
             <span>
               <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                I agree to the terms and privacy policy
-              </label>
-              {/* <Link
-              to="/Terms"
-              className="text-[#068a5b] text-sm hover:underline transition duration-500"
-            >
-              Concordo com os termos e política de privacidade da Green World
-            </Link> */}
             </span>
-
+            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">
