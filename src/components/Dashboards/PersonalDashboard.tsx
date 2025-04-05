@@ -1,6 +1,4 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import MapComponent from "../Map";
-import "leaflet/dist/leaflet.css";
 
 //eyJhbGciOiJIUzI1NiJ9.eyJhIjoiYWNfaWI5dHY0eXkiLCJqdGkiOiIyZjBlZjIzNiJ9.xUM68ikF9MBHfhxuJb0gNI_RMwFk1vbDCrbWKv00Tlo (token de acesso da API da carto dos mapas)
 
@@ -19,13 +17,9 @@ export default function PersonalDashboard() {
   
   const COLORS = ["#FF0000", "#964B00", "#FFBB28"];  
   return (
-    <div>
+    <div className="flex justify-center items-center mt-12 border border-red-200"> 
       {/* Conteúdo principal */}
-      <div className="">
-      <h2 className="mt-12 font-semibold text-2xl">Mapa com as localidades com mais relatas</h2>
-          <div className="flex flex-col items-center justify-center">
-          <MapComponent />
-          </div>
+       <div className="">
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
@@ -62,6 +56,6 @@ export default function PersonalDashboard() {
         <div>
         </div>
       </div>
-    </div>
+      </div>
   )
 }

@@ -59,7 +59,7 @@ const EnterpriseSidebar = () => {
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("Relatos")}>
               <GoReport size={20} />
-              {isSidebarOpen && <span>Relatar</span>}
+              {isSidebarOpen && <span>Relatos</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"

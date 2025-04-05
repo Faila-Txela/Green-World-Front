@@ -85,7 +85,7 @@ export default function EnterpriseForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
    const { name, value } = e.target;
     setFormData((formData) => ({ ...formData, [name]: value }));
-  };
+};
 
   const [formData, setFormData] = useState<EnterpriseFormData>({
     nome: "",

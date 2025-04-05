@@ -3,4 +3,6 @@ type relatar = {
     descricao: string
     latitude: string
     longitude: string
+    provinciaId: string
+    municipioId: string
 }
