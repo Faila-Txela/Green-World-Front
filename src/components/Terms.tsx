@@ -1,5 +1,5 @@
-import Header from "../../components/Headers/Header";
-import Footer from "../../components/Footers/Footer";
+import Header from "../components/Headers/Header";
+import Footer from "../components/Footers/Footer";
 
 function Terms() {
   return (

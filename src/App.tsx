@@ -14,7 +14,7 @@ import RegisterEnterprise from './pages/user-enterprises/RegisterEnterprise';
 import SidebarAdmin from './pages/admin/SidebarAdmin';
 import News from './pages/News';
 import NotFound from './pages/Not-found';
-import Terms from './components/client/Terms';
+import Terms from './components/Terms';
 
 
  export default function App() {

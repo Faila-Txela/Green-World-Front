@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { FiSettings } from "react-icons/fi";
+import { FaUsers } from "react-icons/fa6";
 import { VscFeedback } from "react-icons/vsc";
+import { FaCity } from "react-icons/fa";
+import { MdOutlinePolicy } from "react-icons/md";
 import DashHeader from "../../components/Headers/DashHeader";
 import AdminDashboard from "../../components/Dashboards/AdminDashboard";
-import Settings from "../../components/client/AdminSettings";
+import Users from "../../components/client/users";
 import Feedback from "../../components/client/Feedback";
-import Provincia from "../../components/client/provincia";
-import Municipio from "../../components/client/municipio";
-import Terms from "../../components/client/Terms";
+import Provincia from "../../components/client/Provincia";
+import Municipio from "../../components/client/Municipio";
+import Terms from "../../components/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Settings" | "Terms";
+type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Users" | "Terms";
 
 
 const AdminSidebar = () => {
@@ -31,7 +33,7 @@ const AdminSidebar = () => {
     Feedback: <Feedback />,
     Provincias: <Provincia />,
     Municipios: <Municipio />,
-    Settings: <Settings />,
+    Users: <Users />,
     Terms: <Terms />
   };
 
@@ -59,24 +61,24 @@ const AdminSidebar = () => {
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("Provincias")}>
-              <FiSettings size={20} />
+              <FaCity size={20} />
               {isSidebarOpen && <span>Provincías</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("Municipios")}>
-              <FiSettings size={20} />
+              <FaCity size={20} />
               {isSidebarOpen && <span>Municípios</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Settings")}>
-              <FiSettings size={20} />
-              {isSidebarOpen && <span>Configurações</span>}
+              onClick={() => setActiveComponent("Users")}>
+              <FaUsers size={20} />
+              {isSidebarOpen && <span>Usuários</span>}1
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition ">
-            <FiSettings size={20} />
+            <MdOutlinePolicy size={20} />
             <Link to="/Terms">Termos</Link>
             </div>
 
