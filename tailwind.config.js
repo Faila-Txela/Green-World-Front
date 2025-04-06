@@ -9,13 +9,13 @@ export default {
   theme: {
     extend: {
       animation: {
-        "slide-in": "slideIn .5 ease-out",
+        "marquee": "marquee infinite linear",
       },
       keyframes:{
-        slideIn: {
-          '0%': { transform: 'translateY(-100%)', opcaity: "0"},
-          '100%': { transform: 'translateY(0)', opcaity: "1"}
-        }
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
       colors: {
         'global-color-primary': '#00160E',

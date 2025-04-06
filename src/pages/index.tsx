@@ -4,12 +4,14 @@ import Footer from "../components/Footers/Footer";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
+import map from '../assets/map1.png';
 import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import imageFixed from '../assets/pexels-tomfisk-3174349.jpg';
-import map from '../assets/map1.png'
-import Card from "../components/Card";
+import mine from '../assets/mine.png'
+import CardBeneficios from "../components/CardBeneficio";
+import CardRelatos from "../components/CardRelatos";
 import { motion } from "framer-motion"; 
 
  //https://www.google.com/search?sca_esv=8568c3189e4a4419&sxsrf=AHTn8zpPPsJib0eVvJPPadQG3atKLKjSMw:1743267080151&q=api%27s+gratuitas+para+usar+mapas+em+projetos+react+js&spell=1&sa=X&ved=2ahUKEwipqb7436-MAxUhVEEAHUkKMc0QBSgAegQIDRAB&biw=1536&bih=738&dpr=1.25
@@ -88,47 +90,77 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       
-      <motion.div 
-        className="mt-36 min-h-screen bg-gray-50  flex md:flex-row flex-col items-center gap-6 md:pt-22 p-4"
-        initial={{ opacity: 0, y: 50 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 1 }}
-      >
-        <div className="p-3">
-          <h1 className="text-5xl font-extrabold font-mono text-global-color-three leading-tight">
-            Luanda mais limpa começa com você!
-          </h1>
-          <p className="text-lg text-gray-700 mt-4">
-            Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!
-          </p>
-          <div className="flex my-4">
-            <PrimaryButton name="Comece a Relatar" addClassName="px-20 py-3 text-lg" onClick={() => navigate('/personal-login')} />
-          </div>
-        </div>
+<Header />
 
-        <div className="inline-block p-6 border-l-global-color-secondary rounded shadow-2xl">
-           <img src={map} className="w-full" alt="imagemDeMapa"  /> 
-        </div>
-      </motion.div>
+{/* Seçcão principal */}      
+<motion.div 
+  className="min-h-screen flex md:flex-row flex-col items-center justify-center"
+  initial={{ opacity: 0, y: 50 }} 
+  animate={{ opacity: 1, y: 0 }} 
+  transition={{ duration: 1 }}
+>
+  <div 
+    className="relative w-full h-[100vh] bg-cover bg-fixed bg-center" 
+    style={{ backgroundImage: `url(${mine})` }}>
+    <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 text-center px-4">
+      <div>
+        <h1 className="text-white text-4xl font-semibold text-start">Luanda mais limpa começa com você!</h1>
+        <p className="text-lg text-gray-300 mt-4">Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!</p>
+      </div>
+    </div>
 
-      <motion.div
+    <div className="absolute top-80 md:top-44 inset-0 flex justify-center items-center">
+      <PrimaryButton 
+        onClick={() => navigate("/register-personal")} 
+        name="Comece a Relatar" 
+        addClassName="px-16 py-3 text-lg" 
+      />
+    </div>
+  </div>
+</motion.div>
+
+{/* Seçcão sobre */}
+<motion.div 
+  className="min-h-screen flex md:flex-row flex-col items-center justify-around"
+  initial={{ opacity: 0, y: 50 }} 
+  animate={{ opacity: 1, y: 0 }} 
+  transition={{ duration: 1 }}>
+  <div className="w-full">
+      <img src={map} className="w-full md:w-9/12 h-80 md:h-2/3 py-20" alt="MapImage" />
+    </div>
+
+    <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
+      <h2 className="text-lg md:text-2xl font-bold text-global-color-three text-center mb-4 md:mb-16">O que é a Green World ?</h2>
+      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+    </div>
+</motion.div>
+
+{/* Seçcão Benefícios */}
+  <div>
+    <CardBeneficios />
+  </div>
+
+
+{/* Sessão Notícias */}
+<motion.div
         className="min-h-screen flex flex-col items-center justify-center gap-6 p-6"
         initial={{ opacity: 0, y: 50 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 1, delay: 0.2 }}
       >
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
+          <h2 className="text-lg md:text-2xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
           <p className="text-gray-600">
             Tenha as notícias sempre perto de si, sem precisar sair de casa.
           </p>
         </div>
 
-        <section className="columns-2 md:columns-2 gap-2 space-y-6">
+<section className="columns-2 md:columns-2 gap-2 space-y-6">
           {midiaItens.map((item, index) => (
-            <motion.div
+<motion.div
               key={index}
               className="relative overflow-hidden rounded-md transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
               onClick={() => setSelectedItem(item)}
@@ -143,30 +175,34 @@ export default function Home() {
               )}
             </motion.div>
           ))}
-        </section>
+</section>
+<Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
+</motion.div>
 
-        <Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
-      </motion.div>
       
       {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />} 
       
+{/* Seção cardRelatos */}
       <div className="mt-10">
-        <Card />
+        <CardRelatos />
       </div>
 
-      <div className="relative w-full h-[80vh] bg-cover bg-fixed bg-center" style={{ backgroundImage: `url(${imageFixed})` }}>
+
+{/* Seçcão fixedImage */}
+      <div className="relative w-full h-[80vh] bg-cover bg-fixed bg-center" style={{ backgroundImage: `url("https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")` }}>
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
-            <h2 className="text-white text-3xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
+            <h2 className="text-white text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>
       </div>
 
-      {/* FAQ Seção */}
-      <motion.div
+
+{/* Seção FAQ */}
+<motion.div
   className="p-6 md:px-16 flex flex-col md:flex-row justify-center items-center mt-14 mb-16 gap-8"
   initial={{ opacity: 0, y: 50 }}
   animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1 }}
->
+  transition={{ duration: 1 }}>
+
   <div className="text-start w-full max-w-xl md:max-w-2xl">
     <p className="text-gray-600 font-semibold text-lg sm:text-xl">FAQ</p>
     <h2 className="text-3xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
@@ -189,6 +225,7 @@ export default function Home() {
   </div>
 </motion.div>
 
+{/* Seçcão rodapé */}
       <Footer />
     </div>
   );

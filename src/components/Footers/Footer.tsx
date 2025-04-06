@@ -52,18 +52,18 @@ export default function Footer() {
   return (
     <div className="flex flex-col items-center p-10 text-white bg-black/75">
       <div className="flex items-center gap-[50px]">
-        <div className="flex justify-center items-center flex-col gap-[8px]" style={{ transition: ".5s ease" }}>
+        <div className="flex justify-center items-center flex-col gap-[8px] transition-class">
           <div className="flex justify-center items-center w-32 h-[48px] p-2 rounded-[2px]">
             <Logo className="w-[90px] h-[90px]" />
           </div>
 
           <span className="text-center">Siga-nos nas redes sociais</span>
           <div className="flex gap-4 mx-auto">
-            <a target="_blank" href="https://www.instagram.com/albertinafaila/">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/albertinafaila/" title="Instagram">
               <IoLogoInstagram size={40} color="white" />
             </a>
 
-            <a href="#">
+            <a href="#" title="LinkedIn">
               <CiLinkedin size={40} color="white" />
             </a>
           </div>
