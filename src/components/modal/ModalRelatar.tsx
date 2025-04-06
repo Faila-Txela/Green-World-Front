@@ -39,6 +39,16 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       return;
     }
 
+    if (!formData.provinciaId.trim()) {
+        setToast({ message: "A seleção da província é obrigatória!", type: "error" });
+        return;
+      }
+
+    if (!formData.municipioId.trim()) {
+        setToast({ message: "A seleção do município é obrigatória!", type: "error" });
+        return;
+      }
+
     setLoading(true);
 
     try {
@@ -59,7 +69,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       <div className="bg-white p-6 rounded-lg w-full max-w-4xl">
         <h2 className="text-2xl text-green-700 mb-4">Relatar Novo Amontoado</h2>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-23 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[80vh] overflow-y-auto">
           {/* Primeira parte: Descrição, Província, e Município */}
           <div className="flex flex-col space-y-4">
             <div className="mb-4">
@@ -152,3 +162,4 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     </div>
   );
 }
+
