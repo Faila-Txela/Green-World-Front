@@ -9,6 +9,14 @@ class RelatarService {
     });
   }
 
+  async getAll() {
+    return await axios.get("/relatar", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
 }
 
 export const relatarService = new RelatarService;
