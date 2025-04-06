@@ -8,7 +8,7 @@ import Toast from "../../components/ui/Toast";
 import { typeUserService } from "../../modules/service/api/typeUser";
 
 
-const InputField = ({ label, type, name, value, onChange, autoComplete, icon, extraPaddingRight = false }: {
+const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false }: {
   label: string;
   type: string;
   name: keyof user;

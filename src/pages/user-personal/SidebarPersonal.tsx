@@ -9,11 +9,10 @@ import PersonalDashboard from "../../components/Dashboards/PersonalDashboard";
 import Relatos from "../../components/Relatos";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
-import Terms from "../../components/client/Terms";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Settings" | "Terms";
+type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Settings";
 
 
 const EnterpriseSidebar = () => {
@@ -30,8 +29,7 @@ const EnterpriseSidebar = () => {
     PersonalDashboard: <PersonalDashboard />,
     Feedback: <Feedback />,
     Relatos: <Relatos />,
-    Settings: <Settings />,
-    Terms: <Terms />
+    Settings: <Settings />
   };
 
   return (
@@ -66,11 +64,6 @@ const EnterpriseSidebar = () => {
               onClick={() => setActiveComponent("Settings")}>
               <FiSettings size={20} />
               {isSidebarOpen && <span>Configurações</span>}
-            </div>
-
-            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition ">
-            <FiSettings size={20} />
-            <Link to="/Terms">Termos</Link>
             </div>
 
           </div>

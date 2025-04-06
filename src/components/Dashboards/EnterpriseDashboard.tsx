@@ -1,5 +1,4 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import MapComponent from "../Map";
 import "leaflet/dist/leaflet.css";
 
 
@@ -28,10 +27,12 @@ export default function EnterpriseDashboard() {
     <div className="">
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">
-        {/* <div>
+        {/* 
+        <div>
            <h2 className="mt-12 font-semibold text-2xl p-5">Mapa dos locais com mais relatas</h2>
           <MapComponent />
-        </div> */}
+        </div> 
+        */}
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 mt-20">
