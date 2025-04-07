@@ -17,7 +17,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://ecoangola.com/wp-content/uploads/2019/09/Lixo-em-luanda.jpg"
-                  alt="Carlos Silva"
+                  alt="lixo1"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -32,7 +32,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://s.rfi.fr/media/display/9409d8c0-6fad-11eb-a5e9-005056bff430/w:980/p:16x9/angola2.png"
-                  alt="João Francisco"
+                  alt="lixo2"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -47,7 +47,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://static.dw.com/image/57507162_605.jpg"
-                  alt="Mariana Oliveira"
+                  alt="lixo3"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -62,7 +62,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://static.dw.com/image/58614703_804.jpg"
-                  alt="Maria da Graça"
+                  alt="lixo4"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -78,7 +78,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://ecoangola.com/wp-content/uploads/2019/09/Lixo-em-luanda.jpg"
-                  alt="Carlos Silva"
+                  alt="lixo1"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -93,7 +93,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://s.rfi.fr/media/display/9409d8c0-6fad-11eb-a5e9-005056bff430/w:980/p:16x9/angola2.png"
-                  alt="João Francisco"
+                  alt="lixo2"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -108,7 +108,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://static.dw.com/image/57507162_605.jpg"
-                  alt="Mariana Oliveira"
+                  alt="lixo3"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>
@@ -123,7 +123,7 @@ function CardRelatos() {
               <div>
                 <img
                   src="https://static.dw.com/image/58614703_804.jpg"
-                  alt="Maria da Graça"
+                  alt="lixo4"
                   className="w-full h-24 rounded mx-auto mb-4 object-cover"
                 />
               </div>

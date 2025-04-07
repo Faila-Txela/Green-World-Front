@@ -17,6 +17,11 @@ class RelatarService {
     });
   }
 
+  async delete(id: string){
+    const response = await axios.delete(`/relatar/${id}`);
+    return response.data;
+  }
+
 }
 
 export const relatarService = new RelatarService;

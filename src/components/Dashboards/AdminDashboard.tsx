@@ -35,7 +35,7 @@ export default function PersonalDashboard() {
  
           <div className="flex gap-3 rounded shadow-lg p-4 duration-300 transform hover:scale-105">
          <h3 className="text-lg font-semibold">Total de usuários:</h3>
-         <span className="text-lg">7</span>
+         <span className="text-lg">10</span>
           </div>
 
           <div className="flex gap-3 rounded-md shadow-lg p-4 duration-300 transform hover:scale-105">

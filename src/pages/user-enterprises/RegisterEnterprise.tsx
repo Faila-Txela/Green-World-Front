@@ -101,6 +101,7 @@ export default function EnterpriseForm() {
     provinciaId: ""
   });
 
+  // Função para pegar as províncias
   const fetchProvincias = async () => {
     const response = await axios.get("/provincia");
     if (response.status === 200) {
@@ -108,6 +109,7 @@ export default function EnterpriseForm() {
     }
   };
 
+  // Função para pegar os municípios
   const fetchMunicipio = async (id: string) => {
     const response = await axios.get(`/municipio/provincia/${id}`);
     //console.log(response.data);
@@ -116,6 +118,7 @@ export default function EnterpriseForm() {
     }
   };
 
+  // Função para pegar os tipos de empresa
   const fetchTypeGarbages = async () => {
     const response = await axios.get("/tipo-empresa");
     if (response.status === 200) {
@@ -123,6 +126,7 @@ export default function EnterpriseForm() {
     }
   };
 
+  // Função para o cadastro de empresas
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     //console.log("Dados enviados:", formData);

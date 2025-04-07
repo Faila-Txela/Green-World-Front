@@ -4,12 +4,13 @@ import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
 import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
+import Relatorio from "../../components/Relatorio";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "EnterpriseDashboard" | "Feedback" | "Settings";
+type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Feedback" | "Settings";
 
 
 const PersonalSidebar = () => {
@@ -23,6 +24,7 @@ const PersonalSidebar = () => {
   // Definir o tipo correto das chaves do ComponentMap
   const ComponentMap = {
     EnterpriseDashboard: <EnterpriseDashboard />,
+    Relatorio: <Relatorio />,
     Feedback: <Feedback />,
     Settings: <Settings />
   };
@@ -47,6 +49,12 @@ const PersonalSidebar = () => {
               onClick={() => setActiveComponent("Feedback")}>
               <VscFeedback size={20} />
               {isSidebarOpen && <span>Feedback</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Relatorio")}>
+              <VscFeedback size={20} />
+              {isSidebarOpen && <span>Relatório dos Relatos</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"

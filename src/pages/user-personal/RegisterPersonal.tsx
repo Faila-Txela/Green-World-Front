@@ -67,7 +67,7 @@ export default function UserForm() {
   };
 
 
-
+  // Função para cadastrar usuários comuns
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     //console.log("Dados enviados:", formData);
