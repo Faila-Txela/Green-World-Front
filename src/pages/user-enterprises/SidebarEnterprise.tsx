@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineSpaceDashboard, MdOutlineCalendarMonth } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
 import DashHeader from "../../components/Headers/DashHeader";
 import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
 import Relatorio from "../../components/Relatorio";
+import Agendar from "../../components/Agendar";
 import Settings from "../../components/client/Settings";
 import Feedback from "../../components/client/Feedback";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Feedback" | "Settings";
+type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Agendar" | "Feedback" | "Settings";
 
 
 const PersonalSidebar = () => {
@@ -25,6 +26,7 @@ const PersonalSidebar = () => {
   const ComponentMap = {
     EnterpriseDashboard: <EnterpriseDashboard />,
     Relatorio: <Relatorio />,
+    Agendar: <Agendar />,
     Feedback: <Feedback />,
     Settings: <Settings />
   };
@@ -55,6 +57,12 @@ const PersonalSidebar = () => {
               onClick={() => setActiveComponent("Relatorio")}>
               <VscFeedback size={20} />
               {isSidebarOpen && <span>Relatório dos Relatos</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Agendar")}>
+              <MdOutlineCalendarMonth size={20} />
+              {isSidebarOpen && <span>Agendar Actividades</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"

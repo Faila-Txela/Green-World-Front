@@ -48,6 +48,15 @@ export default function App() {
             <EnterpriseSidebar />
           </PrivateRoute>
         }
+      />´
+
+        <Route
+        path="/Admin-dashboard"
+        element={
+          <PrivateRoute auth={isAuthenticated()}>
+            <SidebarAdmin />
+          </PrivateRoute>
+        }
       />
 
       <Route path="*" element={<NotFound />} />
