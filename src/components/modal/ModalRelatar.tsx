@@ -1,165 +1,264 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import PrimaryButton from "../ui/PrimaryButton";
 import TextArea from "../ui/TextArea";
 import UploadArea from "../upload-area/single";
 import { relatarService } from "../../modules/service/api/relatar";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import L from "leaflet";
+
+interface RelatarFormData {
+  descricao: string;
+  latitude: string;
+  longitude: string;
+  provinciaId: string;
+  municipioId: string;
+  bairro?: string;
+  prioridade: string;
+  imagens: File[];
+}
+
+interface Provincia {
+  id: string;
+  nome: string;
+}
+
+interface Municipio {
+  id: string;
+  nome: string;
+}
 
 interface ModalRelatarProps {
   closeModal: () => void;
   setToast: React.Dispatch<React.SetStateAction<{ message: string; type: "success" | "error" } | null>>;
 }
 
+const InputField = ({
+  label, type, name, value, onChange, extraPaddingRight = false
+}: {
+  label: string;
+  type: string;
+  name: keyof RelatarFormData;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  //icon: JSX.Element;
+  extraPaddingRight?: boolean;
+}) => (
+  <div className="relative">
+    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">{label}</label>
+    <div className="relative">
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required
+        placeholder={`Digite o ${label.toLowerCase()}`}
+        className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700`}
+      />
+    </div>
+  </div>
+);
+
+function LocationSelector({ setCoords }: { setCoords: (lat: number, lng: number) => void }) {
+  useMapEvents({
+    click(e) {
+      setCoords(e.latlng.lat, e.latlng.lng);
+      console.log(setCoords)
+    },
+  });
+  return null;
+}
+
 export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RelatarFormData>({
     descricao: "",
     latitude: "",
     longitude: "",
     provinciaId: "",
     municipioId: "",
+    bairro: "",
+    prioridade: "",
+    imagens: []
   });
 
-  const [priority, setPriority] = useState("");
-  const [loading, setLoading] = useState(false);  
+  const [imagens, setImagens] = useState<File | null>(null);
+  const [prioridade, setPrioridade] = useState("");
+  const [loading, setLoading] = useState(false);
   const [provincias, setProvincias] = useState<Provincia[]>([]);
-  const [provincia, setProvincia] = useState<string>("");
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
+  const [provincia, setProvincia] = useState("");
   const [municipio, setMunicipio] = useState("");
+  const [locationDenied, setLocationDenied] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const isFormValid =
+  formData.descricao.trim() &&
+  formData.latitude &&
+  formData.longitude &&
+  provincia &&
+  municipio &&
+  prioridade &&
+  imagens !== null;
+
+  const fetchProvincias = async () => {
+    const res = await axios.get("/provincia");
+    if (res.status === 200) setProvincias(res.data);
+  };
+
+  const fetchMunicipios = async (id: string) => {
+    const res = await axios.get(`/municipio/provincia/${id}`);
+    if (res.status === 200) setMunicipios(res.data);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const setCoords = (lat: number, lng: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      latitude: lat.toString(),
+      longitude: lng.toString(),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validações
-    if (!formData.descricao.trim()) {
-      setToast({ message: "A descrição é obrigatória!", type: "error" });
-      return;
-    }
-
-    if (!formData.provinciaId.trim()) {
-        setToast({ message: "A seleção da província é obrigatória!", type: "error" });
-        return;
-      }
-
-    if (!formData.municipioId.trim()) {
-        setToast({ message: "A seleção do município é obrigatória!", type: "error" });
-        return;
-      }
+    if (!formData.descricao.trim()) return setToast({ message: "Descrição obrigatória", type: "error" });
+    if (!provincia) return setToast({ message: "Selecione a província", type: "error" });
+    if (!municipio) return setToast({ message: "Selecione o município", type: "error" });
 
     setLoading(true);
-
     try {
-      const response = await relatarService.create({ ...formData, userId: "exampleUserId" });
-      if (response.status === 201) {
+      const payload = {
+        ...formData,
+        userId: "exampleUserId",
+        provinciaId: provincia,
+        municipioId: municipio,
+        prioridade,
+        imagens: imagens ? [imagens] : [],
+      };
+      const res = await relatarService.create(payload);
+      if (res.status === 201) {
         setToast({ message: "Relato enviado com sucesso!", type: "success" });
         closeModal();
       }
-    } catch (error) {
-      setToast({ message: "Erro ao enviar o relato", type: "error" });
+    } catch (err) {
+      setToast({ message: "Erro ao enviar relato", type: "error" });
     } finally {
       setLoading(false);
     }
   };
 
+  // useEffect(() => {
+  //   fetchProvincias();
+  // }, []);
+
+  useEffect(() => {
+    if (provincia) fetchMunicipios(provincia);
+  }, [provincia]);
+
+  // Geolocalização automática
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setCoords(pos.coords.latitude, pos.coords.longitude);
+        },
+        () => {
+          setLocationDenied(true);
+        }
+      );
+    } else {
+      setLocationDenied(true);
+    }
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center mt-16">
-      <div className="bg-white p-6 rounded-lg w-full max-w-4xl">
-        <h2 className="text-2xl text-green-700 mb-4">Relatar Novo Amontoado</h2>
-
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[80vh] overflow-y-auto">
-          {/* Primeira parte: Descrição, Província, e Município */}
-          <div className="flex flex-col space-y-4">
-            <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">Descrição do Acúmulo</label>
-              <TextArea
-                id="descricao"
-                name="descricao"
-                placeholder="Ex: Lixo acumulado na rua..."
-                value={formData.descricao}
-                onChange={handleChange}
-              />
-            </div>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center  z-50">
+      <div className="bg-white p-8 rounded-lg w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+        <h2 className="text-2xl text-green-700 mb-7 text-center">Relatar Novo Amontoado</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
+          <div className="flex flex-col gap-6 w-full">
+            <label className="block text-gray-700 font-semibold">Descrição</label>
+            <TextArea name="descricao" id="descricao" placeholder="Ex: Ex: Lixo acumulado na rua..." value={formData.descricao} onChange={handleChange} className="" />
 
             <div>
-              <label
-                htmlFor="provincia"
-                className="block text-gray-600 font-semibold mb-2"
-              >
-                Província
-              </label>
-              <select
-                className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-                onChange={(e) => setProvincia(e.target.value)}
-                aria-label="Selecione a província"
-              >
-                <option value="">Selecione a província</option>
-                {/* Mapear as províncias */}
+              <label className="block text-gray-700 font-semibold">Província</label>
+              <select className="w-full p-3 border rounded-md" title="provincia" onChange={(e) => setProvincia(e.target.value)}>
+                <option value="">Selecione a Província</option>
+                {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
               </select>
             </div>
 
             <div>
-              <label
-                htmlFor="municipio"
-                className="block text-gray-600 font-semibold mb-2"
-              >
-                Município
-              </label>
-              <select
-                name="municipio"
-                className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-                onChange={(e) => setMunicipio(e.target.value)}
-                aria-label="Selecione o município"
-              >
-                <option value="">Selecione o município</option>
-                {municipios.map((municipio) => (
-                  <option key={municipio.id} value={municipio.id}>
-                    {municipio.nome}
-                  </option>
-                ))}
+              <label className="block text-gray-700 font-semibold">Município</label>
+              <select className="w-full p-3 border rounded-md" title="municipio" onChange={(e) => setMunicipio(e.target.value)}>
+                <option value="">Selecione o Município</option>
+                {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
               </select>
             </div>
-          </div>
 
-          {/* Segunda parte: Prioridade e Foto */}
-          <div className="flex flex-col space-y-4">
-            <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">Prioridade</label>
-              <select
-                title="Prioridade"
-                name="priority"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                className="w-full p-4 border rounded-md focus:outline-none"
-              >
+            <InputField
+              label="Bairro (opcional)"
+              type="text"
+              name="bairro"
+              value={formData.bairro || ""}
+              onChange={handleChange}
+            />
+
+            <div>
+              <label className="block text-gray-700 font-semibold">Prioridade</label>
+              <select className="w-full p-3 border rounded-md" title="Selecione a prioridade" value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
                 <option value="">Selecione a Prioridade</option>
                 <option value="BAIXA">Baixa</option>
                 <option value="ALTA">Alta</option>
               </select>
             </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">Carregar Foto</label>
-              <UploadArea />
+           <div>
+           <label className="block text-gray-700 font-semibold">Carregar Imagem</label>
+           <UploadArea onChange={setImagens} />
+           </div>
+
+            {locationDenied && (
+              <div>
+                <p className="mb-2 font-semibold">Selecione sua localização no mapa:</p>
+                <MapContainer
+                  center={[-8.8383, 13.2344]}
+                  zoom={13}
+                  style={{ height: "10px", width: "80%" }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; OpenStreetMap contributors"
+                  />
+                  <LocationSelector setCoords={setCoords} />
+                  {formData.latitude && formData.longitude && (
+                    <Marker
+                      position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
+                      icon={L.icon({
+                        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                      })}
+                    />
+                  )}
+                </MapContainer>
+              </div>
+            )}
             </div>
+
+          <div className="grid gap-4 w-full">
+            <PrimaryButton name={loading ? "Enviando..." : "Enviar Relato"} addClassName="px-36" disabled={!isFormValid || loading} />
+            <PrimaryButton name="Fechar" addClassName="bg-gray-300 text-black hover:bg-gray-400" onClick={closeModal} />
           </div>
 
-          <div className="flex justify-between mt-6">
-            <PrimaryButton name={loading ? "Enviando..." : "Enviar Relato"} addClassName="w-full" />
-            <button
-              type="button"
-              onClick={closeModal}
-              className="w-full md:w-1/4 p-3 bg-gray-300 font-semibold text-black hover:bg-gray-400 rounded-md"
-              style={{ transition: ".2s ease-in-out" }}
-            >
-              Fechar
-            </button>
-          </div>
         </form>
+
       </div>
     </div>
   );
 }
-

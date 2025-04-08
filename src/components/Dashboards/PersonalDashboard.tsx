@@ -1,5 +1,8 @@
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AnimationDuration } from "recharts";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { MdOutlineSpaceDashboard } from 'react-icons/md'
+
 //eyJhbGciOiJIUzI1NiJ9.eyJhIjoiYWNfaWI5dHY0eXkiLCJqdGkiOiIyZjBlZjIzNiJ9.xUM68ikF9MBHfhxuJb0gNI_RMwFk1vbDCrbWKv00Tlo (token de acesso da API da carto dos mapas)
+
 
 export default function PersonalDashboard() {
   const locationsData = [
@@ -20,15 +23,15 @@ export default function PersonalDashboard() {
   const totalWaste = wasteTypesData.reduce((total, item) => total + item.value, 0);
 
   return (
-    <div className="flex justify-center items-center mt-12">
+    <div className="flex justify-center items-center mt-40">
+       {/* Texto explicativo da tela */}
+      <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
+        <MdOutlineSpaceDashboard className="h-9 w-9" />
+       <h1 className="text-xl md:text-2xl font-semibold text-left">Painel Principal do Cidadão</h1>
+      </div>
+
       {/* Conteúdo principal */}
       <div className="w-full">
-
-        {/* Seção de Total de Relatos */}
-        <div className="bg-white p-6 shadow rounded-xl mb-10">
-          <h2 className="text-xl font-semibold mb-4 text-center">Total de Relatos</h2>
-          <p className="text-center text-lg font-medium">Total de relatos registrados: <span className="text-blue-600">{totalRelatos}</span></p>
-        </div>
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
@@ -36,7 +39,7 @@ export default function PersonalDashboard() {
           <div className="bg-white p-4 shadow rounded-xl w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={locationsData} animationDuration={1000}>
+              <BarChart data={locationsData}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
@@ -50,7 +53,7 @@ export default function PersonalDashboard() {
           <div className="bg-white p-4 shadow rounded-xl w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
             <ResponsiveContainer width="100%" height={300}>
-              <PieChart animationDuration={1000}>
+              <PieChart>
                 <Pie data={wasteTypesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
                   {wasteTypesData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -63,7 +66,7 @@ export default function PersonalDashboard() {
           </div>
         </div>
 
-        {/* Seção de Estatísticas Adicionais */}
+        {/* Seção de Estatísticas */}
         <div className="bg-white p-6 shadow rounded-xl mb-10">
           <h2 className="text-xl font-semibold mb-4 text-center">Estatísticas de Tipos de Lixo</h2>
           <div className="flex justify-around">
@@ -77,14 +80,6 @@ export default function PersonalDashboard() {
           </div>
         </div>
 
-        {/* Mapa interativo (apenas como exemplo) */}
-        <div className="bg-white p-6 shadow rounded-xl mb-10">
-          <h2 className="text-xl font-semibold mb-4 text-center">Mapa de Localizações</h2>
-          {/* Aqui você pode adicionar um mapa interativo utilizando a API Carto */}
-          <div className="w-full h-96 bg-gray-300 flex justify-center items-center">
-            <p className="text-lg text-gray-600">Mapa interativo aqui (em integração com a API Carto)</p>
-          </div>
-        </div>
       </div>
     </div>
   );

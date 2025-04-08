@@ -31,7 +31,6 @@ export default function App() {
       <Route path="/register-personal" element={<RegisterPersonal />} />
       <Route path="/personal-login" element={<PersonalLogin />} />
       <Route path="/enterprise-login" element={<EnterpriseLogin />} />
-      <Route path="/admin" element={<SidebarAdmin />} />
       <Route path="/terms" element={<Terms />} />
       <Route
         path="/personal-dashboard"
@@ -51,7 +50,7 @@ export default function App() {
       />´
 
         <Route
-        path="/Admin-dashboard"
+        path="/admin-dashboard"
         element={
           <PrivateRoute auth={isAuthenticated()}>
             <SidebarAdmin />

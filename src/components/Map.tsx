@@ -11,11 +11,11 @@ import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 
 const locationsData = [
-  { name: "Viana", meses: "Março", relatos: 65, lat: -8.864, lon: 13.56, estado: 'alto' },
-  { name: "Alvalade", meses: "Abril", relatos: 30, lat: -8.852, lon: 13.259, estado: 'médio' },
-  { name: "Cazenga", meses: "Fevereiro", relatos: 10, lat: -8.841, lon: 13.258, estado: 'baixo' },
-  { name: "Ingombota", meses: "Janeiro", relatos: 90, lat: -8.831, lon: 13.235, estado: 'alto' },
-  { name: "Samba", meses: "Março", relatos: 50, lat: -8.885, lon: 13.270, estado: 'médio' },
+  { name: "Viana", meses: "Março", relatos: 65, lat: -8.864, lon: 13.56 },
+  { name: "Alvalade", meses: "Abril", relatos: 30, lat: -8.852, lon: 13.259 },
+  { name: "Cazenga", meses: "Fevereiro", relatos: 10, lat: -8.841, lon: 13.258 },
+  { name: "Ingombota", meses: "Janeiro", relatos: 90, lat: -8.831, lon: 13.235 },
+  { name: "Samba", meses: "Março", relatos: 50, lat: -8.885, lon: 13.270 },
 ];
 
 const getIconUrl = (estado: string) => {
@@ -34,13 +34,11 @@ const MapComponent: React.FC = () => {
         geometry: new Point([location.lon, location.lat]),
         name: location.name,
         relatos: location.relatos,
-        meses: location.meses,
-        estado: location.estado,
+        meses: location.meses
       });
 
       feature.setStyle(new Style({
         image: new Icon({
-          src: getIconUrl(location.estado),
           scale: 0.1,
         }),
       }));

@@ -1,4 +1,5 @@
 import Avatar from "../../components/ui/Avatar";
+import NotificacoesInApp from "../../components/NotificationInApp";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdArrowBack } from "react-icons/io";
 import axios from "../../lib/axios";
@@ -6,14 +7,14 @@ import axios from "../../lib/axios";
 interface DashHeaderProps {
   toggleSidebar: () => void;
   isSidebarOpen: boolean;
-  //onLogout: () => void;
+  onLogout: () => void;
 }
 
-const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen}) => {
+const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, onLogout}) => {
   
   const handleLogout = async () => {
     try {
-      // Logout 
+      // Logout() 
       const response = await axios.get("/logout", {
         headers: {
           "content-type": "application/json",
@@ -33,10 +34,6 @@ const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen}) 
 
   const handleChangeTheme = () => {
     alert("Tema alterado💯");
-  };
-
-  const handleChangeLanguage = () => {
-    alert("Idioma alterado💯");
   };
 
   const handleChangeProfilePic = () => {
@@ -59,9 +56,13 @@ const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen}) 
         tipoUsuario="Administrador"
         onLogout={handleLogout}
         onChangeTheme={handleChangeTheme}
-        onChangeLanguage={handleChangeLanguage}
         onChangeProfilePic={handleChangeProfilePic}
       />
+
+      {/* Notificações */}
+
+      <NotificacoesInApp  empresaId="1"/>
+
     </div>
   );
 }

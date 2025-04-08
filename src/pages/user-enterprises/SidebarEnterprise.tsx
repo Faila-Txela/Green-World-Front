@@ -6,15 +6,15 @@ import DashHeader from "../../components/Headers/DashHeader";
 import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
 import Relatorio from "../../components/Relatorio";
 import Agendar from "../../components/Agendar";
-import Settings from "../../components/client/Settings";
+import EnterpriseSettings from "../../components/client/settings/EnterpriseSettings";
 import Feedback from "../../components/client/Feedback";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Agendar" | "Feedback" | "Settings";
+type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Agendar" | "Feedback" | "EnterpriseSettings";
 
 
-const PersonalSidebar = () => {
+const EnterpriseSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("EnterpriseDashboard");
 
@@ -28,13 +28,17 @@ const PersonalSidebar = () => {
     Relatorio: <Relatorio />,
     Agendar: <Agendar />,
     Feedback: <Feedback />,
-    Settings: <Settings />
+    EnterpriseSettings: <EnterpriseSettings 
+      onChangeProfilePic={() => console.log("Profile picture changed")} 
+      onChangeTheme={() => console.log("Theme changed")} 
+      onDeleteAccount={() => console.log("Account deleted")} 
+    />
   };
 
   return (
     <div className="flex z-10">
       {/* Estado da sidebar */}
-      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => console.log("Logout triggered")} />
 
       <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
 
@@ -66,9 +70,9 @@ const PersonalSidebar = () => {
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Settings")}>
+              onClick={() => setActiveComponent("EnterpriseSettings")}>
               <FiSettings size={20} />
-              {isSidebarOpen && <span>Configurações</span>}
+              {isSidebarOpen && <span>Configurações da Empresa</span>}
             </div>
 
           </div>
@@ -80,4 +84,4 @@ const PersonalSidebar = () => {
   );
 };
 
-export default PersonalSidebar;
+export default EnterpriseSidebar;

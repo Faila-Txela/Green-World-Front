@@ -5,4 +5,7 @@ type relatar = {
     longitude: string
     provinciaId: string
     municipioId: string
+    prioridade: string
+    bairro?: string
+    imagens: File[]
 }

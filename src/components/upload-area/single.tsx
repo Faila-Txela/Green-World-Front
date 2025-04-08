@@ -109,7 +109,7 @@ export default function UploadArea({
               }
             >
               <Dialog>
-                <DialogTrigger onClick={(e) => e.stopPropagation()}>
+                <DialogTrigger asChild onClick={(e) => e.stopPropagation()}>
                   <Button
                     type="button"
                     className="opacity-0 hover:opacity-100 transition-all "
@@ -132,7 +132,8 @@ export default function UploadArea({
             </div>
           ) : file?.type?.startsWith("application/pdf" as AcceptedFiles) ? (
             <Dialog>
-              <DialogTrigger
+              <DialogTrigger 
+                asChild
                 onClick={(e) => e.stopPropagation()}
                 className="flex flex-col gap-2 items-center"
               >
@@ -180,6 +181,7 @@ const icons: Record<AcceptedFiles, React.ReactNode> = {
     <BsFiletypeXlsx size={30} />
   ),
   "application/csv": <FaFileCsv size={30} />,
+  ".csv": <FaFileCsv size={30} />,
   "image/*": <FaFileImage size={30} />,
   "image/jpeg": <FaFileImage size={30} />,
   "image/png": <FaFileImage size={30} />,

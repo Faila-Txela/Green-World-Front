@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.1",
+    "@novu/react": "^3.0.3",
     "@radix-ui/themes": "^3.2.1",
-    "@react-google-maps/api": "^2.20.6",
     "@tanstack/react-query": "^5.69.0",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaPaintBrush, FaLanguage, FaSignOutAlt, FaUserCircle, FaSun, FaMoon } from "react-icons/fa";
+import { FaSignOutAlt, FaUserCircle, FaSun, FaMoon } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io" 
 
 interface AvatarProps {
@@ -7,8 +7,7 @@ interface AvatarProps {
   tipoUsuario: string;
   size?: number;
   onLogout: () => void;
-  onChangeTheme: () => void;
-  onChangeLanguage: (language: string) => void;  // Alterado para passar o idioma selecionado
+  onChangeTheme: () => void;  
   onChangeProfilePic: (newProfilePic: File) => void; // Passando o novo arquivo da foto de perfil
 }
 
@@ -18,13 +17,11 @@ const Avatar: React.FC<AvatarProps> = ({
   size = 50,
   onLogout,
   onChangeTheme,
-  onChangeLanguage,
   onChangeProfilePic,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string | null>(null); // Armazenando a imagem de perfil
   const [isDarkTheme, setIsDarkTheme] = useState(false); // Para alternar o tema
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("pt"); // Idioma selecionado
   const popUpRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,13 +56,6 @@ const Avatar: React.FC<AvatarProps> = ({
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
     onChangeTheme();  // Chama o método para alternar o tema no componente pai
-  };
-
-  // Lidar com a mudança do idioma
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = event.target.value;
-    setSelectedLanguage(newLanguage);
-    onChangeLanguage(newLanguage); // Passando o idioma selecionado para o pai
   };
 
   return (
@@ -103,6 +93,7 @@ const Avatar: React.FC<AvatarProps> = ({
               accept="image/*"
               onChange={handleProfilePicChange}
               className="hidden" // Oculta o input de file
+              title="Selecione uma nova foto de perfil" // Adiciona um título para acessibilidade
             />
             <div className="text-sm font-semibold">
               <p>{tipoUsuario}</p>
@@ -119,20 +110,6 @@ const Avatar: React.FC<AvatarProps> = ({
               {isDarkTheme ? <FaSun size={18} /> : <FaMoon size={18} />} {/* Ícones de tema */}
               {isDarkTheme ? "Tema Claro" : "Tema Escuro"}
             </button>
-            
-            <div className="w-full text-left">
-              <label className="text-sm block mb-1">Alterar Idioma</label>
-              <select
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-                className="w-full p-2 border rounded-md"
-              >
-                <option value="pt">Português</option>
-                <option value="en">Inglês</option>
-                <option value="es">Espanhol</option>
-                <option value="fr">Francês</option>
-              </select>
-            </div>
 
             <button
               className="w-full text-left flex items-center gap-2 hover:text-gray-600"

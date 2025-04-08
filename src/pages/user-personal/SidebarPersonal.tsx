@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
@@ -7,15 +6,15 @@ import { GoReport } from 'react-icons/go';
 import DashHeader from "../../components/Headers/DashHeader";
 import PersonalDashboard from "../../components/Dashboards/PersonalDashboard";
 import Relatos from "../../components/Relatos";
-import Settings from "../../components/client/Settings";
+import PersonalSettings from "../../components/client/settings/PersonalSettings";
 import Feedback from "../../components/client/Feedback";
 
 //https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
 
-type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Settings";
+type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "PersonalSettings";
 
 
-const EnterpriseSidebar = () => {
+const PersonalSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("PersonalDashboard");
 
@@ -29,13 +28,17 @@ const EnterpriseSidebar = () => {
     PersonalDashboard: <PersonalDashboard />,
     Feedback: <Feedback />,
     Relatos: <Relatos />,
-    Settings: <Settings />
+    PersonalSettings: <PersonalSettings 
+      onChangeProfilePic={() => { /* Mudança de imagem do perfil */ }} 
+      onChangeTheme={() => { /* Mudança de tema */ }} 
+      onDeleteAccount={() => { /* Exclusão de conta */ }} 
+    />
   };
 
   return (
     <div className="flex z-10">
       {/* Estado da sidebar */}
-      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => { /* handle logout */ }} />
 
       <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
 
@@ -61,7 +64,7 @@ const EnterpriseSidebar = () => {
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
-              onClick={() => setActiveComponent("Settings")}>
+              onClick={() => setActiveComponent("PersonalSettings")}>
               <FiSettings size={20} />
               {isSidebarOpen && <span>Configurações</span>}
             </div>
@@ -75,4 +78,4 @@ const EnterpriseSidebar = () => {
   );
 };
 
-export default EnterpriseSidebar;
+export default PersonalSidebar;
