@@ -5,6 +5,7 @@ import TextArea from "../ui/TextArea";
 import UploadArea from "../upload-area/single";
 import { relatarService } from "../../modules/service/api/relatar";
 import MapComponent from "../../components/Map";
+import { validatorImagesService } from '../../modules/service/api/ImagesValidator/validateImages'
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
@@ -16,7 +17,7 @@ interface RelatarFormData {
   municipioId: string;
   bairro?: string;
   prioridade: string;
-  imagens: File[];
+  analiseImagem: File | null;
 }
 
 interface Provincia {
@@ -80,10 +81,11 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     municipioId: "",
     bairro: "",
     prioridade: "",
-    imagens: []
+    analiseImagem: null,
   });
 
-  const [imagens, setImagens] = useState<File | null>(null);
+  const [imagens, setImagens] = useState<File[] | null>(null);
+  const [isImageValid, setIsImageValid] = useState<boolean | null>(null);
   const [prioridade, setPrioridade] = useState("");
   const [loading, setLoading] = useState(false);
   const [provincias, setProvincias] = useState<Provincia[]>([]);
@@ -99,7 +101,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   provincia &&
   municipio &&
   prioridade &&
-  imagens !== null;
+  imagens !== null && isImageValid;
 
   const fetchProvincias = async () => {
     const res = await axios.get("/provincia");
@@ -117,6 +119,21 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageValidation = async (file: File) => {
+    // Chama o serviço de validação da imagem
+    const result = await validatorImagesService.create({
+      imageURL: file,
+      labels: [],
+      analysisDate: new Date(),
+      amontoadoRelatadoId: "",
+      status: "pendente",
+    });
+  
+    const isValid = result.data.isValid;
+    setIsImageValid(isValid);
+    setImagens((prev) => (prev ? [...prev, file] : [file]));
+  };
+
   const setCoords = (lat: number, lng: number) => {
     setFormData((prev) => ({
       ...prev,
@@ -131,16 +148,21 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     if (!formData.descricao.trim()) return setToast({ message: "Descrição obrigatória", type: "error" });
     if (!provincia) return setToast({ message: "Selecione a província", type: "error" });
     if (!municipio) return setToast({ message: "Selecione o município", type: "error" });
+    if (imagens === null || !isImageValid) return setToast({ message: "As imagens não são válidas ou não foram enviadas corretamente", type: "error" });
 
     setLoading(true);
     try {
+      if (!imagens || !(imagens[0] instanceof File)) {
+        return setToast({ message: "Imagem inválida ou não enviada", type: "error" });
+      }
+
       const payload = {
         ...formData,
         userId: "exampleUserId",
         provinciaId: provincia,
         municipioId: municipio,
-        prioridade,
-        imagens: imagens ? [imagens] : [],
+        prioridade: formData.prioridade,
+        analiseImagem: imagens[0],
       };
       const res = await relatarService.create(payload);
       if (res.status === 201) {
@@ -222,7 +244,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
 
            <div>
            <label htmlFor="imagens" className="block text-gray-700 font-semibold">Carregar Imagem</label>
-           <UploadArea onChange={setImagens} />
+           <UploadArea onChange={handleImageValidation} />
            </div>
 
             {locationDenied && (

@@ -7,5 +7,5 @@ type relatar = {
     municipioId: string
     prioridade: string
     bairro?: string
-    imagens: File[]
+    analiseImagem: File
 }

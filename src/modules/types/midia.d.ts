@@ -1,6 +1,7 @@
-type midia = {
-    caminho: string
-    tipoMidiaId: string
+type validatorImage = {
+    imageURL: File
+    labels: string[]
+    analysisDate: Date
     amontoadoRelatadoId: string
-    pagamentoId: string
+    status: "pendente" | "aprovado" | "rejeitado"
 }
