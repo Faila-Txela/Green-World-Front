@@ -10,7 +10,7 @@ function Feedback() {
         </div>
 
         <div className="mb-96">
-        <p>Suas notificações e feedback aparecerão aqui.</p>
+        <p>Intereja com ourtos usuários da plataforma aqui.</p>
         </div>
 
       </div>

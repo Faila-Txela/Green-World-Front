@@ -13,8 +13,6 @@ import Provincia from "../../components/client/Provincia";
 import Municipio from "../../components/client/Municipio";
 import Terms from "../../components/Terms";
 
-//https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
-
 type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Users" | "Terms";
 
 
@@ -27,7 +25,7 @@ const AdminSidebar = () => {
   };
 
 
-  // Definir o tipo correto das chaves do ComponentMap
+  // Definindo o tipo correto das chaves do ComponentMap
   const ComponentMap = {
     AdminDashboard: <AdminDashboard />,
     Feedback: <Feedback />,
@@ -39,8 +37,7 @@ const AdminSidebar = () => {
 
   return (
     <div className="flex z-10">
-      {/* Estado da sidebar */}
-      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => { console.log("Logout clicado") }} />
 
       <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
 
@@ -85,8 +82,13 @@ const AdminSidebar = () => {
           </div>
         </div>
       </div>
+
       {/* Conteúdo do Componente Ativo */}
-      <div className={isSidebarOpen ? "ml-[20vw] p-7 w-full mt-[10px]" : "ml-[6vw] p-7 w-full mt-[10px]" }>{ComponentMap[activeComponente]}</div>
+      <div 
+        className={isSidebarOpen ? "ml-[20vw] p-7 w-full mt-[10px]" : "ml-[6vw] p-7 w-full mt-[10px]" }>
+        {ComponentMap[activeComponente]}
+      </div>
+
     </div>
   );
 };

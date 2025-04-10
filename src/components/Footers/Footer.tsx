@@ -1,51 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoLogoInstagram } from "react-icons/io";
 import { CiLinkedin } from "react-icons/ci";
-import { MdSunny } from "react-icons/md";
-import { RiMoonFill } from "react-icons/ri";
 import Logo from "../../assets/Logo";
 import Skeleton from "../ui/Skeleton";
 import FooterLinks from "../../components/FooterLinks";
 
 export default function Footer() {
+
   const [isLoading, setIsLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
-
-  useEffect(() => {
-
-    setTimeout(() => setIsLoading(false), 3000);
-
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
+  setTimeout(() => setIsLoading(false), 2000)
 
   const groupLinks1 = {
     title: "Mapa do site",
     links: [
-      { linkName: "Inicio", link: "/" },
-      { linkName: "Notícias", link: "/news" },
-      { linkName: "Empresas", link: "/empresas" },
-      { linkName: "Contactos", link: "/contactos" },
+      { label: "Inicio", link: "" },
+      { label: "Notícias", link: "news" },
+      { label: "Empresas", link: "enterprises" },
+      { label: "Contactos", link: "contacts" },
     ],
   };
 
   const groupLinks2 = {
     title: "Links úteis",
     links: [
-      { linkName: "Sites Greens", link: "https://www.elisal.ao/" },
-      { linkName: "Contacte-nos", link: "/" },
+      { label: "Sites Greens", link: "https://www.elisal.ao/" },
+      { label: "Contacte-nos", link: "contacts" },
     ],
   };
 
@@ -70,15 +50,6 @@ export default function Footer() {
         </div>
         <FooterLinks data={[groupLinks1, groupLinks2]} />
       </div>
-
-      {/* Botão de alternância de tema com ícones
-      <button
-        onClick={toggleTheme}
-        className="mt-6 px-4 py-2 flex items-center gap-2 border rounded text-white bg-gray-700 hover:bg-gray-600 transition"
-      >
-        {darkMode ? <MdSunny size={20} /> : <RiMoonFill size={20} />}
-        {darkMode ? "Modo Claro" : "Modo Escuro"}
-      </button> */}
 
       {isLoading ? (
         <Skeleton width="100%" height="20px" />

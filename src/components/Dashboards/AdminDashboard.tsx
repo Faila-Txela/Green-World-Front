@@ -25,6 +25,7 @@ export default function PersonalDashboard() {
     <div className="">
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">
+
         <div className="mt-12 rounded shadow-lg bg-green-100 py-6 px-6">
            <h1 className="font-extrabold text-2xl">Seja bem-vinda Txela!</h1>
         </div>
@@ -38,10 +39,10 @@ export default function PersonalDashboard() {
          <span className="text-lg">10</span>
         </div>
 
-          <div className="flex gap-3 rounded-md shadow-lg p-4 duration-300 transform hover:scale-105">
-         <h3 className="text-lg font-semibold">Total de relatos:</h3>
-         <span className="text-lg">0</span>
-          </div>
+        <div className="flex gap-3 rounded-md shadow-lg p-4 duration-300 transform hover:scale-105">
+          <h3 className="text-lg font-semibold">Total de relatos:</h3>
+          <span className="text-lg">0</span>
+        </div>
   
         </div>
 
@@ -91,9 +92,8 @@ export default function PersonalDashboard() {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="">
-        </div>
       </div>
+      
     </div>
   )
 }

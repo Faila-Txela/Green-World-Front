@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import  axios from '../../lib/axios'
 import PrimaryButton from "../ui/PrimaryButton";
 import TextArea from "../ui/TextArea";
 import UploadArea from "../upload-area/single";
 import { relatarService } from "../../modules/service/api/relatar";
+import MapComponent from "../../components/Map";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
@@ -102,6 +103,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
 
   const fetchProvincias = async () => {
     const res = await axios.get("/provincia");
+    //console.log(res)
     if (res.status === 200) setProvincias(res.data);
   };
 
@@ -152,9 +154,9 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     }
   };
 
-  // useEffect(() => {
-  //   fetchProvincias();
-  // }, []);
+  useEffect(() => {
+    fetchProvincias();
+  }, []) ;
 
   useEffect(() => {
     if (provincia) fetchMunicipios(provincia);
@@ -182,11 +184,11 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
         <h2 className="text-2xl text-green-700 mb-7 text-center">Relatar Novo Amontoado</h2>
         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
           <div className="flex flex-col gap-6 w-full">
-            <label className="block text-gray-700 font-semibold">Descrição</label>
+            <label htmlFor="descricao" className="block text-gray-700 font-semibold">Descrição</label>
             <TextArea name="descricao" id="descricao" placeholder="Ex: Ex: Lixo acumulado na rua..." value={formData.descricao} onChange={handleChange} className="" />
 
             <div>
-              <label className="block text-gray-700 font-semibold">Província</label>
+              <label htmlFor="provincia" className="block text-gray-700 font-semibold">Província</label>
               <select className="w-full p-3 border rounded-md" title="provincia" onChange={(e) => setProvincia(e.target.value)}>
                 <option value="">Selecione a Província</option>
                 {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
@@ -194,7 +196,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
             </div>
 
             <div>
-              <label className="block text-gray-700 font-semibold">Município</label>
+              <label htmlFor="municipio" className="block text-gray-700 font-semibold">Município</label>
               <select className="w-full p-3 border rounded-md" title="municipio" onChange={(e) => setMunicipio(e.target.value)}>
                 <option value="">Selecione o Município</option>
                 {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
@@ -210,7 +212,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
             />
 
             <div>
-              <label className="block text-gray-700 font-semibold">Prioridade</label>
+              <label htmlFor="prioridade" className="block text-gray-700 font-semibold">Prioridade</label>
               <select className="w-full p-3 border rounded-md" title="Selecione a prioridade" value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
                 <option value="">Selecione a Prioridade</option>
                 <option value="BAIXA">Baixa</option>
@@ -219,17 +221,18 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
             </div>
 
            <div>
-           <label className="block text-gray-700 font-semibold">Carregar Imagem</label>
+           <label htmlFor="imagens" className="block text-gray-700 font-semibold">Carregar Imagem</label>
            <UploadArea onChange={setImagens} />
            </div>
 
             {locationDenied && (
-              <div>
+              <div className="flex flex-col">
                 <p className="mb-2 font-semibold">Selecione sua localização no mapa:</p>
                 <MapContainer
                   center={[-8.8383, 13.2344]}
                   zoom={13}
-                  style={{ height: "10px", width: "80%" }}
+                  
+                  style={{ height: "10px", width: "40%" }}
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

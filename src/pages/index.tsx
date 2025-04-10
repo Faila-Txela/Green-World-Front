@@ -8,13 +8,9 @@ import map from '../assets/map1.png';
 import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
-import imageFixed from '../assets/pexels-tomfisk-3174349.jpg';
-import mine from '../assets/mine.png'
 import CardBeneficios from "../components/CardBeneficio";
 import CardRelatos from "../components/CardRelatos";
 import { motion } from "framer-motion"; 
-
- //https://www.google.com/search?sca_esv=8568c3189e4a4419&sxsrf=AHTn8zpPPsJib0eVvJPPadQG3atKLKjSMw:1743267080151&q=api%27s+gratuitas+para+usar+mapas+em+projetos+react+js&spell=1&sa=X&ved=2ahUKEwipqb7436-MAxUhVEEAHUkKMc0QBSgAegQIDRAB&biw=1536&bih=738&dpr=1.25
 
 interface ModalProps {
   item: {
@@ -62,11 +58,11 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const midiaItens = [
-    { type: "image", src: image2, title: "Coleta Seletiva", description: "A importância da separação correta dos resíduos.", time: "2h atrás" },
-    { type: "video", src: video, title: "Processo de Reciclagem", description: "Como funciona a coleta seletiva em Luanda.", time: "4h atrás" },
-    { type: "image", src: image4, title: "Carta aos Catadores", description: "O papel dos catadores na limpeza urbana.", time: "1 dia atrás" },
-    { type: "video", src: video2, title: "História dos Catadores", description: "A luta diária dos catadores de lixo.", time: "3 dias atrás" },
+  const midiaItens: ModalProps['item'][] = [
+      { type: "image", src: image2, title: "Coleta Seletiva", description: "A importância da separação correta dos resíduos.", item: "item1", time: "2h atrás" },
+      { type: "video", src: video, title: "Processo de Reciclagem", description: "Como funciona a coleta seletiva em Luanda.", item: "item2", time: "4h atrás" },
+      { type: "image", src: image4, title: "Carta aos Catadores", description: "O papel dos catadores na limpeza urbana.", item: "item3", time: "1 dia atrás" },
+      { type: "video", src: video2, title: "História dos Catadores", description: "A luta diária dos catadores de lixo.", item: "item4", time: "3 dias atrás" },
   ];
 
   const faqs = [
@@ -101,8 +97,7 @@ export default function Home() {
   transition={{ duration: 1 }}
 >
   <div 
-    className="relative w-full h-[100vh] bg-cover bg-fixed bg-center" 
-    style={{ backgroundImage: `url(${mine})` }}>
+    className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
     <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 text-center px-4">
       <div>
         <h1 className="text-white text-4xl font-semibold text-start">Luanda mais limpa começa com você!</h1>
@@ -189,7 +184,7 @@ export default function Home() {
 
 
 {/* Seçcão fixedImage */}
-      <div className="relative w-full h-[80vh] bg-cover bg-fixed bg-center" style={{ backgroundImage: `url("https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")` }}>
+      <div className="relative w-full h-[80vh] bg-[url('https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-fixed bg-center">
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
             <h2 className="text-white text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>

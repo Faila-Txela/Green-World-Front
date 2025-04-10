@@ -15,7 +15,9 @@ import { PiCity } from "react-icons/pi";
 import { MdOutlineCalendarMonth, MdOutlineMergeType, MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaRecycle } from "react-icons/fa";
 
+
 export default function EnterpriseDashboard() {
+  
   const locationsData = [
     { name: "Rangel", relatos: 65 },
     { name: "Mutamba", relatos: 86 },

@@ -6,9 +6,11 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
+import { useAuth } from "../../routes/auth_context";
 
 export default function EnterpriseLogin() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -16,7 +18,10 @@ export default function EnterpriseLogin() {
   const [senhaError, setSenhaError] = useState("");
   const [animate, setAnimate] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   // Função para validação de email
   const isEmailValid = (email: string) => {
@@ -50,7 +55,7 @@ export default function EnterpriseLogin() {
     setAnimate(true);
   }, []);
 
-  // Função para o botão de navegar até a Dashboard das empresas
+  // Função para Entrar na dashboard
   const Enter = async () => {
     if (!email || !senha) {
       setToast({ message: "Preencha todos os dados.", type: "error" });
@@ -63,28 +68,41 @@ export default function EnterpriseLogin() {
     }
 
     if (senha.length < 6) {
-      setToast({ message: "A senha deve conter no mínimo 6 caracteres.", type: "error" });
+      setToast({
+        message: "A senha deve conter no mínimo 6 caracteres.",
+        type: "error",
+      });
       return;
     }
 
     try {
-      setLoading(true); // Ativa o estado de carregamento
-      const { data, status } = await axios.post("/empresas/login", { email, senha });
+      setLoading(true);
+      const { data, status } = await axios.post("/empresas/login", {
+        email,
+        senha,
+      });
 
       if (status === 200) {
         setToast({ message: "Login feito com sucesso", type: "success" });
+        setUser(data.data)
         localStorage.setItem("user", JSON.stringify(data.data));
         setTimeout(() => navigate("/enterprise-dashboard"), 2000);
       } else {
         setToast({ message: "Erro ao fazer login.", type: "error" });
       }
     } catch (error: any) {
-      setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" });
+      setToast({
+        message: "Erro no servidor ao tentar fazer login.",
+        type: "error",
+      });
 
       if (error.response) {
         const errorStatus = error.response.status;
         if (errorStatus === 401) {
-          setToast({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
+          setToast({
+            message: "Credenciais inválidas. Tente novamente.",
+            type: "error",
+          });
         }
       }
     } finally {
@@ -107,7 +125,10 @@ export default function EnterpriseLogin() {
           onClick={(e) => e.preventDefault()}
           className={`flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
         >
-          <h3 className="text-2xl font-semibold text-[#068a5b]">Login de Empresas</h3>
+          <h3 
+          className="text-2xl font-semibold text-[#068a5b]">
+            Login de Empresas
+          </h3>
 
           <div className="flex flex-col w-full gap-3">
             <label htmlFor="email" className="p-1">
@@ -122,7 +143,9 @@ export default function EnterpriseLogin() {
               onChange={handleEmailChange}
               addClassName="w-full border-2 focus:border-green-400 p-2 rounded-md"
             />
-            {emailError && <span className="text-red-500 text-sm">{emailError}</span>}
+            {emailError && (
+              <span className="text-red-500 text-sm">{emailError}</span>
+            )}
 
             <label htmlFor="senha" className="p-1">
               Sua senha
@@ -137,7 +160,9 @@ export default function EnterpriseLogin() {
                 onChange={handleSenhaChange}
                 addClassName="w-full border-2 focus:border-green-400 rounded-md"
               />
-              {senhaError && <span className="text-red-500 text-sm">{senhaError}</span>}
+              {senhaError && (
+                <span className="text-red-500 text-sm">{senhaError}</span>
+              )}
 
               <button
                 type="button"
@@ -160,10 +185,10 @@ export default function EnterpriseLogin() {
 
           <div className="w-full">
             <PrimaryButton
-              addClassName={`w-[18rem] py-3 text-sm font-medium ${loading ? "opacity-60 cursor-not-allowed" : ""}`} // Estilo para desabilitar o botão
+              addClassName={`w-[18rem] py-3 text-sm font-medium ${loading ? "opacity-60 cursor-not-allowed" : ""}`} 
               name={loading ? "Carregando..." : "Entrar"}
               onClick={Enter}
-              disabled={loading} // Desabilita o botão "Entrar" durante o carregamento
+              disabled={loading} 
             />
           </div>
 
@@ -178,8 +203,16 @@ export default function EnterpriseLogin() {
             />
           </div>
         </form>
+
         {/* Exibe o Toast se houver mensagem */}
-        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+
       </div>
     </div>
   );

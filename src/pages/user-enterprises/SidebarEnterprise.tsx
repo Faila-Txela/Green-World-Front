@@ -7,11 +7,10 @@ import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard
 import Relatorio from "../../components/Relatorio";
 import Agendar from "../../components/Agendar";
 import EnterpriseSettings from "../../components/client/settings/EnterpriseSettings";
+import Notifications from "../../pages/Notifications";
 import Feedback from "../../components/client/Feedback";
 
-//https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
-
-type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Agendar" | "Feedback" | "EnterpriseSettings";
+type ComponentKey = "EnterpriseDashboard" | "Relatorio" | "Agendar" | "Notifications" | "Feedback" | "EnterpriseSettings";
 
 
 const EnterpriseSidebar = () => {
@@ -22,23 +21,23 @@ const EnterpriseSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Definir o tipo correto das chaves do ComponentMap
+  // Definindo o tipo correto das chaves do ComponentMap
   const ComponentMap = {
     EnterpriseDashboard: <EnterpriseDashboard />,
     Relatorio: <Relatorio />,
     Agendar: <Agendar />,
+    Notifications: <Notifications />,
     Feedback: <Feedback />,
     EnterpriseSettings: <EnterpriseSettings 
-      onChangeProfilePic={() => console.log("Profile picture changed")} 
-      onChangeTheme={() => console.log("Theme changed")} 
-      onDeleteAccount={() => console.log("Account deleted")} 
+      onChangeProfilePic={() => alert("Profile picture changed")} 
+      onChangeTheme={() => alert("Theme changed")} 
+      onDeleteAccount={() => alert("Account deleted")} 
     />
   };
 
   return (
     <div className="flex z-10">
-      {/* Estado da sidebar */}
-      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => console.log("Logout triggered")} />
+      <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => alert("Logout triggered")} />
 
       <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
 
@@ -67,6 +66,12 @@ const EnterpriseSidebar = () => {
               onClick={() => setActiveComponent("Agendar")}>
               <MdOutlineCalendarMonth size={20} />
               {isSidebarOpen && <span>Agendar Actividades</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Notifications")}>
+              <MdOutlineCalendarMonth size={20} />
+              {isSidebarOpen && <span>Notificações</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"

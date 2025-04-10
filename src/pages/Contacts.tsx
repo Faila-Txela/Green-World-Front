@@ -21,8 +21,8 @@ export default function Contacts() {
   setEmail(e.target.value);
   const handleNomeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
   setNome(e.target.value);
-  const handleMensagemChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-  setMensagem(e.target.value);
+  const handleMensagemChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setMensagem(e.target.value);
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
@@ -98,7 +98,7 @@ export default function Contacts() {
             <div className="flex flex-col items-center mb-4">
               <div className="w-full">
                 <label htmlFor="mensagem" className="block font-medium mb-2 required">Mensagem</label>
-                <TextArea name="mensagem" id="mensagem" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" placeholder={"Mensagem"} />
+                <TextArea name="mensagem" id="mensagem" className="w-full py-2 px-3 outline-none border-[1px] rounded-[3px]" onChange={handleMensagemChange} placeholder={"Mensagem"} />
               </div>
             </div>
 
@@ -113,4 +113,3 @@ export default function Contacts() {
     </div>
   );
 }
-

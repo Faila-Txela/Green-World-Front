@@ -38,7 +38,6 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
     </div>
   </div>
 );
-
 interface User {
   nome: string;
   email: string;
@@ -115,7 +114,7 @@ export default function UserForm() {
 
     } catch (error){
       //console.error("Erro ao enviar os dados de cadastro ❌", error)
-      setToast({ message: "❌ Erro ao enviar os dados de cadastro", type: "error" })
+      setToast({ message: "Erro ao enviar os dados de cadastro", type: "error" })
     }
 
   };
@@ -138,7 +137,6 @@ export default function UserForm() {
           <InputField label="Nome" autoComplete="on" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
           <InputField label="Email" type="email" autoComplete="on" name="email" value={formData.email} onChange={handleChange} icon={<FaEnvelope />} />
 
-          {/* Campo de senha com ajuste de padding */}
           <div className="relative">
             <InputField 
               label="Senha" 
@@ -159,8 +157,25 @@ export default function UserForm() {
           </button>
           </div>
 
-          <InputField label="IBAN" type="text" name="iban" autoComplete="on" value={formData.iban} onChange={handleChange} icon={<FaUniversity />} />
-          <InputField label="Nome do Titular" type="text" name="nome_titular" autoComplete="on" value={formData.nome_titular} onChange={handleChange} icon={<FaIdCard />} />
+          <InputField 
+          label="IBAN"
+          type="text" 
+          name="iban" 
+          autoComplete="on" 
+          value={formData.iban} 
+          onChange={handleChange} 
+          icon={<FaUniversity />} 
+          />
+
+          <InputField 
+          label="Nome do Titular" 
+          type="text" 
+          name="nome_titular" 
+          autoComplete="on" 
+          value={formData.nome_titular} 
+          onChange={handleChange} 
+          icon={<FaIdCard />} 
+          />
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
           <span>
@@ -172,7 +187,9 @@ export default function UserForm() {
 
           <div className="col-span-1 md:col-span-2 mt-4">
             <PrimaryButton 
-            addClassName="" name="Cadastrar"/>
+            addClassName="" 
+            name="Cadastrar"
+            />
           </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
@@ -181,8 +198,12 @@ export default function UserForm() {
           </div>
 
         </form>
+
            {/* Exibe o Toast se houver mensagem */}
-          {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+          {toast && <Toast message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} />}
+          
       </div>
     </div>
   );

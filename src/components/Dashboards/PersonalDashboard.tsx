@@ -1,8 +1,6 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { MdOutlineSpaceDashboard } from 'react-icons/md'
 
-//eyJhbGciOiJIUzI1NiJ9.eyJhIjoiYWNfaWI5dHY0eXkiLCJqdGkiOiIyZjBlZjIzNiJ9.xUM68ikF9MBHfhxuJb0gNI_RMwFk1vbDCrbWKv00Tlo (token de acesso da API da carto dos mapas)
-
 
 export default function PersonalDashboard() {
   const locationsData = [
@@ -79,8 +77,8 @@ export default function PersonalDashboard() {
             ))}
           </div>
         </div>
-
       </div>
+      
     </div>
   );
 }

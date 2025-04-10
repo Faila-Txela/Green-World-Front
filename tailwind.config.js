@@ -9,7 +9,11 @@ export default {
   theme: {
     extend: {
       animation: {
-        "marquee": "marquee infinite linear",
+        "marquee": "marquee 20s infinite linear",
+      },
+      backgroundImage: {
+        bannerImg: "url('/mine.png')",
+        garbageImage: "url('/garbageImage.jpg')"
       },
       keyframes:{
         marquee: {

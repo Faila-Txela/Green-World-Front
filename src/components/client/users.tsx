@@ -56,12 +56,13 @@ function Users() {
     buscarUsuarios();
   }
 
-  return (
+      return (
     <div className="rounded shadow-md p-3 mt-20">
       <h3 className="text-lg font-semibold mb-2">Usuários</h3>
 
       {/* Adicionar Usuário */}
       <div className="mb-4 flex gap-2">
+
         <input
           type="text"
           value={novoNome}
@@ -76,9 +77,13 @@ function Users() {
           placeholder="Email do usuário"
           className="border px-2 py-1 rounded w-full"
         />
-        <button onClick={adicionarUsuario} className="bg-green-600 text-white px-3 py-1 rounded">
+        <button 
+          type="button"
+          onClick={adicionarUsuario} 
+          className="bg-green-600 text-white px-3 py-1 rounded">
           Adicionar
         </button>
+
       </div>
 
       {/* Listagem de Usuários */}
@@ -100,22 +105,29 @@ function Users() {
       {modalConfirmacao && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md text-center">
+
             <p className="mb-4">
               Tens a certeza que queres remover este usuário?
             </p>
+
             <div className="flex justify-center gap-4">
+
               <button
+                type="button"
                 className="bg-gray-400 text-white px-4 py-1 rounded"
                 onClick={() => setModalConfirmacao(null)}
               >
                 Cancelar
               </button>
+
               <button
+                type="button"
                 className="bg-red-600 text-white px-4 py-1 rounded"
                 onClick={() => confirmarRemover(modalConfirmacao.id)}
               >
                 Confirmar
               </button>
+              
             </div>
           </div>
         </div>

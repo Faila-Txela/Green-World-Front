@@ -1,47 +1,45 @@
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-interface LinkItem {
-  linkName: string;
+type LinkItem = {
+  label: string;
   link: string;
-}
+};
 
-interface Group {
+type LinkGroup = {
   title: string;
   links: LinkItem[];
-}
+};
 
-interface LinksProps {
-  data: Group[];
-}
-
-export default function FooterLinks({ data }: LinksProps) {
+export default function FooterLinks({ data }: { data: LinkGroup[] }) {
   return (
-    <div className='flex gap-[50px]'>
-      {data.map((group, groupIndex) => (
-        <div key={groupIndex} className='flex flex-col gap-[16px]'>
-          <h4 className='font-bold'>{group.title}</h4>
-          {group.links.map((linkItem, linkIndex) => (
-            <Link key={linkIndex} className='flex column gap-[16px] hover:text-green-600 hover:underline' to={`/${linkItem.link}`}>
-              {linkItem.linkName}
-            </Link>
-          ))}
+    <div className="flex gap-10 flex-wrap">
+      {data.map((group, i) => (
+        <div key={i} className="flex flex-col gap-2 min-w-[150px]">
+          <h4 className="font-semibold text-green-500">{group.title}</h4>
+          {group.links.map(({ label, link }, j) =>
+            link.startsWith("http") ? (
+              <a
+                key={j}
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline text-white/80 hover:text-white transition"
+              >
+                {label}
+              </a>
+            ) : (
+              <Link
+                key={j}
+                to={`${link}`}
+                className="hover:underline text-white/80 hover:text-white transition"
+              >
+                {label}
+              </Link>
+            )
+          )}
         </div>
       ))}
     </div>
   );
 }
 
-FooterLinks.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      links: PropTypes.arrayOf(
-        PropTypes.shape({
-          linkName: PropTypes.string.isRequired,
-          link: PropTypes.string.isRequired,
-        })
-      ).isRequired,
-    })
-  ).isRequired,
-};

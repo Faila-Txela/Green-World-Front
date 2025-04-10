@@ -55,6 +55,7 @@ function Municipio() {
           className="border px-2 py-1 rounded w-full"
         />
         <button
+          type="button"
           onClick={adicionarMunicipio}
           className="bg-green-600 text-white px-3 py-1 rounded"
         >
@@ -87,15 +88,18 @@ function Municipio() {
                 <span>{municipio.nome}</span>
                 <div className="flex gap-2">
                   <button
+                    type="button"
                     onClick={() => {
-                      setEditandoId(municipio.id);
-                      setNomeEditado(municipio.nome);
+                    setEditandoId(municipio.id);
+                    setNomeEditado(municipio.nome);
                     }}
                     className="text-blue-600"
                   >
                     Editar
                   </button>
+
                   <button
+                    type="button"
                     onClick={() => setModalConfirmacao({ tipo: "remover", id: municipio.id })}
                     className="text-red-600"
                   >
@@ -112,18 +116,23 @@ function Municipio() {
       {modalConfirmacao && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md text-center">
+
             <p className="mb-4">
               Tens a certeza que queres{" "}
               {modalConfirmacao.tipo === "remover" ? "remover" : "editar"} este município?
             </p>
+
             <div className="flex justify-end gap-2">
               <button
+                type="button"
                 className="bg-gray-400 text-white px-3 py-1 rounded"
                 onClick={() => setModalConfirmacao(null)}
               >
                 Cancelar
               </button>
+
               <button
+                type="button"
                 className="bg-red-600 text-white px-3 py-1 rounded"
                 onClick={() => {
                   modalConfirmacao.tipo === "remover"
@@ -133,6 +142,7 @@ function Municipio() {
               >
                 Confirmar
               </button>
+
             </div>
           </div>
         </div>

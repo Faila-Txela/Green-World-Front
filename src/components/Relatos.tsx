@@ -3,17 +3,18 @@ import { MdOutlineReport } from "react-icons/md";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Toast from "../components/ui/Toast";
 import { relatarService } from "../modules/service/api/relatar";
-import ModalRelatar from "../components/modal/ModalRelatar"; // Novo componente do modal
+import ModalRelatar from "../components/modal/ModalRelatar";
 
 export default function Relatos() {
-  const [relatos, setRelatos] = useState<any[]>([]); // Array de relatos do usuário
+  const [relatos, setRelatos] = useState<any[]>([]); 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+   // A função para buscar os relatos do usuário
   const fetchRelatos = async () => {
-    // A função para buscar os relatos do usuário
-        const response = await relatarService.getAll();
-        setRelatos(response.data);
+  const response = await relatarService.getAll();
+    setRelatos(response.data);
     try {
       const data = await relatarService.getAll();
       setRelatos(data.data);
@@ -22,9 +23,9 @@ export default function Relatos() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchRelatos();
-  // }, []);
+   useEffect(() => {
+     fetchRelatos();
+   }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -36,11 +37,11 @@ export default function Relatos() {
 
   return (
     <div className="flex justify-center p-12 mt-24">
-           {/* Texto explicativo da tela */}
-            <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
-            <MdOutlineReport className="h-9 w-9" />
-            <h1 className="text-xl md:text-2xl font-semibold text-left">Painel de Relatos</h1>
-            </div>
+        {/* Texto explicativo da tela */}
+      <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
+        <MdOutlineReport className="h-9 w-9" />
+        <h1 className="text-xl md:text-2xl font-semibold text-left">Painel de Relatos</h1>
+      </div>
 
       <div className="flex flex-col items-center p-6 shadow-lg bg-white w-full max-w-xl">
         <div className="text-center">

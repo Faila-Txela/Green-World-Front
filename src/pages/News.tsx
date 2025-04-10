@@ -4,16 +4,15 @@ import Header from "../components/Headers/Header";
 import Footer from "../components/Footers/Footer";
 
 function News() {
-  const [news, setNews] = useState([]); // Estado para armazenar as notícias
+  const [news, setNews] = useState<{ title: string; description: string }[]>([]); // Estado para armazenar as notícias
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simula uma chamada de API
-    fetch("https://api.exemplo.com/news") // Troque pela API real
+    fetch("http://localhost:3001/news") 
       .then((response) => response.json())
       .then((data) => {
-        setNews(data); // Define as notícias no estado
-        setIsLoading(false); // Desativa o skeleton quando os dados chegam
+        setNews(data); 
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Erro ao carregar notícias:", error);
@@ -29,7 +28,7 @@ function News() {
         </h1>
 
         {isLoading ? (
-          // Exibe 4 skeletons com animação em 2 colunas responsivas
+          // Exibe 4 skeletons
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-6xl animate-pulse">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-lg">

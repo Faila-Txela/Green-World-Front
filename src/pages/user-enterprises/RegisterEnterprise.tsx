@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import {
@@ -192,7 +192,7 @@ export default function EnterpriseForm() {
       }
     } catch (error) {
       //console.log("❌ Erro ao cadastrar sua empresa:", error);
-      setToast({ message: "❌ Erro ao cadastrar sua empresa", type: "error" })
+      setToast({ message: "Erro ao cadastrar sua empresa", type: "error" })
     }
   };
 

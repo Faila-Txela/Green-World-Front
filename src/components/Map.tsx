@@ -18,16 +18,7 @@ const locationsData = [
   { name: "Samba", meses: "Março", relatos: 50, lat: -8.885, lon: 13.270 },
 ];
 
-const getIconUrl = (estado: string) => {
-  switch (estado) {
-    case 'alto': return '/amico.svg';
-    case 'médio': return '/garbage.svg';
-    case 'baixo': return 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg';
-    default: return 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Red_circle.svg';
-  }
-};
-
-const MapComponent: React.FC = () => {
+const MapComponent = () => {
   useEffect(() => {
     const features = locationsData.map(location => {
       const feature = new Feature({
@@ -69,7 +60,7 @@ const MapComponent: React.FC = () => {
     return () => map.setTarget();
   }, []);
 
-  return <div id="map" className="" style={{ width: '100vh', height: '400px' }} />;
+  return <div id="map" className="w-full h-[400px]"/>;
 
 };
 

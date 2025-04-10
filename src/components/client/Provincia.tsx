@@ -77,7 +77,10 @@ function ProvinceSettings() {
           placeholder="Nova província"
           className="border px-2 py-1 rounded w-full"
         />
-        <button onClick={adicionarProvincia} className="bg-green-600 text-white px-3 py-1 rounded">
+        <button
+        type="button" 
+        onClick={adicionarProvincia}
+        className="bg-green-600 text-white px-3 py-1 rounded">
           Adicionar
         </button>
       </div>
@@ -105,15 +108,17 @@ function ProvinceSettings() {
                 <span>{prov.nome}</span>
                 <div className="flex gap-2">
                   <button
+                    type="button"
                     onClick={() => {
-                      setEditandoId(prov.id);
-                      setNomeEditado(prov.nome);
+                    setEditandoId(prov.id);
+                    setNomeEditado(prov.nome);
                     }}
                     className="text-blue-600"
                   >
                     Editar
                   </button>
                   <button
+                    type="button"
                     onClick={() => confirmarAcao("remover", prov.id, prov.nome)}
                     className="text-red-600"
                   >
@@ -130,17 +135,27 @@ function ProvinceSettings() {
       {modalVisible && acaoModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-5 rounded shadow-lg w-full max-w-md">
+
             <h2 className="text-lg font-semibold mb-4">Confirmação</h2>
             <p className="mb-4">
               Tem certeza que deseja {acaoModal.tipo === "remover" ? "remover" : "atualizar"} a província <strong>{acaoModal.nome}</strong>?
             </p>
+
             <div className="flex justify-end gap-2">
-              <button onClick={() => setModalVisible(false)} className="px-3 py-1 bg-gray-300 rounded">
+              <button
+                type="button" 
+                onClick={() => setModalVisible(false)}
+                className="px-3 py-1 bg-gray-300 rounded">
                 Cancelar
               </button>
-              <button onClick={executarAcaoConfirmada} className="px-3 py-1 bg-red-600 text-white rounded">
+
+              <button
+                type="button" 
+                onClick={executarAcaoConfirmada}
+                className="px-3 py-1 bg-red-600 text-white rounded">
                 Confirmar
               </button>
+
             </div>
           </div>
         </div>

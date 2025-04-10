@@ -13,10 +13,10 @@ export default function Enterprises() {
       <Header />
       
       {/* Conteúdo principal, com margem superior para dar espaço após o header */}
-      <div className="min-h-screen flex flex-col md:flex-row items-center justify-center py-20 px-8 md:px-16 space-y-12 md:space-y-0 md:space-x-16">
+      <div className="min-h-screen flex flex-col md:flex-row items-center justify-center py-20 px-8 md:px-16 space-y-12 md:space-y-20 md:space-x-16">
         
         {/* Texto da seção */}
-        <div className="max-w-xl text-center md:text-left">
+        <div className="max-w-xl text-center md:text-left mt-20">
           <h1 className="font-semibold text-4xl text-gray-800 mb-6">
             Transforme o Futuro com Green World
           </h1>
@@ -96,14 +96,14 @@ export default function Enterprises() {
             O Que Nossos Clientes Dizem
           </h2>
           <div className="flex justify-center space-x-8">
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full md:w-1/3">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-xl w-full md:w-1/3">
               <p className="text-lg text-gray-600 mb-4">
                 "A Green World tem sido fundamental para a implementação de nossas estratégias ambientais. Contribuir para um mundo mais limpo e inteligente é uma das principais razões pelas quais registramos nossa empresa aqui."
               </p>
               <h4 className="font-semibold text-xl text-gray-800">Carlos Silva</h4>
               <p className="text-gray-500">CEO da SilvaTech</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full md:w-1/3">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-xl w-full md:w-1/3">
               <p className="text-lg text-gray-600 mb-4">
                 "Com a Green World, conseguimos mapear áreas de lixo em nossa cidade e colaborar com outras empresas para promover um ambiente mais saudável para todos. A plataforma é uma excelente ferramenta para empresas que querem fazer a diferença."
               </p>
@@ -118,4 +118,3 @@ export default function Enterprises() {
     </div>
   );
 }
-

@@ -6,12 +6,11 @@ import { GoReport } from 'react-icons/go';
 import DashHeader from "../../components/Headers/DashHeader";
 import PersonalDashboard from "../../components/Dashboards/PersonalDashboard";
 import Relatos from "../../components/Relatos";
+import Notifications from "../../pages/Notifications";
 import PersonalSettings from "../../components/client/settings/PersonalSettings";
 import Feedback from "../../components/client/Feedback";
 
-//https://www.google.com/maps/@-8.8333099,13.2571516,15z?entry=ttu&g_ep=EgoyMDI1MDMxMi4wIKXMDSoASAFQAw%3D%3D
-
-type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "PersonalSettings";
+type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Notificacao" | "PersonalSettings";
 
 
 const PersonalSidebar = () => {
@@ -23,21 +22,21 @@ const PersonalSidebar = () => {
   };
 
 
-  // Definir o tipo correto das chaves do ComponentMap
+  // Definindo o tipo correto das chaves do ComponentMap
   const ComponentMap = {
     PersonalDashboard: <PersonalDashboard />,
     Feedback: <Feedback />,
     Relatos: <Relatos />,
+    Notificacao: <Notifications />,
     PersonalSettings: <PersonalSettings 
-      onChangeProfilePic={() => { /* Mudança de imagem do perfil */ }} 
-      onChangeTheme={() => { /* Mudança de tema */ }} 
-      onDeleteAccount={() => { /* Exclusão de conta */ }} 
+      onChangeProfilePic={() => { alert("Imagem de perfil mudada") }} 
+      onChangeTheme={() => { alert("Tema mudado") }} 
+      onDeleteAccount={() => { alert("Conta excluida") }} 
     />
   };
 
   return (
     <div className="flex z-10">
-      {/* Estado da sidebar */}
       <DashHeader toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onLogout={() => { /* handle logout */ }} />
 
       <div className="fixed h-[calc(100%-100px)]flex flex-col justify-between z-10" >
@@ -64,6 +63,12 @@ const PersonalSidebar = () => {
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Notificacao")}>
+              <GoReport size={20} />
+              {isSidebarOpen && <span>Notificações</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("PersonalSettings")}>
               <FiSettings size={20} />
               {isSidebarOpen && <span>Configurações</span>}
@@ -72,8 +77,13 @@ const PersonalSidebar = () => {
           </div>
         </div>
       </div>
+
       {/* Conteúdo do Componente Ativo */}
-      <div className={isSidebarOpen ? "ml-[20vw] p-7 w-full mt-[10px]" : "ml-[6vw] p-7 w-full mt-[10px]" }>{ComponentMap[activeComponente]}</div>
+      <div 
+      className={isSidebarOpen ? "ml-[20vw] p-7 w-full mt-[10px]" : "ml-[6vw] p-7 w-full mt-[10px]" }>
+        {ComponentMap[activeComponente]}
+      </div>
+
     </div>
   );
 };

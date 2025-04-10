@@ -6,9 +6,11 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/Authentication-rafiki.png";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
+import { useAuth } from "../../routes/auth_context";
 
 export default function PersonalLogin() {
   const navigate = useNavigate();
+  const { setUser} = useAuth()
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("")
@@ -18,13 +20,13 @@ export default function PersonalLogin() {
   const [loading, setLoading] = useState(false); 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   
-     // Validação do email
+     // Função de Validação do email
      const isEmailValid = (email: string) => {
       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return regex.test(email);
     };
 
-    // Validação do campo do email
+    // Função de validação da existencia do email no campo.
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (!isEmailValid(e.target.value)) {
@@ -50,7 +52,7 @@ export default function PersonalLogin() {
     setAnimate(true);
   }, []);
 
-  // Função para o botão de navegar até á Dashboard do cidadão comum
+  // Função de navegação á dashboard
   const Enter = async () => {
     if (!email || !senha) {
       setToast({message: "Preencha todos os campos.", type: "error"})
@@ -68,11 +70,12 @@ export default function PersonalLogin() {
     }
 
     try {
-      setLoading(true); // Ativa o estado de carregamento
+      setLoading(true);
       const { data, status } = await axios.post("user/login", {email, senha});
 
       if (status === 200) {
         setToast({message: "Login feito com sucesso!", type: "success"})
+        setUser(data.data)
         localStorage.setItem("user", JSON.stringify(data.data))
         setTimeout(() => navigate("/personal-dashboard"), 2000)
       } else {
@@ -81,7 +84,7 @@ export default function PersonalLogin() {
       }
      } 
      catch (error: any) {
-      console.error("❌ Erro no login:", error);
+      //console.error("❌ Erro no servidor ao tentar fazer login:", error);
       setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" })
     
       if (error.response ) {
@@ -167,7 +170,7 @@ export default function PersonalLogin() {
               addClassName={`w-[18rem] py-3 text-sm font-medium ${loading ? "opacity-60 cursor-not-allowed" : ""}`} // Estilo para desabilitar o botão
               name={loading ? "Carregando..." : "Entrar"}
               onClick={Enter}
-              disabled={loading} // Desabilita o botão "Entrar" durante o carregamento
+              disabled={loading} 
             />
           </div>
 
@@ -182,8 +185,11 @@ export default function PersonalLogin() {
             />
           </div>
         </form>
+
          {/* Exibe o Toast se houver mensagem */}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && <Toast message={toast.message} 
+      type={toast.type} 
+      onClose={() => setToast(null)} />}
 
     </div>
     </div>
