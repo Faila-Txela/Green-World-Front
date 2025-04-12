@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Headers/Header";
 import Footer from "../components/Footers/Footer";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
 import map from '../assets/map1.png';
 import image2 from '../assets/coleta.jpg';
+import logo from '../../public/logo.png'
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import CardBeneficios from "../components/CardBeneficio";
@@ -84,6 +85,45 @@ export default function Home() {
     },
   ];
 
+  const sentence = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.03,
+      },
+    },
+  };
+  
+  const letter = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
+  interface AnimatedTextProps {
+    text: string;
+    className?: string;
+  }
+
+  const AnimatedText:React.FC<AnimatedTextProps> = ({ text, className }) => (
+    <motion.h1
+      className={className}
+      variants={sentence}
+      initial="hidden"
+      animate="visible"
+    >
+      {text.split("").map((char, index) => (
+        <motion.span key={index} variants={letter}>
+          {char}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       
@@ -99,13 +139,27 @@ export default function Home() {
   <div 
     className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
     <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 text-center px-4">
-      <div>
-        <h1 className="text-white text-4xl font-semibold text-start">Luanda mais limpa começa com você!</h1>
-        <p className="text-lg text-gray-300 mt-4">Relate amontoados de lixo nas ruas e ajude a manter sua comunidade limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!</p>
+      <div className="tracking-wide">
+        <AnimatedText 
+        text="Luanda mais limpa começa com você!"
+        className="text-white text-3xl md:text-4xl font-semibold text-start"
+        />
+        <motion.p
+          className="text-lg text-gray-300 mt-4 text-start"
+          variants={sentence}
+          initial="hidden"
+          animate="visible"
+          >
+            {"Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!".split("").map((char, index) => (
+              <motion.span key={index} variants={letter}>
+                {char}
+              </motion.span>
+            ))}
+        </motion.p>
       </div>
     </div>
 
-    <div className="absolute top-80 md:top-44 inset-0 flex justify-center items-center">
+    <div className="absolute top-80 md:top-44 md:mx-32 inset-0 flex justify-center md:justify-start items-center">
       <PrimaryButton 
         onClick={() => navigate("/register-personal")} 
         name="Comece a Relatar" 
@@ -122,14 +176,14 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src={map} className="w-full md:w-9/12 h-80 md:h-2/3 py-20" alt="MapImage" />
+      <img src={logo} className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white shadow-2xl float-start " alt="MapImage" />
     </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
-      <h2 className="text-lg md:text-2xl font-bold text-global-color-three text-center mb-4 md:mb-16">O que é a Green World ?</h2>
-      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
-      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
-      <p className="text-sm md:text-base text-justify mt-7">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+      <h2 className="text-lg md:text-2xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
+      <p className="text-sm md:text-base text-justify">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
+      <p className="text-sm md:text-base text-justify mt-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+      <p className="text-sm md:text-base text-justify mt-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
     </div>
 </motion.div>
 

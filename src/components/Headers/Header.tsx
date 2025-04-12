@@ -67,8 +67,8 @@ export default function Header() {
 
           <PrimaryButton
             onClick={handleLoginClick}
-            name="Relatar Amontoados"
-            addClassName="w-full"
+            name="Entrar"
+            addClassName="w-full px-20"
           />
         </nav>
       </div>
@@ -98,8 +98,8 @@ export default function Header() {
 
               <PrimaryButton
                 onClick={handleLoginClick}
-                name="Relatar Amontoados"
-                addClassName="w-full bg-global-color-secondary"
+                name="Entrar"
+                addClassName="w-full bg-global-color-secondary px-20"
               />
             </nav>
           </div>

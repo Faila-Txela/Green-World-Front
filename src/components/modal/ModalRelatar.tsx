@@ -111,7 +111,6 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
 
   const fetchMunicipios = async (id: string) => {
     const res = await axios.get(`/municipio/provincia/${id}`);
-    console.log(res)
     if (res.status === 200) setMunicipios(res.data);
   };
 
