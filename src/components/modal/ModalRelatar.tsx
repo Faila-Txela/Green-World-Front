@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import  axios from '../../lib/axios'
+import axios from "../../lib/axios";
 import PrimaryButton from "../ui/PrimaryButton";
 import TextArea from "../ui/TextArea";
 import UploadArea from "../upload-area/single";
 import { relatarService } from "../../modules/service/api/relatar";
-import MapComponent from "../../components/Map";
-import { validatorImagesService } from '../../modules/service/api/ImagesValidator/validateImages'
+import { validatorImagesService } from "../../modules/service/api/ImagesValidator";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import { format } from "date-fns";
 
 interface RelatarFormData {
+  userId: string;
   descricao: string;
   latitude: string;
   longitude: string;
@@ -36,29 +37,33 @@ interface ModalRelatarProps {
 }
 
 const InputField = ({
-  label, type, name, value, onChange, extraPaddingRight = false
+  label,
+  type,
+  name,
+  value,
+  onChange,
+  extraPaddingRight = false,
 }: {
   label: string;
   type: string;
   name: keyof RelatarFormData;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  //icon: JSX.Element;
   extraPaddingRight?: boolean;
 }) => (
-  <div className="relative">
-    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">{label}</label>
-    <div className="relative">
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required
-        placeholder={`Digite o ${label.toLowerCase()}`}
-        className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700`}
-      />
-    </div>
+  <div>
+    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
+      {label}
+    </label>
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required
+      placeholder={`Digite o ${label.toLowerCase()}`}
+      className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700`}
+    />
   </div>
 );
 
@@ -66,7 +71,6 @@ function LocationSelector({ setCoords }: { setCoords: (lat: number, lng: number)
   useMapEvents({
     click(e) {
       setCoords(e.latlng.lat, e.latlng.lng);
-      console.log(setCoords)
     },
   });
   return null;
@@ -74,6 +78,7 @@ function LocationSelector({ setCoords }: { setCoords: (lat: number, lng: number)
 
 export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps) {
   const [formData, setFormData] = useState<RelatarFormData>({
+    userId: "1", // preencha conforme necessário
     descricao: "",
     latitude: "",
     longitude: "",
@@ -84,28 +89,32 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     analiseImagem: null,
   });
 
-  const [imagens, setImagens] = useState<File[] | null>(null);
-  const [isImageValid, setIsImageValid] = useState<boolean | null>(null);
-  const [prioridade, setPrioridade] = useState("");
-  const [loading, setLoading] = useState(false);
   const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
   const [provincia, setProvincia] = useState("");
   const [municipio, setMunicipio] = useState("");
+  const [prioridade, setPrioridade] = useState("");
+  const [imagens, setImagens] = useState<File[] | null>(null);
+  const [isImageValid, setIsImageValid] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
   const [locationDenied, setLocationDenied] = useState(false);
+  const [submittedRelato, setSubmittedRelato] = useState<null | {
+    descricao: string;
+    dataHora: string;
+  }>(null);
 
   const isFormValid =
-  formData.descricao.trim() &&
-  formData.latitude &&
-  formData.longitude &&
-  provincia &&
-  municipio &&
-  prioridade &&
-  imagens !== null && isImageValid;
+    formData.descricao.trim() &&
+    formData.latitude &&
+    formData.longitude &&
+    provincia &&
+    municipio &&
+    prioridade &&
+    imagens !== null &&
+    isImageValid;
 
   const fetchProvincias = async () => {
     const res = await axios.get("/provincia");
-    //console.log(res)
     if (res.status === 200) setProvincias(res.data);
   };
 
@@ -120,7 +129,6 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   };
 
   const handleImageValidation = async (file: File) => {
-    // Chama o serviço de validação da imagem
     const result = await validatorImagesService.create({
       imageURL: file,
       labels: [],
@@ -128,10 +136,10 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       amontoadoRelatadoId: "",
       status: "pendente",
     });
-  
-    const isValid = result.data.isValid;
+
+    const isValid = result.data?.isValid ?? false;
     setIsImageValid(isValid);
-    setImagens((prev) => (prev ? [...prev, file] : [file]));
+    setImagens([file]);
   };
 
   const setCoords = (lat: number, lng: number) => {
@@ -145,29 +153,34 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.descricao.trim()) return setToast({ message: "Descrição obrigatória", type: "error" });
-    if (!provincia) return setToast({ message: "Selecione a província", type: "error" });
-    if (!municipio) return setToast({ message: "Selecione o município", type: "error" });
-    if (imagens === null || !isImageValid) return setToast({ message: "As imagens não são válidas ou não foram enviadas corretamente", type: "error" });
+    if (!isFormValid) {
+      return setToast({ message: "Preencha todos os campos obrigatórios e envie uma imagem válida.", type: "error" });
+    }
 
     setLoading(true);
-    try {
-      if (!imagens || !(imagens[0] instanceof File)) {
-        return setToast({ message: "Imagem inválida ou não enviada", type: "error" });
-      }
 
-      const payload = {
-        ...formData,
-        userId: "exampleUserId",
-        provinciaId: provincia,
-        municipioId: municipio,
-        prioridade: formData.prioridade,
-        analiseImagem: imagens[0],
-      };
+    try {
+      const payload = new FormData();
+      payload.append("UserId", formData.userId);
+      payload.append("descricao", formData.descricao);
+      payload.append("latitude", formData.latitude);
+      payload.append("longitude", formData.longitude);
+      payload.append("provinciaId", provincia);
+      payload.append("municipioId", municipio);
+      payload.append("bairro", formData.bairro || "");
+      payload.append("prioridade", prioridade);
+      payload.append("analiseImage", imagens![0]);
+
       const res = await relatarService.create(payload);
+
       if (res.status === 201) {
+        setSubmittedRelato({
+          descricao: formData.descricao,
+          dataHora: format(new Date(), "dd/MM/yyyy HH:mm"),
+        });
+
         setToast({ message: "Relato enviado com sucesso!", type: "success" });
-        closeModal();
+        setTimeout(() => closeModal(), 1500);
       }
     } catch (err) {
       setToast({ message: "Erro ao enviar relato", type: "error" });
@@ -178,22 +191,17 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
 
   useEffect(() => {
     fetchProvincias();
-  }, []) ;
+  }, []);
 
   useEffect(() => {
     if (provincia) fetchMunicipios(provincia);
   }, [provincia]);
 
-  // Geolocalização automática
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setCoords(pos.coords.latitude, pos.coords.longitude);
-        },
-        () => {
-          setLocationDenied(true);
-        }
+        (pos) => setCoords(pos.coords.latitude, pos.coords.longitude),
+        () => setLocationDenied(true)
       );
     } else {
       setLocationDenied(true);
@@ -201,13 +209,25 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center  z-50">
-      <div className="bg-white p-8 rounded-lg w-full max-w-3xl max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl text-green-700 mb-7 text-center">Relatar Novo Amontoado</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-10">
-          <div className="flex flex-col gap-6 w-full">
-            <label htmlFor="descricao" className="block text-gray-700 font-semibold">Descrição</label>
-            <TextArea name="descricao" id="descricao" placeholder="Ex: Ex: Lixo acumulado na rua..." value={formData.descricao} onChange={handleChange} className="" />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        {submittedRelato && (
+          <div className="bg-green-100 p-4 border border-green-400 rounded mb-4">
+            <p><strong>Relato enviado:</strong> {submittedRelato.descricao}</p>
+            <p className="text-sm text-gray-600">Enviado em: {submittedRelato.dataHora}</p>
+          </div>
+        )}
+
+        <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">Relatar Novo Amontoado</h2>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <TextArea
+            name="descricao"
+            id="descricao"
+            placeholder="Descreva o problema..."
+            value={formData.descricao}
+            onChange={handleChange}
+          />
 
             <div>
               <label htmlFor="provincia" className="block text-gray-700 font-semibold">Província</label>
@@ -219,21 +239,15 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
 
             <div>
               <label htmlFor="municipio" className="block text-gray-700 font-semibold">Município</label>
-              <select className="w-full p-3 border rounded-md" title="municipio" onChange={(e) => setMunicipio(e.target.value)}>
+               <select className="w-full p-3 border rounded-md" title="municipio" onChange={(e) => setMunicipio(e.target.value)}>
                 <option value="">Selecione o Município</option>
                 {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
               </select>
             </div>
 
-            <InputField
-              label="Bairro (opcional)"
-              type="text"
-              name="bairro"
-              value={formData.bairro || ""}
-              onChange={handleChange}
-            />
+          <InputField label="Bairro (opcional)" type="text" name="bairro" value={formData.bairro || ""} onChange={handleChange} />
 
-            <div>
+          <div>
               <label htmlFor="prioridade" className="block text-gray-700 font-semibold">Prioridade</label>
               <select className="w-full p-3 border rounded-md" title="Selecione a prioridade" value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
                 <option value="">Selecione a Prioridade</option>
@@ -242,44 +256,39 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
               </select>
             </div>
 
-           <div>
-           <label htmlFor="imagens" className="block text-gray-700 font-semibold">Carregar Imagem</label>
-           <UploadArea onChange={handleImageValidation} />
-           </div>
+          <UploadArea onChange={handleImageValidation} />
 
-            {locationDenied && (
-              <div className="flex flex-col">
-                <p className="mb-2 font-semibold">Selecione sua localização no mapa:</p>
-                <MapContainer
-                  center={[-8.8383, 13.2344]}
-                  zoom={13}
-                  
-                  style={{ height: "10px", width: "40%" }}
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution="&copy; OpenStreetMap contributors"
+          {locationDenied && (
+            <div>
+              <p className="mb-2 font-medium">Clique no mapa para selecionar o local:</p>
+              <MapContainer center={[-8.8383, 13.2344]} zoom={13} style={{ height: "300px", width: "100%" }}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <LocationSelector setCoords={setCoords} />
+                {formData.latitude && formData.longitude && (
+                  <Marker
+                    position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
+                    icon={L.icon({
+                      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                      iconSize: [25, 41],
+                      iconAnchor: [12, 41],
+                    })}
                   />
-                  <LocationSelector setCoords={setCoords} />
-                  {formData.latitude && formData.longitude && (
-                    <Marker
-                      position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
-                      icon={L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
-                      })}
-                    />
-                  )}
-                </MapContainer>
-              </div>
-            )}
+                )}
+              </MapContainer>
             </div>
+          )}
 
-          <div className="grid gap-4 w-full">
-            <PrimaryButton name={loading ? "Enviando..." : "Enviar Relato"} addClassName="px-36" disabled={!isFormValid || loading} />
-            <PrimaryButton name="Fechar" addClassName="bg-gray-300 text-black hover:bg-gray-400" onClick={closeModal} />
-          </div>
+          <PrimaryButton
+            name={loading ? "Enviando..." : "Enviar Relato"}
+            addClassName="w-full"
+            disabled={!isFormValid || loading}
+          />
+ 
+         <PrimaryButton 
+           name="Fechar"
+           addClassName="bg-gray-300 text-black hover:bg-gray-400" 
+           onClick={closeModal} 
+          />
 
         </form>
 
