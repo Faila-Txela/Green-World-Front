@@ -6,7 +6,6 @@ import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
 import map from '../assets/map1.png';
 import image2 from '../assets/coleta.jpg';
-import logo from '../../public/logo.png'
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import CardBeneficios from "../components/CardBeneficio";
@@ -176,7 +175,7 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src={logo} className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white shadow-2xl float-start " alt="MapImage" />
+      <img src="/logo.png" className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white shadow-2xl float-start " alt="MapImage" />
     </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">

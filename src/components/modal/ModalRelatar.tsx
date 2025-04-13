@@ -129,18 +129,29 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   };
 
   const handleImageValidation = async (file: File) => {
-    const result = await validatorImagesService.create({
-      imageURL: file,
-      labels: [],
-      analysisDate: new Date(),
-      amontoadoRelatadoId: "",
-      status: "pendente",
-    });
-
-    const isValid = result.data?.isValid ?? false;
-    setIsImageValid(isValid);
-    setImagens([file]);
-  };
+    const formData = new FormData();
+    formData.append("file", file); // O nome do campo deve ser o mesmo que o Fastify espera com `await req.file()`
+  
+    try {
+      const response = await axios.post("/analise-imagem", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      const conceitos = response.data.conceitos;
+      const validLabels = ["litter", "garbage", "trash", "waste", "pollution", "junk", "dump", "pile", "enviroment", "plastic", "dirty", "messy"];
+      const isValid = conceitos.some((c: any) =>
+        validLabels.includes(c.name.toLowerCase())
+      );
+  
+      setIsImageValid(isValid);
+      setImagens([file]);
+    } catch (err) {
+      console.error("Erro na validação da imagem:", err);
+      setToast({ message: "Erro ao validar a imagem.", type: "error" });
+    }
+  };  
 
   const setCoords = (lat: number, lng: number) => {
     setFormData((prev) => ({
@@ -154,6 +165,17 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     e.preventDefault();
 
     if (!isFormValid) {
+      console.log("Validação do formulário falhou:", {
+        descricao: !!formData.descricao.trim(),
+        latitude: !!formData.latitude,
+        longitude: !!formData.longitude,
+        provincia: !!provincia,
+        municipio: !!municipio,
+        prioridade: !!prioridade,
+        imagem: imagens !== null,
+        imagemValida: isImageValid,
+      });
+      console.log("Preencha todos os campos e dê uma imagem válida.",isFormValid)
       return setToast({ message: "Preencha todos os campos obrigatórios e envie uma imagem válida.", type: "error" });
     }
 
