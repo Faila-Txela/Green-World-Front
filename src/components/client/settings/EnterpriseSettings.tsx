@@ -6,222 +6,164 @@ import pic from '../../../assets/default-avatar-profile-picture-male-icon.png';
 interface ProfileProps {
   onChangeProfilePic: (newProfilePic: File) => void;
   onChangeTheme: () => void;
-  onDeleteAccount: () => void; // Função para excluir a conta
+  onDeleteAccount: () => void;
 }
 
 const Settings: React.FC<ProfileProps> = ({ onChangeProfilePic, onChangeTheme, onDeleteAccount }) => {
-  const [profilePic, setProfilePic] = useState<string | null>(null); // Armazenando a imagem de perfil
-  const [name, setName] = useState<string>(''); // Armazenando o nome do usuário
-  const [biography, setBiography] = useState<string>(''); // Biografia
-  const [instagram, setInstagram] = useState<string>(''); // Link do Instagram
-  const [website, setWebsite] = useState<string>(''); // Link do site pessoal
-  const [isDarkTheme, setIsDarkTheme] = useState(false); // Para alternar o tema
-  const [isModalOpen, setIsModalOpen] = useState(false); // Para controlar a exibição do modal
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Para o modal de exclusão
-  const [isChecked, setIsChecked] = useState(false); // Estado para o checkbox de exclusão
+  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [name, setName] = useState<string>('');
+  const [biography, setBiography] = useState<string>('');
+  const [instagram, setInstagram] = useState<string>('');
+  const [website, setWebsite] = useState<string>('');
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Função para lidar com a mudança da foto de perfil
   const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setProfilePic(URL.createObjectURL(file)); 
+      setProfilePic(URL.createObjectURL(file));
       onChangeProfilePic(file);
     }
   };
 
-  // Função para alternar entre os temas
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
-    onChangeTheme(); 
+    onChangeTheme();
   };
 
-  // Função para abrir o modal de salvar alterações
-  const handleSaveChanges = () => {
-    setIsModalOpen(true);
-  };
-
-  // Função para salvar as alterações
+  const handleSaveChanges = () => setIsModalOpen(true);
   const confirmSaveChanges = () => {
     console.log("Alterações Salvas");
     setIsModalOpen(false);
   };
+  const closeModal = () => setIsModalOpen(false);
 
-  // Função para fechar o modal sem salvar
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // Função para abrir o modal de excluir conta
-  const handleDeleteAccount = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  // Função para confirmar a exclusão da conta
+  const handleDeleteAccount = () => setIsDeleteModalOpen(true);
   const confirmDeleteAccount = () => {
-    onDeleteAccount(); // Chama a função passada como prop para excluir a conta
+    onDeleteAccount();
     setIsDeleteModalOpen(false);
   };
-
-  // Função para cancelar a exclusão
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-800 text-white' : 'bg-white text-black'} flex flex-col items-center justify-center gap-12 mt-16`}>
-      {/* Texto explicativo da tela */}
-      <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
-        <MdOutlineSettings className="h-9 w-9" />
-        <h1 className="text-xl md:text-2xl font-semibold text-left">Painel de Configurações da Empresa</h1>
+    <div className={`min-h-screen transition-colors duration-500 ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} flex flex-col items-center px-4 pb-12`}>
+      {/* Cabeçalho */}
+      <div className="flex items-center gap-3 mt-16 mb-6">
+        <MdOutlineSettings className="h-8 w-8 text-green-600" />
+        <h1 className="text-2xl font-semibold">Painel de Configurações da Empresa</h1>
       </div>
 
-      <div className='flex justify-start mt-16'>
-        <h3 className='font-semibold text-lg'>Foto e Biografia</h3>
-      </div>
-      <div className="shadow-md bg-gray-50 p-6 rounded-lg w-1/2">
-        {/* Foto de perfil */}
-        <div className="flex items-center justify-center mb-4">
-          <div
-            className="flex items-center justify-center rounded-full bg-gray-300 w-20 h-20 cursor-pointer"
-            onClick={() => fileInputRef.current?.click()} // Clica no input file ao clicar na foto de perfil
-          >
+      {/* Foto e Bio */}
+      <section className="w-full max-w-2xl bg-white dark:bg-gray-50 shadow-md rounded-2xl p-6 mb-6 transition-all duration-300">
+        <h3 className="text-lg font-semibold mb-4">Foto e Biografia</h3>
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative w-20 h-20">
             <img
-              src={profilePic || pic} // Exibe a imagem atual ou uma imagem padrão
+              src={profilePic || pic}
               alt="Profile"
-              className="w-20 h-20 rounded-full object-cover"
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-full w-full h-full object-cover border-2 border-green-800 cursor-pointer hover:opacity-80 transition"
+            />
+            <input
+              title='file'
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+              className="hidden"
             />
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleProfilePicChange}
-            className="hidden" 
-            title="Selecione uma nova foto de perfil" 
-          />
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Digite seu nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2 rounded-md border shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
         </div>
-
-        {/* Nome de perfil */}
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">Nome de perfil</label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)} 
-            placeholder="Digite seu nome"
-            className="mt-2 w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
-
-        {/* Biografia */}
-        <div className="mb-4">
-          <label htmlFor="biography" className="block text-gray-700">Biografia</label>
-          <textarea
-            id="biography"
-            value={biography}
-            onChange={(e) => setBiography(e.target.value)}
-            placeholder="Fale um pouco sobre você"
-            className="mt-2 w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
-      </div>
+        <textarea
+          placeholder="Fale um pouco sobre você"
+          value={biography}
+          onChange={(e) => setBiography(e.target.value)}
+          className="w-full px-4 py-2 rounded-md border shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+          rows={4}
+        />
+      </section>
 
       {/* Links */}
-      <div className='flex justify-start'>
-        <h3 className='font-semibold text-lg'>Links</h3>
-      </div>
-
-      <div className='shadow-md bg-gray-100 items-center justify-center p-6 rounded-lg w-1/2'>
-        <div className="mb-4">
-          <label htmlFor="instagram" className="block text-gray-700">Instagram</label>
+      <section className="w-full max-w-2xl bg-white dark:bg-gray-50 shadow-md rounded-2xl p-6 mb-6 transition-all duration-300">
+        <h3 className="text-lg font-semibold mb-4">Links</h3>
+        <div className="space-y-4">
           <input
-            id="instagram"
             type="url"
+            placeholder="Instagram"
             value={instagram}
-            onChange={(e) => setInstagram(e.target.value)} 
-            placeholder="Link do Instagram"
-            className="mt-2 w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            onChange={(e) => setInstagram(e.target.value)}
+            className="w-full px-4 py-2 rounded-md border shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="website" className="block text-gray-700">Website</label>
           <input
-            id="website"
             type="url"
+            placeholder="Website pessoal"
             value={website}
-            onChange={(e) => setWebsite(e.target.value)} 
-            placeholder="Link do site pessoal"
-            className="mt-2 w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            onChange={(e) => setWebsite(e.target.value)}
+            className="w-full px-4 py-2 rounded-md border shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
+      </section>
+
+      {/* Botões Ações */}
+      <div className="flex flex-wrap justify-center gap-4 mb-8">
+        <PrimaryButton name={isDarkTheme ? 'Tema Claro' : 'Tema Escuro'} onClick={toggleTheme} addClassName="bg-blue-600 hover:bg-blue-700 px-10" />
+        <PrimaryButton name="Salvar Alterações" onClick={handleSaveChanges} addClassName="bg-green-600 hover:bg-green-700 px-10" />
       </div>
 
-      {/* Alternar Tema */}
-      <div className='flex items-center justify-center gap-12'>
-        <div className="flex items-center justify-between mt-6">
-          <PrimaryButton name={isDarkTheme ? 'Tema Claro' : 'Tema Escuro'} onClick={toggleTheme} addClassName='bg-blue-700 hover:bg-blue-800 px-16' />
-        </div>
+      {/* Exclusão de Conta */}
+      <section className="w-full max-w-2xl bg-white dark:bg-gray-50 shadow-md rounded-2xl p-6 transition-all duration-300">
+        <h3 className="text-lg font-semibold mb-4">Excluir Conta</h3>
+        <p className="text-sm mb-2">Antes de excluir sua conta, leia as informações abaixo:</p>
+        <ul className="text-sm list-disc pl-4 mb-4">
+          <li>Todos os seus dados serão apagados e não poderão ser recuperados.</li>
+          <li>Você precisará criar uma nova conta para usar a Green World novamente.</li>
+        </ul>
 
-        {/* Botão para salvar alterações */}
-        <div className="flex items-center justify-between mt-6">
-          <PrimaryButton name='Salvar Alterações' onClick={handleSaveChanges} addClassName='bg-green-700 px-16' />
-        </div>
-      </div>
-
-      {/* Excluir conta */}
-      <div className='flex justify-start'>
-        <h3 className='font-semibold text-lg'>Conta</h3>
-      </div>
-      <div className='shadow-md bg-gray-100 flex flex-col items-center justify-center p-10 rounded-lg w-1/2 mt-12'>
-        <div className='flex flex-col gap-6 justify-start text-left p-3'>
-          <p>Antes de excluir sua conta,pedimos que tome um pouco de seu tempo para ler algumas notas,que serão deixadas no texto abaixo.</p>
-          <p className='font-medium text-sm'>▪️ Ao excluir sua conta saiba que todos os seus dados serão apagados e você não terá como voltar a recuperá-los.</p>
-          <p className='font-medium text-sm'>▪️ Você terá que criar uma outra conta para poder usufruir dos serviços da Green World novamente,caso queira.</p>
-        </div>
-
-        {/* Checkbox para confirmar a exclusão */}
-        <div className="flex items-center mt-4">
+        <label className="flex items-center gap-2 mb-4">
           <input
             type="checkbox"
-            id="confirmDelete"
             checked={isChecked}
             onChange={(e) => setIsChecked(e.target.checked)}
-            className="mr-2 cursor-pointer"
+            className="accent-green-600"
           />
-          <label htmlFor="confirmDelete" className="text-sm">
-            Eu li as normas e decido continuar com o processo de exclusão da minha conta.
-          </label>
-        </div>
+          <span className="text-sm">Eu li as normas e desejo continuar com a exclusão.</span>
+        </label>
 
-        {/* Botão para excluir conta */}
-        <div className="flex items-center justify-between mt-6">
-          <PrimaryButton 
-            name='Excluir Conta' 
-            onClick={handleDeleteAccount} 
-            addClassName={`bg-red-600 hover:bg-red-700 px-16 ${!isChecked ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={!isChecked}
-          />
-        </div>
-      </div>
+        <PrimaryButton
+          name="Excluir Conta"
+          onClick={handleDeleteAccount}
+          addClassName={`bg-red-600 hover:bg-red-700 px-10 ${!isChecked ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!isChecked}
+        />
+      </section>
 
-      {/* Modal de confirmação */}
+      {/* Modal de Confirmação de Exclusão */}
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-80 shadow-md">
-            <h3 className="text-xl mb-4">Você tem certeza que deseja excluir sua conta?</h3>
-            <div className="flex justify-between">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-96">
+            <h3 className="text-xl font-semibold mb-4 text-center">Tem certeza que deseja excluir sua conta?</h3>
+            <div className="flex justify-between gap-4">
               <button
                 onClick={confirmDeleteAccount}
-                className="px-4 py-2 bg-red-500 text-white rounded-md"
+                className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-md"
               >
                 Excluir
               </button>
               <button
                 onClick={closeDeleteModal}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md"
+                className="w-full py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md"
               >
                 Cancelar
               </button>

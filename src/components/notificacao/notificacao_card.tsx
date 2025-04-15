@@ -1,5 +1,4 @@
 
-
 interface NotificacaoCardProps {
   titulo: string;
   descricao: string;
@@ -13,7 +12,7 @@ export default function NotificacaoCard({ titulo, descricao, data }: Notificacao
       <p className="text-gray-600 mt-2">{descricao}</p>
       <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-gray-500">{new Date(data).toLocaleString()}</span>
-        <button className="text-blue-500 hover:text-blue-700 text-sm font-medium">
+        <button className="text-green-600 hover:text-green-700 text-sm font-medium transition duration-150 ease-in-out">
           Marcar como lida
         </button>
       </div>

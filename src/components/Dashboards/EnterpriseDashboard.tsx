@@ -57,7 +57,7 @@ export default function EnterpriseDashboard() {
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 mt-36">
           {/* Locais */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
+          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
               <PiCity className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#82ca9d] text-white rounded" />
@@ -74,7 +74,7 @@ export default function EnterpriseDashboard() {
           </div>
 
           {/* Meses */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
+          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
               <MdOutlineCalendarMonth className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#8884d8] text-white rounded" />
@@ -91,7 +91,7 @@ export default function EnterpriseDashboard() {
           </div>
 
           {/* Tipos de lixo */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
+          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
               <MdOutlineMergeType className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#FFBB28] text-white rounded" />
@@ -111,7 +111,7 @@ export default function EnterpriseDashboard() {
         </div>
 
           {/* Gráfico: Fluxo de Recolha */}
-          <div className="bg-white p-6 shadow-xl rounded-2xl w-full max-w-6xl mb-20">
+          <div className="bg-white p-6 shadow hover:shadow-lg transition-all duration-300 rounded-2xl w-full max-w-6xl mb-20">
             <div className="flex items-center justify-start gap-4 mb-6">
               <h2 className="text-2xl font-semibold text-gray-700 text-center">Fluxo de Recolha de Lixo por Semana</h2>
               <FaRecycle className="h-9 w-9 bg-[#06D6A0] text-white rounded p-1 shadow-lg" />

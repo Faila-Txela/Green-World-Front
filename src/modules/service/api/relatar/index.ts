@@ -1,7 +1,7 @@
 import axios from "../../../../lib/axios";
 
 class RelatarService {
-  async create(relatarData: relatar) {
+  async create(relatarData: FormData) {
     return await axios.post("/relatar", relatarData, {
       headers: {
         "Content-Type": "application/json",

@@ -34,7 +34,7 @@ export default function PersonalDashboard() {
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
           {/* Gráfico de Locais com Mais Relatos */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
+          <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={locationsData}>
@@ -48,7 +48,7 @@ export default function PersonalDashboard() {
           </div>
 
           {/* Gráfico de Tipos de Lixo Mais Retirados */}
-          <div className="bg-white p-4 shadow rounded-xl w-full">
+          <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full">
             <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -65,7 +65,7 @@ export default function PersonalDashboard() {
         </div>
 
         {/* Seção de Estatísticas */}
-        <div className="bg-white p-6 shadow rounded-xl mb-10">
+        <div className="bg-white p-6 shadow hover:shadow-lg transition-all duration-300 rounded-xl mb-10">
           <h2 className="text-xl font-semibold mb-4 text-center">Estatísticas de Tipos de Lixo</h2>
           <div className="flex justify-around">
             {wasteTypesData.map((item, index) => (

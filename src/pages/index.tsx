@@ -158,7 +158,7 @@ export default function Home() {
       </div>
     </div>
 
-    <div className="absolute top-80 md:top-44 md:mx-28 inset-0 flex justify-center md:justify-start items-center">
+    <div className="absolute top-80 md:top-44 mx-0 md:mx-32 inset-0 flex justify-center md:justify-start items-center">
       <PrimaryButton 
         onClick={() => navigate("/register-personal")} 
         name="Comece a Relatar" 

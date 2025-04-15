@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
+import { IoNotificationsCircleOutline } from "react-icons/io5";
 import { GoReport } from 'react-icons/go';
 import DashHeader from "../../components/Headers/DashHeader";
 import PersonalDashboard from "../../components/Dashboards/PersonalDashboard";
@@ -64,7 +65,7 @@ const PersonalSidebar = () => {
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("Notificacao")}>
-              <GoReport size={20} />
+              <IoNotificationsCircleOutline size={20} />
               {isSidebarOpen && <span>Notificações</span>}
             </div>
 
