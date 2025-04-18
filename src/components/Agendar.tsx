@@ -149,6 +149,7 @@ function Agendar() {
         <div className="grid gap-4">
           {agendamentos.map(item => (
             <motion.div
+              key={item.createAt}
               className="bg-white p-4 rounded-lg shadow hover:shadow-md duration-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

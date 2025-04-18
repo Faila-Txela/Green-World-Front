@@ -7,11 +7,14 @@ export default function CardBeneficios() {
         className="py-20 bg-gray-100 text-center w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.2 }}
+        transition={{ duration: 1, delay: .2 }}
       >
-        <h2 className="text-3xl font-bold text-green-700 p-4">Benefícios de usar a Green World</h2>
+        <h2 className="text-3xl font-bold text-green-700 p-4">
+          Benefícios de usar a Green World
+        </h2>
         <p className="text-gray-600 mb-10 px-4">
-          Descubra como você pode se beneficiar ao contribuir para um ambiente mais limpo.
+          Descubra como você pode se beneficiar ao contribuir para um ambiente
+          mais limpo.
         </p>
 
         {/* Container */}
@@ -37,9 +40,14 @@ export default function CardBeneficios() {
             ].map((card, index) => (
               <motion.div
                 key={index}
-                className="bg-white h-36 shadow-lg rounded-lg p-4 text-center mx-3 sm:max-w-full hover:text-green-800"
+                className="relative bg-white h-36 shadow-lg rounded-lg p-4 text-center mx-3 sm:max-w-full hover:text-green-800"
                 whileHover={{ scale: 1.05 }}
               >
+                {/* Número no canto superior esquerdo */}
+                <div className="absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-full bg-green-700 text-white text-sm font-bold">
+                  {index + 1}
+                </div>
+
                 <h3 className="font-medium text-xl mt-4">{card.title}</h3>
                 <p className="text-gray-600">{card.desc}</p>
               </motion.div>

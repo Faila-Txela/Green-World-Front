@@ -144,7 +144,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   
       const conceitos = result.data?.labels || [];
       const lixoDetectado = conceitos.some((c: any) =>
-        ["garbage", "trash", "rubbish", "pollution", "waste"].includes(c.name.toLowerCase())
+        ["garbage", "trash", "rubbish", "pollution", "waste", "recycling", "dirty", "messy", "pile", "landfill", "litter"].includes(c.name.toLowerCase())
       );
   
       setIsImageValid(lixoDetectado);
