@@ -6,13 +6,8 @@ class FeedbackService{
         return data;
     }
 
-    async getAll(feedbackData: feedback){
-        return await axios.get("feedback", {
-            params: feedbackData,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+    async getAll(){
+        return await axios.get("feedback")
     }
 }
 

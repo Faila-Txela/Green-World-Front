@@ -74,17 +74,27 @@ export default function PersonalLogin() {
       const { data, status } = await axios.post("user/login", {email, senha});
 
       if (status === 200) {
-        setToast({message: "Login feito com sucesso!", type: "success"})
-        setUser(data.data)
-        localStorage.setItem("user", JSON.stringify(data.data))
-        setTimeout(() => navigate("/personal-dashboard"), 2000)
-      } else {
-        //console.error(data.error);
+        setToast({ message: "Login feito com sucesso!", type: "success" });
+        setUser(data.data);
+      
+        localStorage.setItem("user", JSON.stringify(data.data));
+      
+        const userId = data?.data?.id;
+        if (userId) {
+          localStorage.setItem("userId", userId);
+        } else {
+          console.warn("ID do usuário não encontrado no login.");
+        }
+      
+        setTimeout(() => navigate("/personal-dashboard"), 2000);
+      }
+       else {
+        console.error(data.error);
         setToast({ message: "Erro ao fazer login.", type: "error" });
       }
      } 
      catch (error: any) {
-      //console.error("❌ Erro no servidor ao tentar fazer login:", error);
+      console.error("❌ Erro no servidor ao tentar fazer login:", error);
       setToast({ message: "Erro no servidor ao tentar fazer login.", type: "error" })
     
       if (error.response ) {

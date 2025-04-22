@@ -1,4 +1,5 @@
 type feedback = {
-    userId: string;
+    userId?: string;
+    empresaId?: string;
     feedback: string;
 }

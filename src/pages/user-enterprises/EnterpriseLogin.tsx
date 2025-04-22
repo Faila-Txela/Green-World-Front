@@ -83,11 +83,21 @@ export default function EnterpriseLogin() {
       });
 
       if (status === 200) {
-        setToast({ message: "Login feito com sucesso", type: "success" });
-        setUser(data.data)
-        localStorage.setItem("user", JSON.stringify(data.data));
+        setToast({ message: "Login da empresa, feito com sucesso", type: "success" });
+        setUser(data.data);
+        
+        localStorage.setItem("empresa", JSON.stringify(data.data));
+      
+        const empresaId = data?.data?.id;
+        if (empresaId) {
+          localStorage.setItem("empresaId", empresaId);
+        } else {
+          console.warn("ID da empresa não encontrado no login.");
+        }
+      
         setTimeout(() => navigate("/enterprise-dashboard"), 2000);
-      } else {
+      }
+       else {
         setToast({ message: "Erro ao fazer login.", type: "error" });
       }
     } catch (error: any) {

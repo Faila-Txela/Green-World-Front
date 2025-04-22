@@ -5,10 +5,10 @@
     "jsx": "react-jsx",
     "strict": true,
     "baseUrl": "./src",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "noEmit": true,
     "isolatedModules": true,
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true

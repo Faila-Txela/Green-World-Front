@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { VscFeedback } from "react-icons/vsc";
 import { FaUserCircle } from "react-icons/fa";
 import Toast from '../ui/Toast';
+import { feedbackService } from "../../modules/service/api/feedback";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 
 function Feedback() {
@@ -14,18 +15,77 @@ function Feedback() {
 
   const [novoFeedback, setNovoFeedback] = useState("");
 
-  const adicionarFeedback = () => {
+  const adicionarFeedback = async () => {
     if (novoFeedback.trim() === "") return;
+  
+    const userId = localStorage.getItem("userId");
+    const empresaId = localStorage.getItem("empresaId");
+  
+    if (!userId && !empresaId) {
+      console.log("Nenhuma identificação encontrada.");
+      setToast({ message: "Usuário ou empresa não identificados.", type: "error" });
+      return;
+    }
 
-    const novo = {
-      nome: "Você",
-      texto: novoFeedback,
-      data: new Date().toLocaleDateString("pt-BR"),
+    if (novoFeedback.trim().length < 32) {
+    setToast({ message: "Seu feedback deve ter pelo menos 32 caracteres.", type: "error" });
+    return;
+    }
+  
+    console.log("Novo feedback:", novoFeedback);
+    console.log("User ID:", userId);
+    console.log("Empresa ID:", empresaId);
+
+    const payload = {
+      feedback: novoFeedback,
+      ...(userId ? { userId } : empresaId ? { empresaId } : {}),
     };
-    setFeedbacks([novo, ...feedbacks]);
-    setNovoFeedback("");
+  
+    console.log("Enviando Feedback", payload);
+  
+    try {
+      const response = await feedbackService.create(payload);
+  
+      const novo = {
+        nome: "Você",
+        texto: novoFeedback,
+        data: new Date(response.createAt).toLocaleDateString("pt-BR"),
+      };
+  
+      setFeedbacks([novo, ...feedbacks]);
+      setNovoFeedback("");
+      setToast({ message: "Feedback enviado com sucesso!", type: "success" });
+  
+    } catch (err) {
+      //console.error("Erro ao enviar feedback:", err);
+      if (err instanceof Error) {
+        console.error("Erro ao enviar feedback:", (err as any).response?.data || err.message);
+      } else {
+        console.error("Erro ao enviar feedback:", err);
+      }
+      setToast({ message: "Erro ao enviar feedback.", type: "error" });
+    }
+  };  
+  
+useEffect(() => {
+  const fetchFeedbacks = async () => {
+    try {
+      const { data } = await feedbackService.getAll();
+      const formatted = data.map((f: any) => ({
+        nome: f.user ? f.user.nome : (f.empresa ? f.empresa?.nome : "Usuário"),
+        texto: f.feedback,
+        data: new Date(f.createAt).toLocaleDateString("pt-BR"),
+      }));
+      setFeedbacks(formatted);
+    } catch (err) {
+      console.error("Erro ao buscar feedbacks:", err);
+    }
   };
 
+  fetchFeedbacks();
+}, []);
+
+  
   return (
     <div className="flex flex-col h-screen px-8 py-20">
       {/* Título da página */}
@@ -41,6 +101,7 @@ function Feedback() {
           className="w-full h-24 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 transition"
           placeholder="Digite aqui sua sugestão, crítica ou comentário..."
           value={novoFeedback}
+          required
           onChange={(e) => setNovoFeedback(e.target.value)}
         />
         <div className="mt-3">
