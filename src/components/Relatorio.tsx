@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TbReport } from "react-icons/tb";
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 
@@ -129,7 +130,11 @@ const Relatorio = () => {
 
   return (
     <div className="min-h-screen p-6 md:p-10 mt-12">
-      <h1 className="text-2xl font-bold mb-8">Relatórios de Relatos Recebidos</h1>
+       
+       <div className="flex items-center gap-3 mb-8">
+       <TbReport size={28} className="h-9 w-9 text-green-600 animate-pulse" />
+       <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel dos Relatos Recebidos</h1>
+       </div>
 
       {/* Botões de Exportação */}
       <div className="mb-6 flex gap-4">
@@ -196,7 +201,7 @@ const Relatorio = () => {
       <AnimatePresence>
         {relatoSelecionado && (
           <motion.div
-            className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

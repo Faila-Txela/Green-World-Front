@@ -16,6 +16,7 @@ export default function Footer() {
     links: [
       { label: "Inicio", link: "" },
       { label: "Notícias", link: "news" },
+      { label: "Blog", link: "blog" },
       { label: "Empresas", link: "enterprises" },
       { label: "Contactos", link: "contacts" },
     ],

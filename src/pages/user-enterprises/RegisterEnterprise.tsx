@@ -236,7 +236,7 @@ export default function EnterpriseForm() {
 
         <form className="flex flex-col gap-6" onSubmit={handleSubmit} action="Admindashboard">
           <InputField
-            label="Nome da Empresa"
+            label="Nome da Empresa *"
             type="text"
             name="nome"
             autoComplete="on"

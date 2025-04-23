@@ -98,6 +98,7 @@ export default function Relatos() {
           <div className="w-[65%] h-full px-6 py-6 overflow-y-auto bg-white shadow-lg transition-all duration-300 relative">
             {/* Botão de fechar */}
             <button
+              type="button"
               onClick={handleFecharPainel}
               className="absolute top-4 right-4 text-black hover:text-gray-300 duration-300 text-2xl"
               title="Fechar"

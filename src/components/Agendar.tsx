@@ -84,8 +84,8 @@ function Agendar() {
   return (
     <div className="min-h-screen p-6 mt-12">
       <div className="flex items-center gap-3 mb-6">
-        <MdOutlineCalendarMonth className="h-8 w-8 text-green-700 dark:text-green-400" />
-        <h1 className="text-2xl font-bold">Painel de Actividades Agendadas</h1>
+        <MdOutlineCalendarMonth className="h-9 w-9 text-green-600 animate-pulse" />
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel de Actividades Agendadas</h1>
       </div>
 
       <div className="bg-white p-6 rounded-xl shadow hover:shadow-md duration-300 mb-10">

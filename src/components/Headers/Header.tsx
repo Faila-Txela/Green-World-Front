@@ -58,6 +58,9 @@ export default function Header() {
           <Link className={commonLinkStylesBlack} to="/news">
             Notícias
           </Link>
+          <Link className={commonLinkStylesBlack} to="/blog">
+            Blog
+          </Link>
           <Link className={commonLinkStylesBlack} to="/enterprises">
             Empresas
           </Link>
@@ -89,6 +92,9 @@ export default function Header() {
               <Link className={commonLinkStylesWhite} to="/news">
                 Notícias
               </Link>
+              <Link className={commonLinkStylesWhite} to="/blog">
+             Blog
+            </Link>
               <Link className={commonLinkStylesWhite} to="/enterprises">
                 Empresas
               </Link>

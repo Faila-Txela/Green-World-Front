@@ -29,11 +29,7 @@ const EnterpriseSidebar = () => {
     Agendar: <Agendar />,
     Notifications: <Notifications />,
     Feedback: <Feedback />,
-    EnterpriseSettings: <EnterpriseSettings 
-      onChangeProfilePic={() => alert("Profile picture changed")} 
-      onChangeTheme={() => alert("Theme changed")} 
-      onDeleteAccount={() => alert("Account deleted")} 
-    />
+    EnterpriseSettings: <EnterpriseSettings />
   };
 
   return (

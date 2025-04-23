@@ -7,15 +7,9 @@ interface PrivateRouteProps {
 }
 
 function PublicRoutesEnterprise({ children }: PrivateRouteProps) {
-  const authRef = useRef<boolean>(false)
-  useEffect(()=>{
-    const data = localStorage.getItem("user")
-    if (data) {
-      authRef.current = true
-    }
-  }, [])
+  const data = localStorage.getItem("empresa")
   // Verifica se não há um usuário autenticado
-  if (authRef) {
+  if (data) {
     return <Navigate to="/enterprise-dashboard" replace />;
   }
 

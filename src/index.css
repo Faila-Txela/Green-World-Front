@@ -18,6 +18,34 @@
       -ms-overflow-style: none; /* IE e Edge */
        /* Firefox */
   }
+
+  .blob-animation {
+    animation: morph 8s ease-in-out infinite;
+    clip-path: polygon(
+      50% 0%, 70% 15%, 100% 35%, 100% 65%, 
+      75% 100%, 50% 85%, 25% 100%, 0% 65%, 
+      0% 35%, 25% 15%
+    );
+  }
+
+  @keyframes morph {
+    0%,
+    100% {
+      clip-path: polygon(
+        50% 0%, 70% 15%, 100% 35%, 100% 65%, 
+        75% 100%, 50% 85%, 25% 100%, 0% 65%, 
+        0% 35%, 25% 15%
+      );
+    }
+    50% {
+      clip-path: polygon(
+        45% 5%, 65% 10%, 95% 30%, 90% 70%, 
+        70% 95%, 50% 90%, 30% 95%, 10% 70%, 
+        5% 40%, 20% 20%
+      );
+    }
+  }
+
 }
 
 ::-webkit-scrollbar{

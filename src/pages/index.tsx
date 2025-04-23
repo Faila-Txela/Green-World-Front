@@ -5,6 +5,7 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
 import map from '../assets/map1.png';
+import Clock from "../components/clock";
 import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
@@ -28,7 +29,13 @@ interface ModalProps {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
-        <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-red-600">✖</button>
+        <button
+         type="button"
+         onClick={onClose} 
+         className="absolute top-2 right-2 text-gray-600 hover:text-red-600">
+          ✖
+         </button>
+
         <h2 className="text-xl font-bold mb-2">{item.title}</h2>
         {item.type === "image" ? (
           <img src={item.src} alt={item.title} className="w-full rounded-md" />
@@ -137,6 +144,10 @@ export default function Home() {
 >
   <div 
     className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
+     <div>
+        {/* ⏰ Hora Atual */}
+        <Clock />
+     </div>
     <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 text-center px-4">
       <div className="tracking-wide">
         <AnimatedText 
@@ -175,7 +186,7 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src="/logo.png" className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white shadow-2xl float-start " alt="MapImage" />
+      <img src="/logo.png" className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white float-start rounded-xl shadow-2xl blob-animation transition duration-500 bg-green-800" alt="MapImage" />
     </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
@@ -229,7 +240,7 @@ export default function Home() {
 
       
       {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />} 
-      
+
 {/* Seção cardRelatos */}
       <div className="mt-10">
         <CardRelatos />

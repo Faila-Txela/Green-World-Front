@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import NotificacaoCard from "../components/notificacao/notificacao_card";
+import { IoNotificationsCircleOutline } from "react-icons/io5";
 import axios from "./../lib/axios";
 import { useAuth } from "../routes/auth_context";
 
@@ -13,14 +14,14 @@ interface Notificacao {
 export default function Notifications() {
   const [notifications, setNotifications] = useState<Notificacao[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { user } = useAuth();
-  
+  const user = JSON.parse(localStorage.getItem("user") || localStorage.getItem("empresa") || "{}");
 
   const fetchNotifications = useCallback(async () => {
     if (!user) return;
     setLoading(true); 
     try {
-      const response = await axios.get(`/notificacao/${user.id}/user`);
+      const response = user?.tipoEmpresa_id ? await axios.get(`/notificacao/${user.id}/empresa`): await axios.get(`/notificacao/${user.id}/user`);
+      console.log(response)
       setNotifications(response.data);
     } catch (error) {
       console.log(error);
@@ -31,7 +32,7 @@ export default function Notifications() {
 
   useEffect(() => {
     fetchNotifications();
-  }, [fetchNotifications]);
+  }, []);
 
   if (loading) {
     return <div className="text-center py-4">Carregando notificações...</div>;
@@ -43,6 +44,12 @@ export default function Notifications() {
 
   return (
     <div>
+     
+     <div className="flex items-center gap-4 mb-6">
+      <IoNotificationsCircleOutline size={28} className="h-9 w-9 text-green-600 animate-pulse" />
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel de Notificações</h1>
+     </div>
+
       {notifications.map((notification, index) => (
         <NotificacaoCard
           data={notification.createAt}

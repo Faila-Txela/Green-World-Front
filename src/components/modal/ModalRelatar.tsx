@@ -141,8 +141,9 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       //formData.append("amontoadoRelatadoId", amontoadoRelatadoId)
   
       const result = await validatorImagesService.create(formData);
-  
-      const conceitos = result.data?.labels || [];
+      console.log(result);
+      const conceitos = result.data?.conceitos || []; // Ajuste conforme a estrutura da resposta
+
       const lixoDetectado = conceitos.some((c: any) =>
         ["garbage", "trash", "rubbish", "pollution", "waste", "recycling", "dirty", "messy", "pile", "landfill", "litter"].includes(c.name.toLowerCase())
       );
@@ -154,6 +155,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
         setToast({ message: "A imagem não parece conter lixo. Tente outra.", type: "error" });
       }
     } catch (erro) {
+      console.error("Erro ao validar a imagem:", erro);
       setToast({ message: "Erro ao validar a imagem.", type: "error" });
     } finally {
       setIsImageLoading(false);
@@ -179,7 +181,9 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   
     try {
       const payload = new FormData();
-      payload.append("userId", formData.userId);
+      const user = localStorage.getItem("user");
+      const parsedUser = user ? JSON.parse(user) : null;
+      payload.append("userId", parsedUser?.id || "");
       payload.append("descricao", formData.descricao);
       payload.append("latitude", formData.latitude);
       payload.append("longitude", formData.longitude);
@@ -201,6 +205,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
         setTimeout(() => closeModal(), 1500);
       }
     } catch (erro) {
+      console.error("Erro ao enviar relato:", erro);
       setToast({ message: "Erro ao enviar relato", type: "error" });
     } finally {
       setLoading(false);

@@ -50,8 +50,8 @@ export default function EnterpriseDashboard() {
       <div className="flex justify-center items-center flex-col">
       {/* Texto explicativo da tela */}
       <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
-        <MdOutlineSpaceDashboard className="h-9 w-9" />
-       <h1 className="text-xl md:text-2xl font-semibold text-left">Painel Principal da Empresa</h1>
+        <MdOutlineSpaceDashboard className="h-9 w-9 text-green-600 animate-pulse" />
+       <h1 className="text-2xl md:text-3xl font-bold text-gray-700 text-left">Painel Principal da Empresa</h1>
       </div>
 
         {/* Gráficos organizados em grid responsivo */}
