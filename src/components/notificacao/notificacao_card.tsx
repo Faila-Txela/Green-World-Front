@@ -6,7 +6,7 @@ interface NotificacaoCardProps {
 
 export default function NotificacaoCard({ titulo, descricao, data }: NotificacaoCardProps) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white p-4 gap-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
       <h3 className="text-xl font-semibold text-gray-800">{titulo}</h3>
       <p className="text-gray-600 mt-2">{descricao}</p>
       <div className="flex justify-between items-center mt-4">

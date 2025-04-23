@@ -4,7 +4,7 @@ import Footer from "../components/Footers/Footer";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
-import map from '../assets/map1.png';
+import image from '../assets/enviroment.png'
 import Clock from "../components/clock";
 import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
@@ -186,14 +186,14 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src="/logo.png" className="w-full md:w-9/12 h-80 md:h-2/3 py-20 gb-white float-start rounded-xl shadow-2xl blob-animation transition duration-500 bg-green-800" alt="MapImage" />
+      <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20 blob-animation transition duration-500 bg-global-color-three" alt="handsWithPlant" />
     </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
       <h2 className="text-lg md:text-2xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
       <p className="text-sm md:text-base text-justify">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
-      <p className="text-sm md:text-base text-justify mt-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
-      <p className="text-sm md:text-base text-justify mt-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit amet laudantium possimus est. Quidem, veniam blanditiis esse animi sequi eligendi atque hic optio.</p>
+      <p className="text-sm md:text-base text-justify mt-4">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
+      <p className="text-sm md:text-base text-justify mt-4">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
     </div>
 </motion.div>
 

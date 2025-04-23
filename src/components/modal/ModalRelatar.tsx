@@ -142,10 +142,10 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   
       const result = await validatorImagesService.create(formData);
       console.log(result);
-      const conceitos = result.data?.conceitos || []; // Ajuste conforme a estrutura da resposta
+      const conceitos = result.data?.conceitos || [];
 
       const lixoDetectado = conceitos.some((c: any) =>
-        ["garbage", "trash", "rubbish", "pollution", "waste", "recycling", "dirty", "messy", "pile", "landfill", "litter"].includes(c.name.toLowerCase())
+        ["garbage", "trash", "rubbish", "pollution", "waste", "recycling", "dirty", "messy", "pile", "landfill", "litter", "junk", "enviroment", "dust", "plastic", "glass", "dump", "industry"].includes(c.name.toLowerCase())
       );
   
       setIsImageValid(lixoDetectado);
@@ -191,7 +191,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       payload.append("municipioId", municipio);
       payload.append("bairro", formData.bairro || "");
       payload.append("prioridade", prioridade);
-      payload.append("image", imagens![0]); // Certifique-se de que o nome do campo é "image"
+      payload.append("image", imagens![0]); 
   
       const res = await relatarService.create(payload);
   
@@ -292,7 +292,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
           {locationDenied && (
             <div>
               <p className="mb-2 font-medium">Clique no mapa para selecionar o local:</p>
-              <MapContainer center={[-8.8383, 13.2344]} zoom={12} style={{ height: "30px", width: "60%" }}>
+              <MapContainer center={[-8.8383, 13.2344]} zoom={12} style={{ height: "30px", width: "60%" }} className="w-full md:w-60 h-12 rounded-lg shadow-md mb-4">
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <LocationSelector setCoords={setCoords} />
                 {formData.latitude && formData.longitude && (

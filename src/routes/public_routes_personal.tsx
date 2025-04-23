@@ -15,7 +15,3 @@ export default function PublicRoutesPersonal({ children }: PrivateRouteProps) {
 
   return children;
 }
-
-
-// Chave da API da NOVU(para o envio de notificações)
-//b731ea3427c8b71c7d85403799754545

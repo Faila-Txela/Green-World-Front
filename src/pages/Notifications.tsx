@@ -43,9 +43,9 @@ export default function Notifications() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4">
      
-     <div className="flex items-center gap-4 mb-6">
+     <div className="flex items-center gap-12 mb-6 mt-10">
       <IoNotificationsCircleOutline size={28} className="h-9 w-9 text-green-600 animate-pulse" />
       <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel de Notificações</h1>
      </div>
