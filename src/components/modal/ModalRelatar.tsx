@@ -180,6 +180,8 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     setLoading(true);
   
     try {
+   setLoading(true);
+
       const payload = new FormData();
       const user = localStorage.getItem("user");
       const parsedUser = user ? JSON.parse(user) : null;
