@@ -186,7 +186,7 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20 blob-animation transition duration-500 bg-global-color-three" alt="handsWithPlant" />
+      <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20" alt="handsWithPlant" />
     </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">

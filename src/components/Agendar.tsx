@@ -18,7 +18,7 @@ function Agendar() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error"; } | null>(null);
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [form, setForm] = useState({
-    empresaId: "74cd7463-0d3d-4045-bbd6-03df6364988e",
+    empresaId: "",
     contexto: "",
     start_time: "",
     end_time: "",
@@ -38,22 +38,32 @@ function Agendar() {
 
   const handleAgendar = async () => {
     if (!form.contexto || !form.start_time || !form.end_time) {
-      setToast({ message: "Por favor,preencha todos os dados.", type: "error" })
+      setToast({ message: "Por favor, preencha todos os dados.", type: "error" });
       return;
     }
-
+  
+    const empresaId = localStorage.getItem('empresaId'); 
+    
+    if (!empresaId) {
+      setToast({ message: "Empresa não identificada. Faça login novamente.", type: "error" });
+      return;
+    }
+  
     setLoading(true);
     try {
-      const res = await axios.post("/agendar", form);
+      const res = await axios.post("/agendar", {
+        ...form,
+        empresaId, 
+      });
       setAgendamentos(prev => [res.data, ...prev]);
       setForm({ contexto: "", start_time: "", end_time: "", empresaId: "" });
     } catch (err) {
-      console.error("Erro ao criar agendamento.",err);
-      setToast({ message: "Erro ao criar agendamento. Tente novamente.", type: "error" })
+      console.error("Erro ao criar agendamento.", err);
+      setToast({ message: "Erro ao criar agendamento. Tente novamente.", type: "error" });
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const exportarCSV = () => {
     const header = ['Contexto', 'Início', 'Fim', 'Criado em'];

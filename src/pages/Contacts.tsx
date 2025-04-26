@@ -14,6 +14,8 @@ interface contactoData {
   email: string;
   nome: string;
   mensagem: string;
+  userId: string;
+  empresaId: string;
 }
 
 export default function Contacts() {
@@ -22,7 +24,9 @@ export default function Contacts() {
   const [formData, setFormData] = useState<contactoData>({
     nome: "",
     email: "",
-    mensagem: ""
+    mensagem: "",
+    userId: "",
+    empresaId: ""
   });
 
   const [emailError, setEmailError] = useState("");

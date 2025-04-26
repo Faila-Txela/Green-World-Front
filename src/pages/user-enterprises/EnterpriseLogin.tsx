@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import background from "../../assets/Authentication-rafiki.png";
+import background from "../../assets/enterprise.png";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 import { useAuth } from "../../routes/auth_context";
@@ -123,7 +123,7 @@ export default function EnterpriseLogin() {
   return (
     <div className="flex-row items-center justify-center h-screen gap-6">
       <div className="flex items-center justify-center h-screen gap-6 flex-wrap px-4">
-        <div className="hidden sm:flex items-center justify-center w-[60vh]">
+        <div className={`hidden sm:flex items-center justify-center w-[60vh] bg-[#007f5b] rounded-lg shadow-md transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}>
           <img
             src={background}
             className={`w-[30rem] h-[30rem] self-center flip-rtl babybear:hidden transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}

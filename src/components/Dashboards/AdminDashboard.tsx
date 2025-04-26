@@ -26,13 +26,9 @@ export default function PersonalDashboard() {
       {/* Conteúdo principal */}
       <div className="flex justify-center items-center flex-col">
 
-        <div className="mt-12 rounded shadow-lg bg-green-100 py-6 px-6">
-           <h1 className="font-extrabold text-2xl">Seja bem-vinda Txela!</h1>
-        </div>
-
         {/* Totais vistos */}
 
-        <div className="mt-12 flex justify-center items-center gap-8">
+        {/* <div className="mt-12 flex justify-center items-center gap-8">
  
         <div className="flex gap-3 rounded shadow-lg p-4 duration-300 transform hover:scale-105">
          <h3 className="text-lg font-semibold">Total de usuários:</h3>
@@ -44,7 +40,7 @@ export default function PersonalDashboard() {
           <span className="text-lg">0</span>
         </div>
   
-        </div>
+        </div> */}
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 mt-20">

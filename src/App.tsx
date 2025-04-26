@@ -29,7 +29,13 @@ export default function App() {
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/register-enterprise" element={<RegisterEnterprise />} />
       <Route path="/register-personal" element={<RegisterPersonal />} />
-      <Route
+      {/* <Route path="/personal-login" element={<PersonalLogin />} />
+      <Route path="/notificacao" element={<Notifications />} />
+      <Route path="/login-enter" element={<EnterpriseLogin />} />
+      <Route path="/dash-enter" element={<EnterpriseSidebar />} />
+      <Route path="/admin" element={<SidebarAdmin />} />
+      <Route path="/dash-per" element={<PersonalSidebar />} /> */}
+       <Route
         path="/personal-login"
         element={
           <PublicRoutesPersonal>
@@ -71,7 +77,7 @@ export default function App() {
             <Notifications />
           </PrivateRoute>
         }
-      />
+      /> 
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

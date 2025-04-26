@@ -4,88 +4,98 @@ import { FaUserCircle } from "react-icons/fa";
 import Toast from '../ui/Toast';
 import { feedbackService } from "../../modules/service/api/feedback";
 import PrimaryButton from "../../components/ui/PrimaryButton";
+import { formatDistanceToNow } from "date-fns"; // Função para formatar o tempo
+import { pt } from 'date-fns/locale'; // Importação da localidade em português
+
+interface FeedbackItem {
+  nome: string;
+  texto: string;
+  data: Date;
+}
 
 function Feedback() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error"; } | null>(null);
-  const [feedbacks, setFeedbacks] = useState([
-    { nome: "Maria", texto: "Seria bom ter uma opção para ver os relatos por prioridade.", data: "14/04/2025" },
-    { nome: "João", texto: "A interface está ótima, mas poderiam adicionar um modo escuro.", data: "13/04/2025" },
-    { nome: "Carla", texto: "Excelente ideia essa plataforma. Espero que ajude mesmo!", data: "12/04/2025" },
+  const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([ 
+    { nome: "Maria", texto: "Seria bom ter uma opção para ver os relatos por prioridade.", data: new Date("2025-04-14") },
+    { nome: "João", texto: "A interface está ótima, mas poderiam adicionar um modo escuro.", data: new Date("2025-04-13") },
+    { nome: "Carla", texto: "Excelente ideia essa plataforma. Espero que ajude mesmo!", data: new Date("2025-04-12") },
   ]);
 
   const [novoFeedback, setNovoFeedback] = useState("");
 
   const adicionarFeedback = async () => {
     if (novoFeedback.trim() === "") return;
-  
+
     const userId = localStorage.getItem("userId");
-    const empresaId = localStorage.getItem("empresaId");
-  
+    const empresaId = localStorage.getItem("empresaId") || undefined;
+
     if (!userId && !empresaId) {
-      console.log("Nenhuma identificação encontrada.");
       setToast({ message: "Usuário ou empresa não identificados.", type: "error" });
       return;
     }
 
-    if (novoFeedback.trim().length < 32) {
-    setToast({ message: "Seu feedback deve ter pelo menos 32 caracteres.", type: "error" });
-    return;
+    if (novoFeedback.trim().length < 10) { 
+      setToast({ message: "Seu feedback deve ter pelo menos 10 caracteres.", type: "error" });
+      return;
     }
-  
-    console.log("Novo feedback:", novoFeedback);
-    console.log("User ID:", userId);
-    console.log("Empresa ID:", empresaId);
 
     const payload = {
       feedback: novoFeedback,
-      ...(userId ? { userId } : empresaId ? { empresaId } : {}),
+      ...(userId ? { userId } : { empresaId }), 
     };
-  
-    console.log("Enviando Feedback", payload);
-  
+
     try {
       const response = await feedbackService.create(payload);
-  
+
       const novo = {
         nome: "Você",
         texto: novoFeedback,
-        data: new Date(response.createAt).toLocaleDateString("pt-BR"),
+        data: new Date(response.createAt), 
       };
-  
+
       setFeedbacks([novo, ...feedbacks]);
       setNovoFeedback("");
       setToast({ message: "Feedback enviado com sucesso!", type: "success" });
-  
-    } catch (err) {
-      //console.error("Erro ao enviar feedback:", err);
-      if (err instanceof Error) {
-        console.error("Erro ao enviar feedback:", (err as any).response?.data || err.message);
+
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Erro ao enviar feedback:", (error as any).response?.data || error.message);
       } else {
-        console.error("Erro ao enviar feedback:", err);
+        console.error("Erro ao enviar feedback:", error);
       }
       setToast({ message: "Erro ao enviar feedback.", type: "error" });
     }
-  };  
-  
-useEffect(() => {
-  const fetchFeedbacks = async () => {
-    try {
-      const { data } = await feedbackService.getAll();
-      const formatted = data.map((f: any) => ({
-        nome: f.user ? f.user.nome : (f.empresa ? f.empresa?.nome : "Usuário"),
-        texto: f.feedback,
-        data: new Date(f.createAt).toLocaleDateString("pt-BR"),
-      }));
-      setFeedbacks(formatted);
-    } catch (err) {
-      console.error("Erro ao buscar feedbacks:", err);
-    }
   };
 
-  fetchFeedbacks();
-}, []);
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const { data } = await feedbackService.getAll();
+        const formatted = data.map((f: any) => {
+          const nome = f.user ? f.user.nome : f.empresa ? f.empresa.nome : "Usuário";
+          const data = new Date(f.createAt);
+          
+          // Verifica se a data é válida
+          if (isNaN(data.getTime())) {
+            console.error("Data inválida:", f.createAt);
+            return null; // Retorna null ou um valor padrão caso a data seja inválida
+          }
 
-  
+          return {
+            nome,
+            texto: f.feedback,
+            data,
+          };
+        }).filter((f: FeedbackItem | null) => f !== null); // Filtra os feedbacks inválidos
+        setFeedbacks(formatted);
+      } catch (err) {
+        console.error("Erro ao buscar feedbacks:", err);
+      }
+    };
+
+    fetchFeedbacks();
+  }, []);
+
   return (
     <div className="flex flex-col h-screen px-8 py-20">
       {/* Título da página */}
@@ -116,18 +126,21 @@ useEffect(() => {
             <div className="flex items-center gap-3 mb-2">
               <FaUserCircle className="text-green-600 text-2xl" />
               <span className="font-semibold text-gray-700">{item.nome}</span>
-              <span className="text-sm text-gray-400 ml-auto">{item.data}</span>
+              <span className="text-sm text-gray-400 ml-auto">
+                {/* Exibe o tempo passado de forma relativa */}
+                {formatDistanceToNow(item.data, { addSuffix: true, locale: pt })}
+              </span>
             </div>
             <p className="text-gray-600">{item.texto}</p>
           </div>
         ))}
         {/* Exibe o Toast se houver mensagem */}
         {toast && (
-        <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast(null)}
-        />
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
         )}
       </div>
     </div>
