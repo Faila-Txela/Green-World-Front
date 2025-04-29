@@ -7,11 +7,11 @@ interface PrivateRouteProps {
 }
 
 function PrivateRoute({ children }: PrivateRouteProps) {
-  const data = localStorage.getItem("user")
+  const data = localStorage.getItem("empresa")
   
   // Volta para a página de login se não houver um usuário autenticado
   if (!data) {
-    return <Navigate to="/personal-login" replace />;
+    return <Navigate to="/enterprise-login" replace />;
   }
 
   return children;

@@ -2,6 +2,7 @@ import "./index.css";
 import "@radix-ui/themes/styles.css";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./routes/private_routes";
+import PrivateRoute2 from "./routes/private_routes2";
 import Home from "./pages";
 import Contacts from "./pages/Contacts";
 import PersonalLogin from "./pages/user-personal/PersoanlLogin";
@@ -56,9 +57,9 @@ export default function App() {
       <Route
         path="/enterprise-dashboard"
         element={
-          <PrivateRoute>
+          <PrivateRoute2>
             <EnterpriseSidebar />
-          </PrivateRoute>
+          </PrivateRoute2>
         }
       />
       ´

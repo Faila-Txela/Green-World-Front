@@ -16,5 +16,10 @@ class UserService{
         const { data } = await axios.delete(`/users/${id}`);
         return data;
       }
+
+      async logOut() {
+        return await axios.post("/empresas/logOut");
+      //return await axios.post("/users/logOut");
+      }
 }
 export const userService = new UserService();

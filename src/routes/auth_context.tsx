@@ -1,26 +1,26 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface user {
+interface User {
   // Defina as propriedades para o tipo `user`
   id: string;
   name: string;
 }
 
-interface empresa {
+interface Empresa {
   // Defina as propriedades para o tipo `empresa`
   id: string;
   companyName: string;
 }
 
 interface authContextType {
-  user: empresa | user | null;
-  setUser: React.Dispatch<React.SetStateAction<empresa | user | null>>;
+  user: Empresa | User | null;
+  setUser: React.Dispatch<React.SetStateAction<Empresa | User | null>>;
 }
 
 const authContext = createContext<authContextType | undefined>(undefined);
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<empresa | user | null>(null);
+  const [user, setUser] = useState<Empresa | User | null>(null);
 
   useEffect(()=>{
     const data = localStorage.getItem("user")

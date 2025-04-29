@@ -33,8 +33,8 @@ const ExcluirConta = () => {
       // 1. Verifica a senha
       await empresaService.verifyPassword(senha);
   
-      // 2. Desloga
-      await empresaService.logout();
+      // 2. Faz logOut
+      await empresaService.logOut();
   
       // 3. Exclui a conta
       await empresaService.deleteAccount();

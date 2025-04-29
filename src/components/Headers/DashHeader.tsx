@@ -1,11 +1,8 @@
-import Avatar from "../../components/ui/Avatar";
 import { useNavigate } from "react-router-dom";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
-import NotificacoesInApp from "../../components/NotificationInApp";
-import Notifications from "../../pages/Notifications";
+import PersonalPerfil from "../../components/client/settings/PersonalPerfil";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdArrowBack } from "react-icons/io";
-import axios from "../../lib/axios";
 
 interface DashHeaderProps {
   toggleSidebar: () => void;
@@ -13,65 +10,37 @@ interface DashHeaderProps {
   onLogout: () => void;
 }
 
-const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, onLogout}) => {
+const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, onLogout }) => {
   const navigate = useNavigate()  
 
-  const handleLogout = async () => {
-    try {
-      // Logout() 
-      const response = await axios.get("/logout", {
-        headers: {
-          "content-type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token")
-        }
-      });
-
-      if (response.status === 200) { 
-        //onLogout(); 
-      } else {
-        console.error("Erro ao tentar terminar a sessão");
-      }
-    } catch (error) {
-      console.error("Erro ao fazer logout", error);
-    }
-  };
-
-  const handleChangeTheme = () => {
-    alert("Tema alterado💯");
-  };
-
-  const handleChangeProfilePic = () => {
-    alert("Foto de perfil alterada💯");
-  };
-
   return (
-    <div className="w-full flex justify-between fixed top-0 left-0 p-3 bg-green-800 shadow-lg z-50">
-
+    <header className="w-full flex items-center justify-between fixed top-0 left-0 px-4 py-2 bg-green-800 shadow-lg z-50 h-16">
       {/* Botão para abrir/fechar Sidebar */}
       <button
-        className="text-white p-2 bg-green-700 rounded-md"
+        type="button"
+        className="text-white p-1 bg-green-700 rounded-md hover:bg-green-600 transition-colors"
         onClick={toggleSidebar}
       >
-        {isSidebarOpen ? <IoMdArrowBack size={24} /> : <RxHamburgerMenu size={24} />}
+        {isSidebarOpen ? <IoMdArrowBack size={26} /> : <RxHamburgerMenu size={20} />}
       </button>
 
-      {/* <Avatar
-        nome="Albertina Sauimbo"
-        tipoUsuario="Administrador"
-        onLogout={handleLogout}
-        onChangeTheme={handleChangeTheme}
-        onChangeProfilePic={handleChangeProfilePic}
-      /> */}
+      <div className="flex items-center gap-4">
+        {/* Ícone de Notificações */}
+        <button 
+          type="button"
+          title="Notificações"
+          className="text-white hover:text-green-200 transition-colors"
+          onClick={() => navigate("/notificacao")}
+        >
+          <IoNotificationsCircleOutline size={26} />
+        </button>
 
-      {/* Notificações */}
-      {/* <NotificacoesInApp  empresaId="74cd7463-0d3d-4045-bbd6-03df6364988e"/> */}
-
-      <div className="py-2 px-8 bg-white rounded cursor-pointer flex items-center gap-4" onClick={() => navigate("/notificacao")}>
-      <IoNotificationsCircleOutline size={32} color="green" /> 
-      <span className="font-medium text-lg text-green-800">Notificações</span>
+        {/* Perfil do Usuário */}
+        <div className="cursor-pointer">
+          <PersonalPerfil />
+        </div>
       </div>
-
-    </div>
+    </header>
   );
 }
 

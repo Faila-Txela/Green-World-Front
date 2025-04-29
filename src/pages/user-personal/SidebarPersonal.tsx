@@ -30,9 +30,9 @@ const PersonalSidebar = () => {
     Relatos: <Relatos />,
     Notificacao: <Notifications />,
     PersonalSettings: <PersonalSettings 
-      onChangeProfilePic={() => { alert("Imagem de perfil mudada") }} 
-      onChangeTheme={() => { alert("Tema mudado") }} 
-      onDeleteAccount={() => { alert("Conta excluida") }} 
+      //onChangeProfilePic={() => { alert("Imagem de perfil mudada") }} 
+      //onChangeTheme={() => { alert("Tema mudado") }} 
+      //onDeleteAccount={() => { alert("Conta excluida") }} 
     />
   };
 

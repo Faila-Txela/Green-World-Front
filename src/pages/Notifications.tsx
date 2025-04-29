@@ -35,7 +35,7 @@ export default function Notifications() {
   }, []);
 
   if (loading) {
-    return <div className="text-center py-4">Carregando notificações...</div>;
+    return <div className="text-center py-4 mt-12">Carregando notificações...</div>;
   }
 
   if (notifications.length === 0) {

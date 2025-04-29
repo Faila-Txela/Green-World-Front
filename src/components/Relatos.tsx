@@ -1,20 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Toast from "../components/ui/Toast";
 import ModalRelatar from "../components/modal/ModalRelatar";
+import { relatarService } from "../modules/service/api/relatar";
+
+interface Relato {
+  titulo: string;
+  descricao: string;
+  foto: string;
+  data: string;
+  local: string;
+  status: "pendente" | "resolvido";
+}
 
 export default function Relatos() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [relatoSelecionado, setRelatoSelecionado] = useState<any>(null);
+  const [relatoSelecionado, setRelatoSelecionado] = useState<Relato | null>(null);
+  const [relatos, setRelatos] = useState<Relato[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const handleFecharPainel = () => setRelatoSelecionado(null);
 
-  const relatosExemplo = [
+  const relatosExemplo: Relato[] = [
     {
       titulo: "Amontoado no bairro São Paulo",
       descricao: "Grande acúmulo de lixo perto do mercado informal.",
@@ -49,17 +61,53 @@ export default function Relatos() {
     },
   ];
 
+  const fetchRelatos = async () => {
+    try {
+      setLoading(true);
+      // Simulação de chamada API - substitua pela sua chamada real
+       const response = await relatarService.getAll();
+       setRelatos(response.data.length > 0 ? response.data : relatosExemplo);
+      
+      // Temporariamente usando apenas os exemplos
+      setRelatos(relatosExemplo);
+    } catch (error) {
+      console.error("Erro ao buscar relatos:", error);
+      setRelatos(relatosExemplo); // Fallback para exemplos em caso de erro
+      setToast({ message: "Erro ao carregar relatos. Mostrando exemplos.", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNovoRelato = () => {
+    fetchRelatos(); // Atualiza a lista após novo relato
+    setToast({ message: "Novo relato adicionado com sucesso!", type: "success" });
+  };
+
+  useEffect(() => {
+    fetchRelatos();
+  }, []);
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-4 bg-white shadow-md fixed gap-12 mt-20 top-0 z-10">
         <div className="flex items-center gap-3">
-          <MdOutlineReport size={28} />
+          <MdOutlineReport size={28} className="animate-pulse text-green-800" />
           <h1 className="text-xl font-semibold">Painel de Relatos</h1>
         </div>
         <div className="flex gap-4">
-          <PrimaryButton name="Ver Relatos Recentes" addClassName="" onClick={() => {}} />
-          <PrimaryButton name="Relatar Novo Amontoado" addClassName="" onClick={openModal} />
+          <PrimaryButton 
+            name="Atualizar Relatos" 
+            addClassName="" 
+            onClick={fetchRelatos} 
+            disabled={loading}
+          />
+          <PrimaryButton 
+            name="Relatar Novo Amontoado" 
+            addClassName="" 
+            onClick={openModal} 
+          />
         </div>
       </div>
 
@@ -71,26 +119,43 @@ export default function Relatos() {
             relatoSelecionado ? "w-[35%]" : "w-full"
           }`}
         >
-          {relatosExemplo.map((relato, index) => (
-            <div
-              key={index}
-              onClick={() => setRelatoSelecionado(relato)}
-              className="bg-white shadow-lg p-6 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-            >
-              <h3 className="font-bold text-lg">{relato.titulo}</h3>
-              <p className="text-sm text-gray-400 truncate">{relato.descricao}</p>
-              <span className="text-xs text-gray-600">{relato.data}</span>
-              <div className="mt-2 flex items-center gap-2">
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-full animate-pulse ${
-                    relato.status === "resolvido" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {relato.status === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
-                </span>
-              </div>
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-gray-500">Carregando relatos...</p>
             </div>
-          ))}
+          ) : relatos.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center p-8">
+              <MdOutlineReport size={48} className="text-gray-400 mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600">Nenhum amontoado reportado</h3>
+              <p className="text-gray-500 mb-6">Não encontramos relatos recentes de amontoados de lixo.</p>
+              <PrimaryButton 
+                name="Relatar Primeiro Amontoado" 
+                onClick={openModal}
+                addClassName="w-auto"
+              />
+            </div>
+          ) : (
+            relatos.map((relato, index) => (
+              <div
+                key={index}
+                onClick={() => setRelatoSelecionado(relato)}
+                className="bg-white shadow-lg p-6 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+              >
+                <h3 className="font-bold text-lg">{relato.titulo}</h3>
+                <p className="text-sm text-gray-400 truncate">{relato.descricao}</p>
+                <span className="text-xs text-gray-600">{relato.data}</span>
+                <div className="mt-2 flex items-center gap-2">
+                  <span
+                    className={`text-xs font-semibold px-2 py-1 rounded-full animate-pulse ${
+                      relato.status === "resolvido" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {relato.status === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Aba lateral com detalhes */}
@@ -123,8 +188,7 @@ export default function Relatos() {
             </div>
             <div className="rounded-md overflow-hidden border border-gray-300">
               <img
-                // src={relatoSelecionado.foto}
-                src="/mine.png"
+                src={relatoSelecionado.foto}
                 alt="Foto do relato"
                 className="w-full object-cover max-h-[400px]"
               />
@@ -141,7 +205,13 @@ export default function Relatos() {
           onClose={() => setToast(null)}
         />
       )}
-      {isModalOpen && <ModalRelatar closeModal={closeModal} setToast={setToast} />}
+      {isModalOpen && (
+        <ModalRelatar 
+          closeModal={closeModal} 
+          setToast={setToast} 
+          onRelatoSuccess={handleNovoRelato}
+        />
+      )}
     </div>
   );
 }

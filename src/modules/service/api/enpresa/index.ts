@@ -9,8 +9,8 @@ class EmpresaService {
     });
   }
 
-  async logout() {
-    return await axios.post("/empresa/onlogOut");
+  async logOut() {
+    return await axios.post("/empresas/logOut");
   }
 
   async getTipoEmpresaIdByNome() {
@@ -24,11 +24,11 @@ class EmpresaService {
   }
 
   async verifyPassword(senha: string) {
-    return await axios.post("/empresa/verify-password", { senha });
+    return await axios.post("/empresas/verify-password", { senha });
   }
 
   async deleteAccount() {
-    return await axios.delete("/empresa");
+    return await axios.delete("/empresas");
   }
 
 }

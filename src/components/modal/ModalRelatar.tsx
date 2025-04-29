@@ -16,7 +16,7 @@ interface RelatarFormData {
   longitude: string;
   provinciaId: string;
   municipioId: string;
-  bairro?: string;
+  bairro: string;
   prioridade: string;
   analiseImagem: File | null;
 }
@@ -33,6 +33,7 @@ interface Municipio {
 
 interface ModalRelatarProps {
   closeModal: () => void;
+  onRelatoSuccess: () => void;
   setToast: React.Dispatch<React.SetStateAction<{ message: string; type: "success" | "error" } | null>>;
 }
 
@@ -43,6 +44,7 @@ const InputField = ({
   value,
   onChange,
   extraPaddingRight = false,
+  required = false
 }: {
   label: string;
   type: string;
@@ -50,17 +52,18 @@ const InputField = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   extraPaddingRight?: boolean;
+  required?: boolean;
 }) => (
   <div>
     <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
-      {label}
+      {label} {required && <span className="text-red-500">*</span>}
     </label>
     <input
       type={type}
       name={name}
       value={value}
       onChange={onChange}
-      required
+      required={required}
       placeholder={`Digite o ${label.toLowerCase()}`}
       className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700`}
     />
@@ -76,7 +79,7 @@ function LocationSelector({ setCoords }: { setCoords: (lat: number, lng: number)
   return null;
 }
 
-export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps) {
+export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: ModalRelatarProps) {
   const [formData, setFormData] = useState<RelatarFormData>({
     userId: "", 
     descricao: "",
@@ -103,17 +106,23 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
     descricao: string;
     dataHora: string;
   }>(null);
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
 
-  const isFormValid =
+  const isFormValid = Boolean(
     formData.descricao.trim() &&
     formData.latitude &&
     formData.longitude &&
     provincia &&
     municipio &&
+    formData.bairro.trim() && // Agora verifica o bairro
     prioridade &&
     imagens !== null &&
     isImageValid &&
-    !isImageLoading;
+    !isImageLoading
+  );
+
+  const isFieldInvalid = (fieldName: string, value: string) => 
+    touchedFields[fieldName] && !value.trim();
 
   const fetchProvincias = async () => {
     const res = await axios.get("/provincia");
@@ -128,6 +137,20 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    if (!touchedFields[name]) {
+      setTouchedFields(prev => ({ ...prev, [name]: true }));
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    const { value } = e.target;
+    setter(value);
+    
+    const fieldName = e.target.title;
+    if (!touchedFields[fieldName]) {
+      setTouchedFields(prev => ({ ...prev, [fieldName]: true }));
+    }
   };
 
   const handleImageValidation = async (file: File) => {
@@ -137,11 +160,9 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
   
     try {
       const formData = new FormData();
-      formData.append("image", file); 
-      //formData.append("amontoadoRelatadoId", amontoadoRelatadoId)
+      formData.append("image", file);
   
       const result = await validatorImagesService.create(formData);
-      console.log(result);
       const conceitos = result.data?.conceitos || [];
 
       const lixoDetectado = conceitos.some((c: any) =>
@@ -168,20 +189,36 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       latitude: lat.toString(),
       longitude: lng.toString(),
     }));
+    
+    if (!touchedFields.latitude) {
+      setTouchedFields(prev => ({ ...prev, latitude: true, longitude: true }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
     if (!isFormValid) {
-      return setToast({ message: "Preencha todos os campos obrigatórios e envie uma imagem válida.", type: "error" });
+      const allFields = {
+        descricao: true,
+        provincia: true,
+        municipio: true,
+        bairro: true, // Adicionado bairro
+        prioridade: true,
+        latitude: true,
+        longitude: true
+      };
+      setTouchedFields(allFields);
+      
+      return setToast({ 
+        message: "Preencha todos os campos obrigatórios corretamente (incluindo o bairro).", 
+        type: "error" 
+      });
     }
   
     setLoading(true);
   
     try {
-   setLoading(true);
-
       const payload = new FormData();
       const user = localStorage.getItem("user");
       const parsedUser = user ? JSON.parse(user) : null;
@@ -191,7 +228,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
       payload.append("longitude", formData.longitude);
       payload.append("provinciaId", provincia);
       payload.append("municipioId", municipio);
-      payload.append("bairro", formData.bairro || "");
+      payload.append("bairro", formData.bairro);
       payload.append("prioridade", prioridade);
       payload.append("image", imagens![0]); 
   
@@ -204,6 +241,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
         });
   
         setToast({ message: "Relato enviado com sucesso!", type: "success" });
+        onRelatoSuccess();
         setTimeout(() => closeModal(), 1500);
       }
     } catch (erro) {
@@ -246,74 +284,147 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
         <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">Relatar Novo Amontoado</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <TextArea
-            name="descricao"
-            id="descricao"
-            placeholder="Descreva o problema..."
-            value={formData.descricao}
-            onChange={handleChange}
-          />
+          <div>
+            <label htmlFor="Descrição" className="block text-gray-700 font-semibold">
+              Descrição <span className="text-red-500">*</span></label>
+            <TextArea
+              name="descricao"
+              id="descricao"
+              placeholder="Descreva o problema..."
+              value={formData.descricao}
+              onChange={handleChange}
+            />
+            {isFieldInvalid("descricao", formData.descricao) && (
+              <p className="text-red-500 text-sm mt-1">Por favor, descreva o problema</p>
+            )}
+          </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold">Província</label>
-            <select className="w-full p-3 border rounded-md" title="provincia" onChange={(e) => setProvincia(e.target.value)}>
+            <label className="block text-gray-700 font-semibold">
+              Província <span className="text-red-500">*</span>
+            </label>
+            <select 
+              className={`w-full p-3 border rounded-md ${isFieldInvalid("provincia", provincia) ? "border-red-500" : ""}`}
+              title="provincia" 
+              value={provincia}
+              onChange={(e) => handleSelectChange(e, setProvincia)}
+            >
               <option value="">Selecione a Província</option>
               {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
             </select>
+            {isFieldInvalid("provincia", provincia) && (
+              <p className="text-red-500 text-sm mt-1">Selecione uma província</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold">Município</label>
-            <select className="w-full p-3 border rounded-md" title="municipio" onChange={(e) => setMunicipio(e.target.value)}>
+            <label className="block text-gray-700 font-semibold">
+              Município <span className="text-red-500">*</span>
+            </label>
+            <select 
+              className={`w-full p-3 border rounded-md ${isFieldInvalid("municipio", municipio) ? "border-red-500" : ""}`}
+              title="municipio" 
+              value={municipio}
+              onChange={(e) => handleSelectChange(e, setMunicipio)}
+              disabled={!provincia}
+            >
               <option value="">Selecione o Município</option>
               {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
             </select>
+            {isFieldInvalid("municipio", municipio) && (
+              <p className="text-red-500 text-sm mt-1">Selecione um município</p>
+            )}
           </div>
 
-          <InputField label="Bairro (opcional)" type="text" name="bairro" value={formData.bairro || ""} onChange={handleChange} />
+          <div>
+            <InputField 
+              label="Bairro" 
+              type="text" 
+              name="bairro" 
+              value={formData.bairro} 
+              onChange={handleChange}
+              required={true}
+            />
+            {isFieldInvalid("bairro", formData.bairro) && (
+              <p className="text-red-500 text-sm mt-1">Por favor, informe o bairro</p>
+            )}
+          </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold">Prioridade</label>
-            <select className="w-full p-3 border rounded-md" title="prioridade" value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
+            <label className="block text-gray-700 font-semibold">
+              Prioridade <span className="text-red-500">*</span>
+            </label>
+            <select 
+              className={`w-full p-3 border rounded-md ${isFieldInvalid("prioridade", prioridade) ? "border-red-500" : ""}`}
+              title="prioridade" 
+              value={prioridade}
+              onChange={(e) => handleSelectChange(e, setPrioridade)}
+            >
               <option value="">Selecione a Prioridade</option>
               <option value="BAIXA">Baixa</option>
               <option value="ALTA">Alta</option>
             </select>
+            {isFieldInvalid("prioridade", prioridade) && (
+              <p className="text-red-500 text-sm mt-1">Selecione uma prioridade</p>
+            )}
           </div>
 
-          <UploadArea onChange={handleImageValidation} />
-
-          {isImageLoading && (
-            <p className="text-green-600 text-sm">Validando imagem... <span className="animate-pulse">⏳</span></p>
-          )}
-
-          {isImageValid === false && (
-            <p className="text-red-500 text-sm">A imagem enviada não parece conter lixo. Tente outra.</p>
-          )}
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2">
+              Foto do amontoado <span className="text-red-500">*</span>
+            </label>
+            <UploadArea onChange={handleImageValidation} />
+            {isImageLoading && (
+              <p className="text-green-600 text-sm mt-1">Validando imagem... <span className="animate-pulse">⏳</span></p>
+            )}
+            {isImageValid === false && (
+              <p className="text-red-500 text-sm mt-1">A imagem enviada não parece conter lixo. Tente outra.</p>
+            )}
+            {touchedFields.latitude && !formData.latitude && (
+              <p className="text-red-500 text-sm mt-1">Selecione um local no mapa</p>
+            )}
+          </div>
 
           {locationDenied && (
-            <div>
-              <p className="mb-2 font-medium">Clique no mapa para selecionar o local:</p>
-              <MapContainer center={[-8.8383, 13.2344]} zoom={12} style={{ height: "30px", width: "60%" }} className="w-full md:w-60 h-12 rounded-lg shadow-md mb-4">
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <LocationSelector setCoords={setCoords} />
-                {formData.latitude && formData.longitude && (
-                  <Marker
-                    position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
-                    icon={L.icon({
-                      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-                      iconSize: [25, 41],
-                      iconAnchor: [12, 41],
-                    })}
+            <div className="relative">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Localização <span className="text-red-500">*</span>
+              </label>
+              <p className="mb-2 text-sm text-gray-600">Clique no mapa para selecionar o local:</p>
+              <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-sm">
+                <MapContainer 
+                  center={[-8.8383, 13.2344]} 
+                  zoom={14} 
+                  className="h-full w-full"
+                  style={{ minHeight: '198px' }}
+                >
+                  <TileLayer 
+                    className="cursor-pointer"
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   />
-                )}
-              </MapContainer>
+                  <LocationSelector setCoords={setCoords} />
+                  {formData.latitude && formData.longitude && (
+                    <Marker
+                      position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
+                      icon={L.icon({
+                        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                      })}
+                    />
+                  )}
+                </MapContainer>
+              </div>
+              {(!formData.latitude || !formData.longitude) && touchedFields.latitude && (
+                <p className="text-red-500 text-sm mt-1">Por favor, selecione um local no mapa</p>
+              )}
             </div>
           )}
 
           <PrimaryButton
             name={loading ? "Enviando..." : "Enviar Relato"}
-            addClassName="w-full"
+            addClassName={`w-full ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={!isFormValid || loading}
           />
 
@@ -321,6 +432,7 @@ export default function ModalRelatar({ closeModal, setToast }: ModalRelatarProps
             name="Fechar"
             addClassName="bg-gray-300 text-black hover:bg-gray-400"
             onClick={() => !loading && closeModal()}
+            disabled={loading}
           />
         </form>
       </div>
