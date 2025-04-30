@@ -5,213 +5,316 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import Toast from "../components/ui/Toast";
 import ModalRelatar from "../components/modal/ModalRelatar";
 import { relatarService } from "../modules/service/api/relatar";
+import { format, parseISO } from 'date-fns';
+import { pt } from 'date-fns/locale';
 
-interface Relato {
-  titulo: string;
-  descricao: string;
-  foto: string;
-  data: string;
-  local: string;
-  status: "pendente" | "resolvido";
-}
-
-export default function Relatos() {
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [relatoSelecionado, setRelatoSelecionado] = useState<Relato | null>(null);
-  const [relatos, setRelatos] = useState<Relato[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-  const handleFecharPainel = () => setRelatoSelecionado(null);
-
-  const relatosExemplo: Relato[] = [
-    {
-      titulo: "Amontoado no bairro São Paulo",
-      descricao: "Grande acúmulo de lixo perto do mercado informal.",
-      foto: "https://images.unsplash.com/photo-1605042309866-1a9e3f80a688",
-      data: "2025-04-14 09:00",
-      local: "Luanda - São Paulo",
-      status: "pendente",
-    },
-    {
-      titulo: "Lixo hospitalar abandonado",
-      descricao: "Resíduos hospitalares jogados próximos a uma escola.",
-      foto: "https://images.unsplash.com/photo-1589987607627-8ee53a4a3172",
-      data: "2025-04-13 17:45",
-      local: "Luanda - Kilamba",
-      status: "resolvido",
-    },
-    {
-      titulo: "Contentor transbordando",
-      descricao: "Contentor de lixo completamente cheio e lixo espalhado na rua.",
-      foto: "https://images.unsplash.com/photo-1587820513273-84b90ac78fd3",
-      data: "2025-04-12 11:15",
-      local: "Luanda - Maianga",
-      status: "pendente",
-    },
-    {
-      titulo: "Lixo tóxico próximo a área residencial",
-      descricao: "Possível resíduo químico emitindo odor forte.",
-      foto: "https://images.unsplash.com/photo-1548611716-1b7d2cf79c59",
-      data: "2025-04-10 08:10",
-      local: "Luanda - Samba",
-      status: "resolvido",
-    },
-  ];
-
-  const fetchRelatos = async () => {
-    try {
-      setLoading(true);
-      // Simulação de chamada API - substitua pela sua chamada real
-       const response = await relatarService.getAll();
-       setRelatos(response.data.length > 0 ? response.data : relatosExemplo);
-      
-      // Temporariamente usando apenas os exemplos
-      setRelatos(relatosExemplo);
-    } catch (error) {
-      console.error("Erro ao buscar relatos:", error);
-      setRelatos(relatosExemplo); // Fallback para exemplos em caso de erro
-      setToast({ message: "Erro ao carregar relatos. Mostrando exemplos.", type: "error" });
-    } finally {
-      setLoading(false);
+    interface Relato {
+      id: string;
+      descricao: string;
+      latitude: number;
+      longitude: number;
+      bairro: string;
+      createdAt: string;
+      provincia?: {
+        nome: string;
+      };
+      municipio?: {
+        nome: string;
+      };
+      prioridade: "BAIXA" | "ALTA";
+      statusColeta?: "RETIRADO" | "NAO_RETIRADO" | "PENDENTE";
+      user?: {
+        nome: string;
+      };
     }
-  };
 
-  const handleNovoRelato = () => {
-    fetchRelatos(); // Atualiza a lista após novo relato
-    setToast({ message: "Novo relato adicionado com sucesso!", type: "success" });
-  };
+    export default function Relatos() {
+      const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [relatoSelecionado, setRelatoSelecionado] = useState<Relato | null>(null);
+      const [relatos, setRelatos] = useState<Relato[]>([]);
+      const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchRelatos();
-  }, []);
+      const openModal = () => setIsModalOpen(true);
+      const closeModal = () => setIsModalOpen(false);
+      const handleFecharPainel = () => setRelatoSelecionado(null);
 
-  return (
-    <div className="flex flex-col h-screen">
-      {/* Header */}
-      <div className="flex items-center justify-between px-8 py-4 bg-white shadow-md fixed gap-12 mt-20 top-0 z-10">
-        <div className="flex items-center gap-3">
-          <MdOutlineReport size={28} className="animate-pulse text-green-800" />
-          <h1 className="text-xl font-semibold">Painel de Relatos</h1>
-        </div>
-        <div className="flex gap-4">
-          <PrimaryButton 
-            name="Atualizar Relatos" 
-            addClassName="" 
-            onClick={fetchRelatos} 
-            disabled={loading}
-          />
-          <PrimaryButton 
-            name="Relatar Novo Amontoado" 
-            addClassName="" 
-            onClick={openModal} 
-          />
-        </div>
-      </div>
+      const fetchRelatos = async () => {
+        try {
+          setLoading(true);
+          const response = await relatarService.getAll();
+          
+          // Verifique se os dados têm a estrutura esperada
+          if (!Array.isArray(response.data)) {
+            throw new Error("Dados recebidos não são um array");
+          }
+          
+          // Mapeie os dados com verificações de segurança
+          const relatosFormatados = response.data.map((relato: any) => ({
+            id: relato.id,
+            descricao: relato.descricao,
+            latitude: relato.latitude,
+            longitude: relato.longitude,
+            bairro: relato.bairro,
+            createdAt: relato.createdAt,
+            provincia: relato.provincia || { nome: 'N/A' },
+            municipio: relato.municipio || { nome: 'N/A' },
+            prioridade: relato.prioridade,
+            statusColeta: relato.statusColeta,
+            user: relato.user || { nome: 'Anônimo' }
+          }));
+          
+          setRelatos(relatosFormatados);
+        } catch (error) {
+          console.error("Erro ao buscar relatos:", error);
+          setToast({ message: "Erro ao carregar relatos.", type: "error" });
+          setRelatos([]); // Define como array vazio em caso de erro
+        } finally {
+          setLoading(false);
+        }
+      };
 
-      {/* Conteúdo principal */}
-      <div className="flex flex-1 mt-36 transition-all duration-300">
-        {/* Lista de relatos */}
-        <div
-          className={`overflow-y-auto border-r px-4 py-8 flex flex-col gap-4 transition-all duration-300 ${
-            relatoSelecionado ? "w-[35%]" : "w-full"
-          }`}
-        >
-          {loading ? (
-            <div className="flex justify-center items-center h-full">
-              <p className="text-gray-500">Carregando relatos...</p>
+      const handleNovoRelato = () => {
+        fetchRelatos();
+        setToast({ message: "Novo relato adicionado com sucesso!", type: "success" });
+      };
+      
+      const formatarData = (dataString: string) => {
+        try {
+          // Se a data já estiver no formato ISO (como "2023-01-01T12:00:00Z")
+          const data = parseISO(dataString);
+          return format(data, "dd/MM/yyyy HH:mm", { locale: pt });
+        } catch (error) {
+          console.error("Erro ao formatar data:", error);
+          return "Data inválida";
+        }
+      };
+
+      const getStatus = (relato: Relato) => {
+        if (relato.statusColeta === "RETIRADO") return "resolvido";
+        if (relato.statusColeta === "NAO_RETIRADO") return "pendente";
+        return "pendente";
+      };
+
+      useEffect(() => {
+        fetchRelatos();
+      }, []);
+
+      return (
+        <div className="flex flex-col h-screen">
+          {/* Header */}
+          <div className="flex items-center justify-between px-8 py-4 bg-white shadow-md fixed gap-12 mt-20 top-0 z-10">
+            <div className="flex items-center gap-3">
+              <MdOutlineReport size={28} className="animate-pulse text-green-800" />
+              <h1 className="text-xl font-semibold">Painel de Relatos</h1>
             </div>
-          ) : relatos.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8">
-              <MdOutlineReport size={48} className="text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600">Nenhum amontoado reportado</h3>
-              <p className="text-gray-500 mb-6">Não encontramos relatos recentes de amontoados de lixo.</p>
+            <div className="flex gap-4">
               <PrimaryButton 
-                name="Relatar Primeiro Amontoado" 
-                onClick={openModal}
-                addClassName="w-auto"
+                name="Atualizar Relatos" 
+                addClassName="" 
+                onClick={fetchRelatos} 
+                disabled={loading}
               />
-            </div>
-          ) : (
-            relatos.map((relato, index) => (
-              <div
-                key={index}
-                onClick={() => setRelatoSelecionado(relato)}
-                className="bg-white shadow-lg p-6 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-              >
-                <h3 className="font-bold text-lg">{relato.titulo}</h3>
-                <p className="text-sm text-gray-400 truncate">{relato.descricao}</p>
-                <span className="text-xs text-gray-600">{relato.data}</span>
-                <div className="mt-2 flex items-center gap-2">
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded-full animate-pulse ${
-                      relato.status === "resolvido" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {relato.status === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Aba lateral com detalhes */}
-        {relatoSelecionado && (
-          <div className="w-[65%] h-full px-6 py-6 overflow-y-auto bg-white shadow-lg transition-all duration-300 relative">
-            {/* Botão de fechar */}
-            <button
-              type="button"
-              onClick={handleFecharPainel}
-              className="absolute top-4 right-4 text-black hover:text-gray-300 duration-300 text-2xl"
-              title="Fechar"
-            >
-              <IoClose />
-            </button>
-
-            <h2 className="text-2xl font-semibold mb-4">{relatoSelecionado.titulo}</h2>
-            <p className="mb-4 text-gray-400">{relatoSelecionado.descricao}</p>
-            <p className="mb-2 text-sm text-gray-500">📍 Local: {relatoSelecionado.local}</p>
-            <p className="mb-4 text-sm text-gray-500">🕒 {relatoSelecionado.data}</p>
-            <div className="mb-4">
-              <span
-                className={`text-sm font-semibold px-3 py-1 rounded-full animate-pulse ${
-                  relatoSelecionado.status === "resolvido"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-yellow-100 text-yellow-700"
-                }`}
-              >
-                {relatoSelecionado.status === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
-              </span>
-            </div>
-            <div className="rounded-md overflow-hidden border border-gray-300">
-              <img
-                src={relatoSelecionado.foto}
-                alt="Foto do relato"
-                className="w-full object-cover max-h-[400px]"
+              <PrimaryButton 
+                name="Relatar Novo Amontoado" 
+                addClassName="" 
+                onClick={openModal} 
               />
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Toast e Modal */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+          {/* Conteúdo principal */}
+          <div className="flex flex-1 mt-36 transition-all duration-300">
+            {/* Lista de relatos */}
+            <div
+              className={`overflow-y-auto border-r px-4 py-8 flex flex-col gap-4 transition-all duration-300 ${
+                relatoSelecionado ? "w-[35%]" : "w-full"
+              }`}
+            >
+    {loading ? (
+      <div className="flex justify-center items-center h-full">
+        <p className="text-gray-500">Carregando relatos...</p>
+      </div>
+    ) : relatos.length === 0 ? (
+      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+        <MdOutlineReport size={48} className="text-gray-400 mb-4" />
+        <h3 className="text-xl font-semibold text-gray-600">Nenhum amontoado reportado</h3>
+        <p className="text-gray-500 mb-6">Não encontramos relatos recentes de amontoados de lixo.</p>
+        <PrimaryButton 
+          name="Relatar Primeiro Amontoado" 
+          onClick={openModal}
+          addClassName="w-auto"
         />
-      )}
-      {isModalOpen && (
-        <ModalRelatar 
-          closeModal={closeModal} 
-          setToast={setToast} 
-          onRelatoSuccess={handleNovoRelato}
-        />
-      )}
-    </div>
-  );
-}
+      </div>
+    ) : (
+      relatos.map((relato) => (
+        <div
+          key={relato.id}
+          onClick={() => setRelatoSelecionado(relato)}
+          className="bg-white shadow-lg p-6 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+        >
+          <h3 className="font-bold text-lg">
+            {relato.descricao?.substring(0, 50) || "Sem descrição"}{relato.descricao?.length > 50 ? "..." : ""}
+          </h3>
+          <p className="text-sm text-gray-400 truncate">
+            {relato.bairro || "Sem localização"}, {relato.municipio?.nome || "Município desconhecido"}
+          </p>
+          <span className="text-xs text-gray-600">{relato.createdAt ? formatarData(relato.createdAt) : "Data desconhecida"}</span>
+          <div className="mt-2 flex items-center gap-2">
+            <span
+              className={`text-xs font-semibold px-2 py-1 rounded-full animate-pulse ${
+                relato.prioridade === "ALTA" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {relato.prioridade === "ALTA" ? "🔴 Alta Prioridade" : "🔵 Baixa Prioridade"}
+            </span>
+            <span
+              className={`text-xs font-semibold px-2 py-1 rounded-full animate-pulse ${
+                getStatus(relato) === "resolvido" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+              }`}
+            >
+              {getStatus(relato) === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
+            </span>
+          </div>
+        </div>
+      ))
+    )}
+            </div>
+
+            {/* Aba lateral com detalhes */}
+            {relatoSelecionado && (
+              <div className="w-[65%] h-full px-6 py-6 overflow-y-auto bg-white shadow-lg transition-all duration-300 relative">
+                <button
+                  type="button"
+                  onClick={handleFecharPainel}
+                  className="absolute top-4 right-4 text-black hover:text-gray-300 duration-300 text-2xl"
+                  title="Fechar"
+                >
+                  <IoClose />
+                </button>
+
+                <h2 className="text-2xl font-semibold mb-4">Detalhes do Relato</h2>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Data/Hora</p>
+                    <p className="text-gray-600">{formatarData(relatoSelecionado.createdAt)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Reportado por</p>
+                    <p className="text-gray-600">{relatoSelecionado.user?.nome || "Anônimo"}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Localização</p>
+                    <p className="text-gray-600">
+                      {relatoSelecionado.bairro}, {relatoSelecionado.municipio?.nome || "Município desconhecido"}, {relatoSelecionado.provincia?.nome || "Província desconhecida"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Prioridade</p>
+                    <span
+                      className={`text-sm font-semibold px-3 py-1 rounded-full animate-pulse ${
+                        relatoSelecionado.prioridade === "ALTA" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"
+                      }`}
+                    >
+                      {relatoSelecionado.prioridade === "ALTA" ? "🔴 Alta Prioridade" : "🔵 Baixa Prioridade"}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Status</p>
+                    <span
+                      className={`text-sm font-semibold px-3 py-1 rounded-full animate-pulse ${
+                        getStatus(relatoSelecionado) === "resolvido"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {getStatus(relatoSelecionado) === "resolvido" ? "✅ Resolvido" : "⌛ Pendente"}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-semibold">Coordenadas</p>
+                    <p className="text-gray-600">
+                      Lat: {relatoSelecionado.latitude}, Long: {relatoSelecionado.longitude}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <p className="text-sm text-gray-500 font-semibold mb-2">Descrição</p>
+                  <p className="text-gray-600 whitespace-pre-line">{relatoSelecionado.descricao}</p>
+                </div>
+
+                {/* Mapa com a localização */}
+                <div className="mb-6">
+                  <p className="text-sm text-gray-500 font-semibold mb-2">Mapa</p>
+                  <div className="h-64 w-full rounded-lg overflow-hidden border border-gray-300">
+                    <iframe
+                      title="Mapa do Relato"
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      scrolling="no"
+                      marginHeight={0}
+                      marginWidth={0}
+                      src={`https://maps.google.com/maps?q=${relatoSelecionado.latitude},${relatoSelecionado.longitude}&z=15&output=embed`}
+                    ></iframe>
+                  </div>
+                </div>
+
+                {/* Ações */}
+                <div className="flex justify-end gap-4 mt-6">
+                  <PrimaryButton
+                    name="Marcar como Resolvido"
+                    addClassName="bg-green-600 hover:bg-green-700"
+                    onClick={async () => {
+                      try {
+                        // Aqui implemento a chamada para atualizar o status
+                        await relatarService.updateStatus(relatoSelecionado.id, "resolvido");
+                        setToast({ message: "Relato marcado como resolvido!", type: "success" });
+                        fetchRelatos();
+                        handleFecharPainel();
+                      } catch (error) {
+                        setToast({ message: "Erro ao atualizar status", type: "error" });
+                      }
+                    }}
+                  />
+                  <PrimaryButton
+                    name="Excluir Relato"
+                    addClassName="bg-red-600 hover:bg-red-700"
+                    onClick={async () => {
+                      if (window.confirm("Tem certeza que deseja excluir este relato?")) {
+                        try {
+                          await relatarService.delete(relatoSelecionado.id);
+                          setToast({ message: "Relato excluído com sucesso!", type: "success" });
+                          fetchRelatos();
+                          handleFecharPainel();
+                        } catch (error) {
+                          setToast({ message: "Erro ao excluir relato", type: "error" });
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Toast e Modal */}
+          {toast && (
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
+            />
+          )}
+          {isModalOpen && (
+            <ModalRelatar 
+              closeModal={closeModal} 
+              setToast={setToast} 
+              onRelatoSuccess={handleNovoRelato}
+            />
+          )}
+        </div>
+      );
+    }

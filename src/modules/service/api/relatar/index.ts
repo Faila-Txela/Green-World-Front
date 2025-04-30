@@ -22,6 +22,14 @@ class RelatarService {
     return response.data;
   }
 
+  async updateStatus(id: string, status: "pendente" | "resolvido") {
+    return await axios.patch(`/relatar/${id}/status`, { status }, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
 }
 
 export const relatarService = new RelatarService;

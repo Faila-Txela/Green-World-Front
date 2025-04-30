@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { empresaService } from '../../modules/service/api/enpresa';
+import { empresaService } from '../../modules/service/api/empresa';
 
 
 const ExcluirConta = () => {

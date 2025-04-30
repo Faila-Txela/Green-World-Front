@@ -93,7 +93,7 @@ function Municipio() {
                     setEditandoId(municipio.id);
                     setNomeEditado(municipio.nome);
                     }}
-                    className="text-blue-600"
+                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition-all duration-300"
                   >
                     Editar
                   </button>
@@ -101,7 +101,7 @@ function Municipio() {
                   <button
                     type="button"
                     onClick={() => setModalConfirmacao({ tipo: "remover", id: municipio.id })}
-                    className="text-red-600"
+                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-600 transition-all duration-300"
                   >
                     Remover
                   </button>
@@ -133,7 +133,7 @@ function Municipio() {
 
               <button
                 type="button"
-                className="bg-red-600 text-white px-3 py-1 rounded"
+                className="bg-red-600 text-white px-3 py-1 rounded tarnsition-all duration-300"
                 onClick={() => {
                   modalConfirmacao.tipo === "remover"
                     ? confirmarRemover(modalConfirmacao.id)

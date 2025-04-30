@@ -64,7 +64,7 @@ export default function App() {
       />
       ´
       <Route
-        path="/admin-dashboard"
+        path="/admin"
         element={
           <PrivateRoute>
             <SidebarAdmin />

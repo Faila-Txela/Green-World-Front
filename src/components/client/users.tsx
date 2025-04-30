@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { userService } from "../../modules/service/api/user";
-import Toast from "../../components/ui/Toast";
+import { empresaService } from "../../modules/service/api/empresa";
 
 type User = {
   id: number;
   nome: string;
   email: string;
-  status: string; // Pode ser "ativo", "inativo", etc.
+};
+
+type ModalConfirmacaoData = {
+  tipo: "remover";
+  id: number;
+  userType: "comum" | "empresa";
 };
 
 function Users() {
-  const [usuarios, setUsuarios] = useState<User[]>([]);
-  const [novoNome, setNovoNome] = useState("");
-  const [novoEmail, setNovoEmail] = useState("");
-  const [modalConfirmacao, setModalConfirmacao] = useState<{ tipo: "remover"; id: number } | null>(null);
+  const [usuariosComuns, setUsuariosComuns] = useState<User[]>([]);
+  const [empresas, setEmpresas] = useState<User[]>([]);
+  const [modalConfirmacao, setModalConfirmacao] = useState<ModalConfirmacaoData | null>(null);
 
   useEffect(() => {
     buscarUsuarios();
@@ -21,113 +25,107 @@ function Users() {
 
   async function buscarUsuarios() {
     try {
-      const response = await userService.getAll();
-      console.log("Resposta da API:", response);
-  
-      // Garantir que a resposta seja um array
-      const usuariosData = Array.isArray(response.data) ? response.data : [];
-      
-      console.log("Usuários:", usuariosData);
-      setUsuarios(usuariosData);
+      const [resUsuarios, resEmpresas] = await Promise.all([
+        userService.getAll(),
+        empresaService.getAll(),
+      ]);
+
+      const usuarios = Array.isArray(resUsuarios.data) ? resUsuarios.data : [];
+      const empresas = Array.isArray(resEmpresas.data) ? resEmpresas.data : [];
+
+      setUsuariosComuns(usuarios);
+      setEmpresas(empresas);
     } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      setUsuarios([]); // Garantir que o estado seja sempre um array vazio em caso de erro
+      console.error("Erro ao buscar usuários ou empresas:", error);
+      setUsuariosComuns([]);
+      setEmpresas([]);
     }
-  }  
-
-  async function adicionarUsuario() {
-    if (!novoNome.trim() || !novoEmail.trim()) return;
-    await userService.create({ 
-      nome: novoNome, 
-      email: novoEmail, 
-      senha: "defaultSenha", 
-      tipoUser_id: "", 
-      iban: "defaultIban", 
-      nome_titular: "defaultTitular" 
-    });
-    setNovoNome("");
-    setNovoEmail("");
-    buscarUsuarios();
   }
 
-  async function confirmarRemover(id: number) {
-    await userService.delete(id.toString());
-    setModalConfirmacao(null);
-    buscarUsuarios();
+  async function confirmarRemover(id: number, userType: "comum" | "empresa") {
+    try {
+      if (userType === "comum") {
+        await userService.delete(id.toString());
+        setUsuariosComuns((prev) => prev.filter((u) => u.id !== id));
+      } else {
+        await empresaService.delete(id.toString());
+        setEmpresas((prev) => prev.filter((u) => u.id !== id));
+      }
+      setModalConfirmacao(null);
+    } catch (error) {
+      console.error("Erro ao remover usuário:", error);
+    }
   }
 
-      return (
-    <div className="rounded shadow-md p-3 mt-20">
-      <h3 className="text-lg font-semibold mb-2">Usuários</h3>
+  function TabelaUsuarios({ titulo, lista, tipo }: { titulo: string; lista: User[]; tipo: "comum" | "empresa" }) {
+    return (
+      <>
+        <h3 className="text-lg font-semibold mb-4 mt-10">{titulo}</h3>
+        <table className="w-full text-left border-collapse mb-8">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="p-2 border-b">Nome</th>
+              <th className="p-2 border-b">Email</th>
+              <th className="p-2 border-b text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lista.map((user) => (
+              <tr key={user.id} className="hover:bg-gray-50">
+                <td className="p-2 border-b">{user.nome}</td>
+                <td className="p-2 border-b">{user.email}</td>
+                <td className="p-2 border-b text-center">
+                  <button
+                    type="button"
+                    onClick={() => setModalConfirmacao({ tipo: "remover", id: user.id, userType: tipo })}
+                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 transition-all duration-300"
+                  >
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {lista.length === 0 && (
+              <tr>
+                <td colSpan={3} className="p-4 text-center text-gray-500">
+                  Nenhum registro encontrado.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </>
+    );
+  }
 
-      {/* Adicionar Usuário */}
-      <div className="mb-4 flex gap-2">
+  return (
+    <div className="rounded shadow-md p-6 mt-20">
+      <TabelaUsuarios titulo="Usuários Comuns" lista={usuariosComuns} tipo="comum" />
+      <TabelaUsuarios titulo="Empresas" lista={empresas} tipo="empresa" />
 
-        <input
-          type="text"
-          value={novoNome}
-          onChange={(e) => setNovoNome(e.target.value)}
-          placeholder="Nome do usuário"
-          className="border px-2 py-1 rounded w-full"
-        />
-        <input
-          type="email"
-          value={novoEmail}
-          onChange={(e) => setNovoEmail(e.target.value)}
-          placeholder="Email do usuário"
-          className="border px-2 py-1 rounded w-full"
-        />
-        <button 
-          type="button"
-          onClick={adicionarUsuario} 
-          className="bg-green-600 text-white px-3 py-1 rounded">
-          Adicionar
-        </button>
-
-      </div>
-
-      {/* Listagem de Usuários */}
-      <ul className="space-y-2">
-        {usuarios.map((user) => (
-          <li key={user.id} className="flex items-center justify-between bg-gray-100 px-3 py-2 rounded">
-            <span>{user.nome} - {user.email}</span>
-            <button
-              onClick={() => setModalConfirmacao({ tipo: "remover", id: user.id })}
-              className="text-red-600"
-            >
-              Remover
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      {/* Modal de confirmação */}
       {modalConfirmacao && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md text-center">
-
-            <p className="mb-4">
-              Tens a certeza que queres remover este usuário?
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-md text-center max-w-sm w-full">
+            <p className="mb-4 text-gray-800 font-medium">
+              Tem a certeza que deseja excluir este usuário?
             </p>
-
             <div className="flex justify-center gap-4">
-
               <button
                 type="button"
-                className="bg-gray-400 text-white px-4 py-1 rounded"
+                className="bg-gray-400 text-white px-4 py-1 rounded hover:bg-gray-500"
                 onClick={() => setModalConfirmacao(null)}
               >
                 Cancelar
               </button>
-
               <button
                 type="button"
-                className="bg-red-600 text-white px-4 py-1 rounded"
-                onClick={() => confirmarRemover(modalConfirmacao.id)}
+                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                onClick={() =>
+                  confirmarRemover(modalConfirmacao.id, modalConfirmacao.userType)
+                }
               >
                 Confirmar
               </button>
-              
             </div>
           </div>
         </div>

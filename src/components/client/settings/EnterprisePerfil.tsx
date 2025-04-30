@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
-import { empresaService } from '../../../modules/service/api/enpresa';
+import { empresaService } from '../../../modules/service/api/empresa';
 
 function EnterprisePerfil() {
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ function EnterprisePerfil() {
             onClick={handleLogout}
             className="text-red-500 hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all mt-1"
           >
-            Sair
+            Terminar Sessão
           </div>
         </div>
       )}

@@ -97,6 +97,7 @@ function ProvinceSettings() {
                   placeholder="Editar nome da província"
                 />
                 <button
+                  type="button"
                   onClick={() => confirmarAcao("atualizar", prov.id, nomeEditado)}
                   className="bg-blue-500 text-white px-2 py-1 rounded"
                 >
@@ -113,16 +114,17 @@ function ProvinceSettings() {
                     setEditandoId(prov.id);
                     setNomeEditado(prov.nome);
                     }}
-                    className="text-blue-600"
+                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition-all duration-300"
                   >
                     Editar
                   </button>
+
                   <button
                     type="button"
                     onClick={() => confirmarAcao("remover", prov.id, prov.nome)}
-                    className="text-red-600"
+                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 transition-all duration-300"
                   >
-                    Remover
+                    Excluir
                   </button>
                 </div>
               </>
@@ -152,7 +154,7 @@ function ProvinceSettings() {
               <button
                 type="button" 
                 onClick={executarAcaoConfirmada}
-                className="px-3 py-1 bg-red-600 text-white rounded">
+                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition-all duration-300">
                 Confirmar
               </button>
 

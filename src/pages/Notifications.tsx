@@ -43,14 +43,15 @@ export default function Notifications() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4">
-     
-     <div className="flex items-center gap-12 mb-6 mt-10">
+    <div className="flex flex-col items-center justify-center w-full gap-6 p-4 mt-10">
+
+     <div className="flex items-center gap-4">
       <IoNotificationsCircleOutline size={28} className="h-9 w-9 text-green-600 animate-pulse" />
       <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel de Notificações</h1>
      </div>
 
-      {notifications.map((notification, index) => (
+     <div className="w-full flex flex-col gap-6">
+     {notifications.map((notification, index) => (
         <NotificacaoCard
           data={notification.createAt}
           descricao={notification.mensagen}
@@ -58,6 +59,9 @@ export default function Notifications() {
           key={index}
         />
       ))}
-    </div>
+     </div>
+
+     </div>
+
   );
 }

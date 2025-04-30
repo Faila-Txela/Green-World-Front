@@ -13,6 +13,14 @@ class EmpresaService {
     return await axios.post("/empresas/logOut");
   }
 
+  async getAll(){
+    return await axios.get("/empresas", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   async getTipoEmpresaIdByNome() {
     try {
       const response = await axios.get(`/type/empresa`)
@@ -27,8 +35,9 @@ class EmpresaService {
     return await axios.post("/empresas/verify-password", { senha });
   }
 
-  async deleteAccount() {
-    return await axios.delete("/empresas");
+  async delete(id: string) {
+    const { data } = await axios.delete(`/empresas/${id}`);
+    return data;
   }
 
 }

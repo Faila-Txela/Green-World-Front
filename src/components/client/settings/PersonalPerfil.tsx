@@ -85,7 +85,7 @@ function PersonalPerfil() {
             onClick={handleLogout}
             className="text-red-500 hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all mt-1"
           >
-            Sair
+            Terminar Sessão
           </div>
         </div>
       )}

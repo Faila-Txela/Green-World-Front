@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PrimaryButton from './ui/PrimaryButton';
 import { TbReport } from "react-icons/tb";
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
@@ -13,9 +14,14 @@ interface Relato {
   status: 'Validado' | 'Pendente';
 }
 
+interface StatusColeta{
+  
+}
+
 const Relatorio = () => {
   const [relatos, setRelatos] = useState<Relato[]>([]);
   const [relatoSelecionado, setRelatoSelecionado] = useState<Relato | null>(null);
+  const [filtroStatus, setFiltroStatus] = useState<"TODOS" | StatusColeta>("TODOS");
 
   useEffect(() => {
     const dadosFake: Relato[] = [
@@ -42,7 +48,6 @@ const Relatorio = () => {
   const getPrioridadeCor = (prioridade: string) => {
     switch (prioridade) {
       case 'Alta': return 'bg-red-500 text-white';
-      case 'Média': return 'bg-yellow-400 text-black';
       case 'Baixa': return 'bg-green-500 text-white';
       default: return 'bg-gray-300';
     }
@@ -153,6 +158,31 @@ const Relatorio = () => {
           Exportar para Excel
         </button>
       </div>
+
+      {/* Filtros */}
+      <div className="mb-6 flex flex-wrap gap-4">
+        <PrimaryButton
+          name="Todos"
+          addClassName={`${filtroStatus === "TODOS" ? "bg-green-600" : "bg-gray-300"}`}
+          onClick={() => setFiltroStatus("TODOS")}
+        />
+        <PrimaryButton
+          name="Retirados"
+          addClassName={`${filtroStatus === "RETIRADO" ? "bg-green-600" : "bg-gray-300"}`}
+          onClick={() => setFiltroStatus("RETIRADO")}
+        />
+        <PrimaryButton
+          name="Não Retirados"
+          addClassName={`${filtroStatus === "NAO_RETIRADO" ? "bg-green-600" : "bg-gray-300"}`}
+          onClick={() => setFiltroStatus("NAO_RETIRADO")}
+        />
+        <PrimaryButton
+          name="Pendentes"
+          addClassName={`${filtroStatus === "PENDENTE" ? "bg-green-600" : "bg-gray-300"}`}
+          onClick={() => setFiltroStatus("PENDENTE")}
+        />
+      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {relatos.map((relato) => (

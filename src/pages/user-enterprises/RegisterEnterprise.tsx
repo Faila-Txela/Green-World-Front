@@ -13,7 +13,7 @@ import {
 import { HiMiniIdentification } from "react-icons/hi2";
 import { SiSitepoint } from "react-icons/si";
 import Logo from "../../assets/Logo";
-import { empresaService } from "../../modules/service/api/enpresa";
+import { empresaService } from "../../modules/service/api/empresa";
 import { addressService } from "../../modules/service/api/address";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";

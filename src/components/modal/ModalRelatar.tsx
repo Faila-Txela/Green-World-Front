@@ -97,6 +97,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
   const [provincia, setProvincia] = useState("");
   const [municipio, setMunicipio] = useState("");
   const [prioridade, setPrioridade] = useState("");
+  const [pontos, setPontos] = useState<number>(0);
   const [imagens, setImagens] = useState<File[] | null>(null);
   const [isImageValid, setIsImageValid] = useState<boolean | null>(null);
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
@@ -271,6 +272,18 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
     }
   }, []);
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId')
+
+    if(userId){
+      axios.get(`/pontos/${userId}`).then(res => {
+        setPontos(res.data.pontos);
+      }).catch(() => {
+        setPontos(0); //caso ainda não tenha pontuação
+      });
+    }
+   }, []);
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -434,6 +447,8 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
             onClick={() => !loading && closeModal()}
             disabled={loading}
           />
+          <p className="text-sm text-gray-600">Seus pontos acumulados:</p>
+          <p className="text-3xl font-bold text-green-700">{pontos}</p>
         </form>
       </div>
     </div>

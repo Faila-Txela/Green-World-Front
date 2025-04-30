@@ -17,6 +17,15 @@ class RelatorioColetaService {
             },
         })
     }
+
+    async updateStatus(id: string, status: "RETIRADO" | "NAO_RETIRADO" | "PENDENTE") {
+        return await axios.patch(`/relatorio/${id}/status`, { status });
+      }
+    
+      async delete(id: string) {
+        return await axios.delete(`/relatorio/${id}`);
+      }
+
 }
 
 export const relatorioColetaService = new RelatorioColetaService()

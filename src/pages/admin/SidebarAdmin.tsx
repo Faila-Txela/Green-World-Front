@@ -71,7 +71,7 @@ const AdminSidebar = () => {
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
               onClick={() => setActiveComponent("Users")}>
               <FaUsers size={20} />
-              {isSidebarOpen && <span>Usuários</span>}1
+              {isSidebarOpen && <span>Usuários</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition ">
