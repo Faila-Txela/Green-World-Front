@@ -1,6 +1,5 @@
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { MdOutlineSpaceDashboard } from 'react-icons/md'
-
+import { MdOutlineSpaceDashboard } from 'react-icons/md';
 
 export default function PersonalDashboard() {
   const locationsData = [
@@ -17,19 +16,33 @@ export default function PersonalDashboard() {
   
   const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
   
-  const totalRelatos = locationsData.reduce((total, item) => total + item.relatos, 0);
+  //const totalRelatos = locationsData.reduce((total, item) => total + item.relatos, 0);
   const totalWaste = wasteTypesData.reduce((total, item) => total + item.value, 0);
 
   return (
     <div className="flex justify-center items-center mt-40">
-       {/* Texto explicativo da tela */}
+      {/* Texto explicativo da tela */}
       <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
         <MdOutlineSpaceDashboard className="h-9 w-9" />
-       <h1 className="text-xl md:text-2xl font-semibold text-left">Painel Principal do Cidadão</h1>
+        <h1 className="text-xl md:text-2xl font-semibold text-left">Painel Principal do Cidadão</h1>
       </div>
 
       {/* Conteúdo principal */}
       <div className="w-full">
+
+          {/* Mapa com iframe mostrando locais com mais relatos de lixo */}
+          <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full mb-10">
+          <h2 className="text-lg font-semibold mb-4 text-start">Mapa de Locais com Mais Relatos</h2>
+          <div className="w-full h-[400px]">
+            <iframe
+              title="Mapa de Relatos"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.852600974177!2d13.234638874213565!3d-8.83833349098954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a5202c7b054cced%3A0xd841420bde3ebd48!2sCentro%20de%20Luanda!5e0!3m2!1spt-BR!2sao!4v1685659876543!5m2!1spt-BR!2sao"
+              className="w-full h-full border"
+              allowFullScreen={true}
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
 
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
@@ -77,8 +90,8 @@ export default function PersonalDashboard() {
             ))}
           </div>
         </div>
+
       </div>
-      
     </div>
   );
 }
