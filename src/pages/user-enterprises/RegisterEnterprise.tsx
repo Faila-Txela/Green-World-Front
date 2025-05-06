@@ -153,8 +153,8 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!formData.nif.trim()) {
-    setToast({ message: "O NIF da empresa é obrigatório!", type: "error" });
+  if (!formData.nif.trim() || formData.nif.length < 10) {
+    setToast({ message: "O NIF da empresa deve conter 10 dígitos!", type: "error" });
     return;
   }
 
@@ -296,7 +296,7 @@ export default function EnterpriseForm() {
 
             <InputField
               label="NIF"
-              type="text"
+              type="number"
               name="nif"
               autoComplete="on"
               value={formData.nif}

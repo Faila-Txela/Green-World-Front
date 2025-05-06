@@ -1,5 +1,7 @@
 // sections/GeralSection.tsx
 import { useEffect, useRef, useState } from 'react';
+import Toast from "../../components/ui/Toast";
+import axios from "../../lib/axios";
 import pic from '../../assets/default-avatar-profile-picture-male-icon.png';
 
 const GeralSection = () => {
@@ -8,24 +10,53 @@ const GeralSection = () => {
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [nome, setNome] = useState('');
   const [biografia, setBiografia] = useState('');
-  const [tipoEmpresaId, setTipoEmpresaId] = useState('');
+  //const [tipoEmpresaId, setTipoEmpresaId] = useState('');
   const [nif, setNif] = useState('');
   const [site, setSite] = useState('');
-  const [tiposEmpresa, setTiposEmpresa] = useState<{ id: string; nome: string }[]>([]);
+  //const [tiposEmpresa, setTiposEmpresa] = useState<{ id: string; nome: string }[]>([]);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
+  const [typeGarbage, setTypeGarbage] = useState<string>("");
 
   useEffect(() => {
-    // Simulação: você deve buscar isso da API real
-    setTiposEmpresa([
-      { id: '1', nome: 'Tecnologia' },
-      { id: '2', nome: 'Serviços' },
-      { id: '3', nome: 'Comércio' },
-    ]);
-  }, []);
+  //   // Simulação: você deve buscar isso da API real
+  //   setTiposEmpresa([
+  //     { id: '1', nome: 'Reciclagem' },
+  //     { id: '2', nome: 'Aterros Sanitários' },
+  //     { id: '3', nome: 'Catadores' },
+  //   ]);
+   }, []);
+
+  const handleSave = () => {
+    // Enviar para a API
+    console.log({ nome, biografia, nif, profilePic });
+    alert('Alterações salvas com sucesso!');
+  };
+
+  const handleClear = () => {
+    setNome('');
+    setBiografia('');
+    setNif('');
+    setProfilePic(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setProfilePic(URL.createObjectURL(file));
   };
+
+    // Função para pegar os tipos de empresa
+    const fetchTypeGarbages = async () => {
+      const response = await axios.get("/tipo-empresa");
+      if (response.status === 200) {
+        setTypeGarbages(response.data);
+      }
+    };
+
+    useEffect(() => {
+      fetchTypeGarbages();
+    }, []);
 
   return (
     <section className="max-w-3xl mx-auto">
@@ -58,7 +89,7 @@ const GeralSection = () => {
           onChange={(e) => setBiografia(e.target.value)}
         />
 
-        <select
+        {/* <select
           title='Tipo de empresa'
           className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
           value={tipoEmpresaId}
@@ -70,7 +101,29 @@ const GeralSection = () => {
               {tipo.nome}
             </option>
           ))}
-        </select>
+        </select> */}
+
+<div>
+            <label
+              htmlFor="tipoEmpresa"
+              className="font-semibold mb-2 block text-gray-600"
+            >
+              Com que você trabalha ?
+            </label>
+
+            <select
+            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+              value={typeGarbage}
+              autoComplete="on"
+              onChange={(e) => setTypeGarbage(e.target.value)}
+              title="Selecione a sua área de actuação"
+            >
+              <option value="" key="" className="">Selecione a sua área de actuação</option>
+              {typeGarbages.map((typeGarbage) => (
+                <option value={typeGarbage.id}>{typeGarbage.nome}</option>
+              ))}
+            </select>
+          </div>
 
         <input
           type="text"
@@ -88,6 +141,31 @@ const GeralSection = () => {
           onChange={(e) => setSite(e.target.value)}
         />
       </div>
+
+      {/* Botões */}
+      <div className="flex justify-end gap-4 mt-5">
+        <button
+          type="button"
+          onClick={handleClear}
+          className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md shadow-sm transition duration-200"
+        >
+          Limpar Campos
+        </button>
+
+        <button
+          type="button"
+          onClick={handleSave}
+          className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-md transition duration-200"
+        >
+          Salvar Alterações
+        </button>
+      </div>
+ 
+      {/* Exibe o Toast se houver mensagem */}
+      {toast && <Toast message={toast.message}
+       type={toast.type} 
+       onClose={() => setToast(null)} />}
+
     </section>
   );
 };

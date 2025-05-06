@@ -2,76 +2,86 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PrimaryButton from './ui/PrimaryButton';
 import { TbReport } from "react-icons/tb";
+import axios from '../lib/axios';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface Relato {
-  id: number;
-  imagem: string;
-  data: string;
+  id: string;
+  imagem?: string;
+  data: string; // ISO string ou formato conhecido
   localizacao: string;
-  prioridade: 'Alta' | 'Média' | 'Baixa';
-  status: 'Validado' | 'Pendente';
-}
-
-interface StatusColeta{
-  
+  prioridade: 'Alta' | 'Baixa';
+  status: 'PENDENTE' | 'NAO_RETIRADO' | 'RETIRADO';
 }
 
 const Relatorio = () => {
   const [relatos, setRelatos] = useState<Relato[]>([]);
+  const [relatosFiltrados, setRelatosFiltrados] = useState<Relato[]>([]);
   const [relatoSelecionado, setRelatoSelecionado] = useState<Relato | null>(null);
-  const [filtroStatus, setFiltroStatus] = useState<"TODOS" | StatusColeta>("TODOS");
+
+  // Filtros
+  const [filtroStatus, setFiltroStatus] = useState<string>("TODOS");
+  const [filtroPrioridade, setFiltroPrioridade] = useState<string>("TODAS");
+  const [dataInicio, setDataInicio] = useState<Date | null>(null);
+  const [dataFim, setDataFim] = useState<Date | null>(null);
 
   useEffect(() => {
-    const dadosFake: Relato[] = [
-      {
-        id: 1,
-        imagem: 'https://via.placeholder.com/300x200',
-        data: '2025-04-12 10:35',
-        localizacao: 'Luanda, Maianga',
-        prioridade: 'Alta',
-        status: 'Validado',
-      },
-      {
-        id: 2,
-        imagem: 'https://via.placeholder.com/300x200',
-        data: '2025-04-11 14:20',
-        localizacao: 'Cazenga, Rua 14',
-        prioridade: 'Média',
-        status: 'Pendente',
-      },
-    ];
-    setRelatos(dadosFake);
+    const buscarRelatos = async () => {
+      try {
+        const res = await axios.get(`/relatorio`);
+        setRelatos(res.data);
+      } catch (error) {
+        alert("Erro ao buscar relatos");
+      }
+    };
+    buscarRelatos();
   }, []);
 
-  const getPrioridadeCor = (prioridade: string) => {
-    switch (prioridade) {
-      case 'Alta': return 'bg-red-500 text-white';
-      case 'Baixa': return 'bg-green-500 text-white';
-      default: return 'bg-gray-300';
+  useEffect(() => {
+    filtrarRelatos();
+  }, [relatos, filtroStatus, filtroPrioridade, dataInicio, dataFim]);
+
+  const filtrarRelatos = () => {
+    let filtrados = [...relatos];
+
+    if (filtroStatus !== "TODOS") {
+      filtrados = filtrados.filter(r => r.status === filtroStatus);
     }
+
+    if (filtroPrioridade !== "TODAS") {
+      filtrados = filtrados.filter(r => r.prioridade === filtroPrioridade);
+    }
+
+    if (dataInicio) {
+      filtrados = filtrados.filter(r => new Date(r.data) >= dataInicio);
+    }
+
+    if (dataFim) {
+      filtrados = filtrados.filter(r => new Date(r.data) <= dataFim);
+    }
+
+    setRelatosFiltrados(filtrados);
   };
 
-  const getStatusCor = (status: string) => {
-    return status === 'Validado'
-      ? 'bg-blue-500 text-white'
-      : 'bg-gray-300 text-black';
+  const resetFiltros = () => {
+    setFiltroStatus("TODOS");
+    setFiltroPrioridade("TODAS");
+    setDataInicio(null);
+    setDataFim(null);
   };
 
-  // Função para exportar para PDF
   const exportToPDF = () => {
     const doc = new jsPDF();
-    doc.setFont('helvetica', 'normal');
     doc.setFontSize(14);
-  
     doc.text('Relatório de Relatos Recebidos', 20, 20);
     doc.setFontSize(10);
-  
+
     const tableTop = 30;
     const rowHeight = 10;
-  
-    // Cabeçalhos
+
     doc.setFillColor(220, 220, 220);
     doc.rect(20, tableTop, 170, rowHeight, 'F');
     doc.text('ID', 22, tableTop + 7);
@@ -79,201 +89,147 @@ const Relatorio = () => {
     doc.text('Localização', 80, tableTop + 7);
     doc.text('Prioridade', 130, tableTop + 7);
     doc.text('Status', 160, tableTop + 7);
-  
-    // Dados
-    relatos.forEach((relato, i) => {
+
+    relatosFiltrados.forEach((relato, i) => {
       const y = tableTop + rowHeight * (i + 1);
-  
-      // Verifica se vai ultrapassar a página
-      if (y > 280) {
-        doc.addPage();
-        doc.setFontSize(10);
-      }
-  
+      if (y > 280) doc.addPage();
       doc.text(`${relato.id}`, 22, y + 7);
       doc.text(relato.data, 35, y + 7);
       doc.text(relato.localizacao, 80, y + 7);
       doc.text(relato.prioridade, 130, y + 7);
       doc.text(relato.status, 160, y + 7);
     });
-  
-    doc.save('relatorio.pdf');
-  };  
 
-  // Função para exportar para Excel
+    doc.save('relatorio.pdf');
+  };
+
   const exportToExcel = () => {
-    const dataFormatada = relatos.map(relato => ({
-      ID: relato.id,
-      Data: relato.data,
-      Localização: relato.localizacao,
-      Prioridade: relato.prioridade,
-      Status: relato.status,
+    const dataFormatada = relatosFiltrados.map(r => ({
+      ID: r.id,
+      Data: r.data,
+      Localização: r.localizacao,
+      Prioridade: r.prioridade,
+      Status: r.status,
     }));
-  
-    // Cria a planilha a partir dos dados
+
     const ws = XLSX.utils.json_to_sheet(dataFormatada);
-  
-    // Define a largura das colunas
-    const columnWidths = [
-      { wch: 5 },   // ID
-      { wch: 20 },  // Data
-      { wch: 30 },  // Localização
-      { wch: 12 },  // Prioridade
-      { wch: 12 },  // Status
+    ws['!cols'] = [
+      { wch: 5 }, { wch: 20 }, { wch: 30 }, { wch: 12 }, { wch: 12 }
     ];
-    ws['!cols'] = columnWidths;
-  
-    // Aplica o auto-filtro na linha 1 (cabeçalhos)
-    const range = XLSX.utils.decode_range(ws['!ref'] || '');
-    ws['!autofilter'] = { ref: XLSX.utils.encode_range(range.s, range.e) };
-  
-    // Cria e salva o arquivo
+    ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } }) };
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Relatos');
     XLSX.writeFile(wb, 'relatorio.xlsx');
-  };    
+  };
+
+  const getCorPrioridade = (p: string) =>
+    p === 'Alta' ? 'bg-red-500' : 'bg-green-500';
+
+  const getCorStatus = (s: string) => {
+    switch (s) {
+      case 'PENDENTE': return 'bg-yellow-400';
+      case 'NAO_RETIRADO': return 'bg-red-400';
+      case 'RETIRADO': return 'bg-green-400';
+      default: return 'bg-gray-300';
+    }
+  };
 
   return (
-    <div className="min-h-screen p-6 md:p-10 mt-12">
-       
-       <div className="flex items-center gap-3 mb-8">
-       <TbReport size={28} className="h-9 w-9 text-green-600 animate-pulse" />
-       <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel dos Relatos Recebidos</h1>
-       </div>
+    <div className="p-6 md:p-10 mt-12">
+      <div className="flex items-center gap-3 mb-8">
+        <TbReport size={28} className="text-green-600 animate-pulse" />
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel dos Relatos Recebidos</h1>
+      </div>
 
-      {/* Botões de Exportação */}
-      <div className="mb-6 flex gap-4">
-        <button 
-          type='button'
-          onClick={exportToPDF}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      {/* Exportação */}
+      <div className="flex gap-4 mb-6">
+        <button onClick={exportToPDF} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Exportar PDF</button>
+        <button onClick={exportToExcel} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Exportar Excel</button>
+      </div>
+
+      {/* Filtros Avançados */}
+      <div className="flex flex-wrap gap-4 items-center mb-6">
+        <select
+          title='status'
+          value={filtroStatus}
+          onChange={e => setFiltroStatus(e.target.value)}
+          className="border px-3 py-2 rounded"
         >
-          Exportar para PDF
-        </button>
-        <button
-          type='button'
-          onClick={exportToExcel}
-          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          <option value="TODOS">Todos os Status</option>
+          <option value="PENDENTE">Pendente</option>
+          <option value="NAO_RETIRADO">Não Retirado</option>
+          <option value="RETIRADO">Retirado</option>
+        </select>
+
+        <select
+          title='prioridade'
+          value={filtroPrioridade}
+          onChange={e => setFiltroPrioridade(e.target.value)}
+          className="border px-3 py-2 rounded"
         >
-          Exportar para Excel
+          <option value="TODAS">Todas Prioridades</option>
+          <option value="Alta">Alta</option>
+          <option value="Baixa">Baixa</option>
+        </select>
+
+        <div className="flex items-center gap-2">
+          <span>De:</span>
+          <DatePicker
+            selected={dataInicio}
+            onChange={date => setDataInicio(date)}
+            dateFormat="yyyy-MM-dd"
+            className="border px-2 py-1 rounded"
+          />
+          <span>Até:</span>
+          <DatePicker
+            selected={dataFim}
+            onChange={date => setDataFim(date)}
+            dateFormat="yyyy-MM-dd"
+            className="border px-2 py-1 rounded"
+          />
+        </div>
+
+        <button onClick={resetFiltros} className="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded">
+          Limpar Filtros
         </button>
       </div>
 
-      {/* Filtros */}
-      <div className="mb-6 flex flex-wrap gap-4">
-        <PrimaryButton
-          name="Todos"
-          addClassName={`${filtroStatus === "TODOS" ? "bg-green-600" : "bg-gray-300"}`}
-          onClick={() => setFiltroStatus("TODOS")}
-        />
-        <PrimaryButton
-          name="Retirados"
-          addClassName={`${filtroStatus === "RETIRADO" ? "bg-green-600" : "bg-gray-300"}`}
-          onClick={() => setFiltroStatus("RETIRADO")}
-        />
-        <PrimaryButton
-          name="Não Retirados"
-          addClassName={`${filtroStatus === "NAO_RETIRADO" ? "bg-green-600" : "bg-gray-300"}`}
-          onClick={() => setFiltroStatus("NAO_RETIRADO")}
-        />
-        <PrimaryButton
-          name="Pendentes"
-          addClassName={`${filtroStatus === "PENDENTE" ? "bg-green-600" : "bg-gray-300"}`}
-          onClick={() => setFiltroStatus("PENDENTE")}
-        />
-      </div>
-
-
+      {/* Lista de relatos */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {relatos.map((relato) => (
+        {relatosFiltrados.map(relato => (
           <motion.div
             key={relato.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg"
+            className="bg-white rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
           >
             <div className="flex p-4 gap-4 items-center">
               <img
-                // src={relato.imagem}
-                src='./mine.png'
+                src={relato.imagem || './mine.png'}
                 alt="Imagem do relato"
                 className="w-24 h-24 object-cover rounded-md border"
               />
-              <div className="flex flex-col gap-1 text-sm">
+              <div className="text-sm">
                 <p><strong>Data:</strong> {relato.data}</p>
                 <p><strong>Local:</strong> {relato.localizacao}</p>
                 <p>
                   <strong>Prioridade:</strong>{' '}
-                  <span className={`px-2 py-1 rounded text-xs ${getPrioridadeCor(relato.prioridade)}`}>
+                  <span className={`text-white px-2 py-1 rounded text-xs ${getCorPrioridade(relato.prioridade)}`}>
                     {relato.prioridade}
                   </span>
                 </p>
                 <p>
                   <strong>Status:</strong>{' '}
-                  <span className={`px-2 py-1 rounded text-xs ${getStatusCor(relato.status)}`}>
+                  <span className={`text-white px-2 py-1 rounded text-xs ${getCorStatus(relato.status)}`}>
                     {relato.status}
                   </span>
                 </p>
-                <button
-                  type='button'
-                  onClick={() => setRelatoSelecionado(relato)}
-                  className="mt-2 self-start bg-transparent border border-gray-500 hover:bg-gray-100 text-sm px-3 py-1 rounded transition"
-                >
-                  Ver Detalhes
-                </button>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
-
-      {/* Modal de Detalhes */}
-      <AnimatePresence>
-        {relatoSelecionado && (
-          <motion.div
-            className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="bg-white rounded-xl p-6 max-w-lg w-full relative"
-              initial={{ scale: 0.9, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 30 }}
-            >
-              <button
-                type='button'
-                onClick={() => setRelatoSelecionado(null)}
-                className="absolute top-2 right-3 text-lg hover:text-gray-600 duration-150"
-              >
-                ✕
-              </button>
-              <h2 className="text-xl font-bold mb-4">Detalhes do Relato</h2>
-              <img
-                // src={relatoSelecionado.imagem}
-                src='./mine.png'
-                alt="Relato"
-                className="w-full h-48 object-cover rounded mb-4"
-              />
-              <p><strong>Data:</strong> {relatoSelecionado.data}</p>
-              <p><strong>Localização:</strong> {relatoSelecionado.localizacao}</p>
-              <p>
-                <strong>Prioridade:</strong>{' '}
-                <span className={`px-2 py-1 rounded text-xs ${getPrioridadeCor(relatoSelecionado.prioridade)}`}>
-                  {relatoSelecionado.prioridade}
-                </span>
-              </p>
-              <p>
-                <strong>Status:</strong>{' '}
-                <span className={`px-2 py-1 rounded text-xs ${getStatusCor(relatoSelecionado.status)}`}>
-                  {relatoSelecionado.status}
-                </span>
-              </p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

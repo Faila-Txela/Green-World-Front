@@ -447,8 +447,8 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
             onClick={() => !loading && closeModal()}
             disabled={loading}
           />
-          <p className="text-sm text-gray-600">Seus pontos acumulados:</p>
-          <p className="text-3xl font-bold text-green-700">{pontos}</p>
+          {/* <p className="text-sm text-gray-600">Seus pontos acumulados:</p>
+          <p className="text-3xl font-bold text-green-700">{pontos}</p> */}
         </form>
       </div>
     </div>
