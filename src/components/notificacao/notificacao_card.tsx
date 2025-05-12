@@ -1,3 +1,4 @@
+
 interface NotificacaoCardProps {
   titulo: string;
   descricao: string;

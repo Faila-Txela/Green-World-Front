@@ -191,9 +191,9 @@ export default function Home() {
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
       <h2 className="text-lg md:text-2xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
-      <p className="text-sm md:text-base text-justify">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
-      <p className="text-sm md:text-base text-justify mt-4">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
-      <p className="text-sm md:text-base text-justify mt-4">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
+      <p className="text-sm md:text-base text-justify dark:text-black">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
+      <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
+      <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
     </div>
 </motion.div>
 
@@ -212,7 +212,7 @@ export default function Home() {
       >
         <div className="text-center">
           <h2 className="text-lg md:text-2xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-black">
             Tenha as notícias sempre perto de si, sem precisar sair de casa.
           </p>
         </div>
@@ -250,7 +250,7 @@ export default function Home() {
 {/* Seçcão fixedImage */}
       <div className="relative w-full h-[80vh] bg-[url('https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-fixed bg-center">
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
-            <h2 className="text-white text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
+            <h2 className="text-white dark:text-green-800 text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>
       </div>
 
@@ -263,7 +263,7 @@ export default function Home() {
   transition={{ duration: 1 }}>
 
   <div className="text-start w-full max-w-xl md:max-w-2xl">
-    <p className="text-gray-600 font-semibold text-lg sm:text-xl">FAQ</p>
+    <p className="text-gray-600 dark:text-black font-semibold text-lg sm:text-xl">FAQ</p>
     <h2 className="text-3xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
   </div>
   

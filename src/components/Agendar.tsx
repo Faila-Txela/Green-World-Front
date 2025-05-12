@@ -44,8 +44,8 @@ function Agendar() {
     const start = new Date(form.start_time);
     const end = new Date(form.end_time);
 
-    if (!form.contexto || !form.start_time || !form.end_time) {
-      setToast({ message: "Por favor, preencha todos os dados.", type: "error" });
+    if (!form.contexto.trim() || !form.start_time || !form.end_time) {
+      setToast({ message: "Por favor, preencha todos os dados de forma correcta.", type: "error" });
       return;
     }
 
@@ -66,6 +66,11 @@ function Agendar() {
         type: "success",
       });
     }
+
+    if (!form.contexto.trim()) {
+      setToast({ message: "Por favor, insira um contexto válido (sem apenas espaços).", type: "error" });
+      return;
+    }    
 
     const empresaId = localStorage.getItem("empresaId");
     if (!empresaId) {

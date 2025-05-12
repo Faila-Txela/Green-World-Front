@@ -1,4 +1,3 @@
-// sections/GeralSection.tsx
 import { useEffect, useRef, useState } from 'react';
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
@@ -6,57 +5,92 @@ import pic from '../../assets/default-avatar-profile-picture-male-icon.png';
 
 const GeralSection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Campos preenchidos pelo usuário
   const [nome, setNome] = useState('');
   const [biografia, setBiografia] = useState('');
-  //const [tipoEmpresaId, setTipoEmpresaId] = useState('');
   const [nif, setNif] = useState('');
   const [site, setSite] = useState('');
-  //const [tiposEmpresa, setTiposEmpresa] = useState<{ id: string; nome: string }[]>([]);
+  const [typeGarbage, setTypeGarbage] = useState('');
+
+  // Dados vindos da base
+  const [nomeDB, setNomeDB] = useState('');
+  const [biografiaDB, setBiografiaDB] = useState('');
+  const [nifDB, setNifDB] = useState('');
+  const [siteDB, setSiteDB] = useState('');
+  const [typeGarbageDB, setTypeGarbageDB] = useState('');
+
+  const [typeGarbages, setTypeGarbages] = useState<{ id: string, nome: string }[]>([]);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-  const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
-  const [typeGarbage, setTypeGarbage] = useState<string>("");
+
+  const empresaId = localStorage.getItem("empresaId");
 
   useEffect(() => {
-  //   // Simulação: você deve buscar isso da API real
-  //   setTiposEmpresa([
-  //     { id: '1', nome: 'Reciclagem' },
-  //     { id: '2', nome: 'Aterros Sanitários' },
-  //     { id: '3', nome: 'Catadores' },
-  //   ]);
-   }, []);
+    axios.get("/tipo-empresa").then(res => {
+      setTypeGarbages(res.data);
+    });
 
-  const handleSave = () => {
-    // Enviar para a API
-    console.log({ nome, biografia, nif, profilePic });
-    alert('Alterações salvas com sucesso!');
+    axios.get(`/empresas/${empresaId}`).then(res => {
+      const empresa = res.data;
+      setNomeDB(empresa.nome || '');
+      setBiografiaDB(empresa.biografia || '');
+      setNifDB(empresa.nif || '');
+      setSiteDB(empresa.site || '');
+      setProfilePic(empresa.imagemPerfil || '');
+      setTypeGarbageDB(empresa.tipoEmpresaId || '');
+    });
+  }, []);
+
+  const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setProfilePic(URL.createObjectURL(file));
+    }
+  };
+
+  const uploadToCloudinary = async () => {
+    if (!selectedFile) return null;
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("upload_preset", "greenworld");
+    const res = await axios.post("https://api.cloudinary.com/v1_1/dujc01crk/image/upload", formData);
+    return res.data.secure_url;
+  };
+
+  const handleSave = async () => {
+    try {
+      const imagemPerfil = await uploadToCloudinary();
+
+      await axios.put(`/empresas/${empresaId}`, {
+        nome: nome || nomeDB,
+        biografia: biografia || biografiaDB,
+        nif: nif || nifDB,
+        site: site || siteDB,
+        tipoEmpresaId: typeGarbage || typeGarbageDB,
+        imagemPerfil,
+      });
+
+      setToast({ message: "Informações atualizadas com sucesso!", type: "success" });
+      if (imagemPerfil) localStorage.setItem("empresaFoto", imagemPerfil);
+    } catch (err) {
+      console.error(err);
+      setToast({ message: "Erro ao salvar as alterações", type: "error" });
+    }
   };
 
   const handleClear = () => {
     setNome('');
     setBiografia('');
     setNif('');
+    setSite('');
+    setTypeGarbage('');
     setProfilePic(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
-
-  const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setProfilePic(URL.createObjectURL(file));
-  };
-
-    // Função para pegar os tipos de empresa
-    const fetchTypeGarbages = async () => {
-      const response = await axios.get("/tipo-empresa");
-      if (response.status === 200) {
-        setTypeGarbages(response.data);
-      }
-    };
-
-    useEffect(() => {
-      fetchTypeGarbages();
-    }, []);
 
   return (
     <section className="max-w-3xl mx-auto">
@@ -69,103 +103,57 @@ const GeralSection = () => {
           className="w-20 h-20 rounded-full border-2 border-green-500 object-cover cursor-pointer hover:opacity-80"
           onClick={() => fileInputRef.current?.click()}
         />
-        <input type="file" title='image' accept="image/*" ref={fileInputRef} onChange={handleProfilePicChange} className="hidden text-black" />
+        <input title="image" type="file" accept="image/*" ref={fileInputRef} onChange={handleProfilePicChange} className="hidden" />
       </div>
 
       <div className="space-y-4">
         <input
           type="text"
-          placeholder="Nome da Empresa"
-          className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
+          placeholder={nomeDB || "Nome da Empresa"}
+          className="w-full px-4 py-2 rounded-md border text-black"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
-
         <textarea
-          placeholder="Biografia / Descrição da empresa"
-          className="w-full px-4 py-2 rounded-md border shadow-sm resize-none focus:ring-2 focus:ring-green-500 text-black"
+          placeholder={biografiaDB || "Biografia"}
+          className="w-full px-4 py-2 rounded-md border resize-none text-black"
           rows={4}
           value={biografia}
           onChange={(e) => setBiografia(e.target.value)}
         />
-
-        {/* <select
-          title='Tipo de empresa'
-          className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
-          value={tipoEmpresaId}
-          onChange={(e) => setTipoEmpresaId(e.target.value)}
+        <select
+          title="type"
+          className="w-full px-4 py-2 rounded-md border text-black"
+          value={typeGarbage || typeGarbageDB}
+          onChange={(e) => setTypeGarbage(e.target.value)}
         >
-          <option value="" className='text-black'>Selecione o tipo de empresa</option>
-          {tiposEmpresa.map((tipo) => (
-            <option key={tipo.id} value={tipo.id}>
-              {tipo.nome}
-            </option>
+          <option value="">Selecione a sua área de actuação</option>
+          {typeGarbages.map((t) => (
+            <option key={t.id} value={t.id}>{t.nome}</option>
           ))}
-        </select> */}
-
-<div>
-            <label
-              htmlFor="tipoEmpresa"
-              className="font-semibold mb-2 block text-gray-600"
-            >
-              Com que você trabalha ?
-            </label>
-
-            <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={typeGarbage}
-              autoComplete="on"
-              onChange={(e) => setTypeGarbage(e.target.value)}
-              title="Selecione a sua área de actuação"
-            >
-              <option value="" key="" className="">Selecione a sua área de actuação</option>
-              {typeGarbages.map((typeGarbage) => (
-                <option value={typeGarbage.id}>{typeGarbage.nome}</option>
-              ))}
-            </select>
-          </div>
-
+        </select>
         <input
           type="text"
-          placeholder="NIF"
-          className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
+          placeholder={nifDB || "NIF"}
+          className="w-full px-4 py-2 rounded-md border text-black"
           value={nif}
           onChange={(e) => setNif(e.target.value)}
         />
-
         <input
           type="url"
-          placeholder="Site oficial"
-          className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
+          placeholder={siteDB || "Site oficial"}
+          className="w-full px-4 py-2 rounded-md border text-black"
           value={site}
           onChange={(e) => setSite(e.target.value)}
         />
       </div>
 
-      {/* Botões */}
       <div className="flex justify-end gap-4 mt-5">
-        <button
-          type="button"
-          onClick={handleClear}
-          className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md shadow-sm transition duration-200"
-        >
-          Limpar Campos
-        </button>
-
-        <button
-          type="button"
-          onClick={handleSave}
-          className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-md transition duration-200"
-        >
-          Salvar Alterações
-        </button>
+        <button onClick={handleClear} className="px-6 py-2 bg-gray-200 text-gray-700 rounded-md">Limpar Campos</button>
+        <button onClick={handleSave} className="px-6 py-2 bg-green-600 text-white rounded-md">Salvar Alterações</button>
       </div>
- 
-      {/* Exibe o Toast se houver mensagem */}
-      {toast && <Toast message={toast.message}
-       type={toast.type} 
-       onClose={() => setToast(null)} />}
 
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </section>
   );
 };

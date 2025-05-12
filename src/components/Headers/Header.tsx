@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import PrimaryButton from "../ui/PrimaryButton";
 import Logo from "../../assets/Logo";
+import { MdSunny, MdMood } from "react-icons/md";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -73,6 +74,12 @@ export default function Header() {
             name="Entrar"
             addClassName="w-full px-20"
           />
+
+          {/* Tema/ dark || ligth */}
+          <div className="">
+            <MdSunny size={32} className="cursor-pointer text-green-800" />
+          </div>
+    
         </nav>
       </div>
 

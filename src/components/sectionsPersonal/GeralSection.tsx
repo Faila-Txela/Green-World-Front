@@ -1,23 +1,72 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import pic from '../../assets/default-avatar-profile-picture-male-icon.png';
+import axios from '../../lib/axios';
 
 const GeralSection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Inputs preenchidos pelo usuário
   const [nome, setNome] = useState('');
   const [biografia, setBiografia] = useState('');
   const [iban, setIban] = useState('');
 
+  // Dados da base de dados
+  const [nomeDB, setNomeDB] = useState('');
+  const [biografiaDB, setBiografiaDB] = useState('');
+  const [ibanDB, setIbanDB] = useState('');
+  const [fotoDB, setFotoDB] = useState<string | null>(null);
+
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    axios.get(`/users/${userId}`).then((res) => {
+      const user = res.data;
+      setNomeDB(user.nome || '');
+      setBiografiaDB(user.biografia || '');
+      setIbanDB(user.iban || '');
+      setFotoDB(user.imagemPerfil || null);
+      setProfilePic(user.imagemPerfil || null);
+    });
+  }, []);
+
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setProfilePic(URL.createObjectURL(file));
+    if (file) {
+      setSelectedFile(file);
+      setProfilePic(URL.createObjectURL(file));
+    }
   };
 
-  const handleSave = () => {
-    // Enviar para a API
-    console.log({ nome, biografia, iban, profilePic });
-    alert('Alterações salvas com sucesso!');
+  const uploadToCloudinary = async () => {
+    if (!selectedFile) return null;
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("upload_preset", "greenworld");
+    const res = await axios.post("https://api.cloudinary.com/v1_1/dujc01crk/image/upload", formData);
+    return res.data.secure_url;
+  };
+
+  const handleSave = async () => {
+    try {
+      const imagemPerfil = await uploadToCloudinary();
+
+      await axios.put(`/users/${userId}`, {
+        nome: nome || nomeDB,
+        biografia: biografia || biografiaDB,
+        iban: iban || ibanDB,
+        imagemPerfil,
+      });
+
+      alert('Alterações salvas com sucesso!');
+      if (imagemPerfil) localStorage.setItem("userFoto", imagemPerfil);
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar alterações');
+    }
   };
 
   const handleClear = () => {
@@ -52,14 +101,14 @@ const GeralSection = () => {
       <div className="space-y-4 mb-6">
         <input
           type="text"
-          placeholder="Nome da Empresa"
+          placeholder={nomeDB || "Nome da Empresa"}
           className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
 
         <textarea
-          placeholder="Biografia / Descrição da empresa"
+          placeholder={biografiaDB || "Biografia / Descrição da empresa"}
           className="w-full px-4 py-2 rounded-md border shadow-sm resize-none focus:ring-2 focus:ring-green-500 text-black"
           rows={4}
           value={biografia}
@@ -68,7 +117,7 @@ const GeralSection = () => {
 
         <input
           type="text"
-          placeholder="IBAN"
+          placeholder={ibanDB || "IBAN"}
           className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
           value={iban}
           onChange={(e) => setIban(e.target.value)}

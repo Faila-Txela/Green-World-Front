@@ -35,7 +35,7 @@ export default function Notifications() {
   }, []);
 
   if (loading) {
-    return <div className="text-center py-4 mt-12">Carregando notificações...</div>;
+    return <div className="h-screen flex items-center justify-center text-center">Carregando notificações...</div>;
   }
 
   if (notifications.length === 0) {
@@ -43,7 +43,7 @@ export default function Notifications() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-6 p-4 mt-10">
+    <div className="flex flex-col items-center justify-center shadow-sm bg-white w-full gap-6 p-4 mt-10">
 
      <div className="flex items-center gap-4">
       <IoNotificationsCircleOutline size={28} className="h-9 w-9 text-green-600 animate-pulse" />
