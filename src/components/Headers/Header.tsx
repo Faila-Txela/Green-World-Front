@@ -9,6 +9,30 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Verifica o tema ao carregar o componente
+  // useEffect(() => {
+  //   if (localStorage.theme === 'dark' || 
+  //       (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  //     setDarkMode(true);
+  //     document.documentElement.classList.add('dark');
+  //   } else {
+  //     setDarkMode(false);
+  //     document.documentElement.classList.remove('dark');
+  //   }
+  // }, []);
+
+  // Alterna entre dark e light mode
+  // const toggleDarkMode = () => {
+  //   if (darkMode) {
+  //     document.documentElement.classList.remove('dark');
+  //     localStorage.theme = 'light';
+  //   } else {
+  //     document.documentElement.classList.add('dark');
+  //     localStorage.theme = 'dark';
+  //   }
+  //   setDarkMode(!darkMode);
+  // };
+
   const handleLoginClick = () => {
     navigate("/personal-login");
   };
@@ -114,6 +138,21 @@ export default function Header() {
                 name="Entrar"
                 addClassName="w-full bg-global-color-secondary px-20"
               />
+
+                {/* Botão de tema no menu móvel */}
+              {/* <button 
+                type="button"
+                onClick={toggleDarkMode}
+                className="p-2 rounded-full hover:bg-gray-200 transition-colors duration-300"
+                aria-label={darkMode ? "Modo claro" : "Modo escuro"}
+              >
+                {darkMode ? (
+                  <MdSunny size={24} className="text-yellow-400" />
+                ) : (
+                  <MdDarkMode size={24} className="text-white" />
+                )}
+              </button> */}
+
             </nav>
           </div>
         </>

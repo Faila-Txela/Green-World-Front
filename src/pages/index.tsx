@@ -250,7 +250,7 @@ export default function Home() {
 {/* Seçcão fixedImage */}
       <div className="relative w-full h-[80vh] bg-[url('https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-fixed bg-center">
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
-            <h2 className="text-white dark:text-green-800 text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
+            <h2 className="text-white text-lg md:text-2xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
           </div>
       </div>
 

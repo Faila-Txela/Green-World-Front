@@ -1,15 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import { MdSunny, MdDarkMode } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { userService } from '../../../modules/service/api/user';
-import defaultPic from '../../../assets/default-avatar-profile-picture-male-icon.png'; // ajuste o caminho se necessário
+import defaultPic from '../../../assets/default-avatar-profile-picture-male-icon.png';
 
 function PersonalPerfil() {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [foto, setFoto] = useState<string | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
+
+  // Verificar tema ao carregar
+  useEffect(() => {
+    const isDark = localStorage.theme === 'dark' || 
+                  (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setDarkMode(isDark);
+  }, []);
 
   // Carregar foto da empresa
   useEffect(() => {
@@ -35,6 +44,19 @@ function PersonalPerfil() {
     setIsDropdownOpen(prev => !prev);
   };
 
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.theme = 'dark';
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.theme = 'light';
+    }
+  };
+
   const handleLogout = async () => {
     alert("Logout feito");
     try {
@@ -57,6 +79,21 @@ function PersonalPerfil() {
 
   return (
     <div className="p-3 flex items-center gap-3 cursor-pointer relative z-20">
+      {/* Botão de alternância de tema */}
+      <button 
+        type="button"
+        onClick={toggleDarkMode}
+        className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-[#2a4f42] transition-colors duration-300"
+        aria-label={darkMode ? "Modo claro" : "Modo escuro"}
+      >
+        {darkMode ? (
+          <MdSunny size={20} className="text-yellow-400" />
+        ) : (
+          <MdDarkMode size={20} className="text-[#1a3a2f]" />
+        )}
+      </button>
+
+      {/* Perfil dropdown */}
       <div
         ref={profileRef}
         className="flex items-center gap-2 p-2 rounded-full cursor-pointer"
@@ -67,23 +104,42 @@ function PersonalPerfil() {
           alt="Perfil"
           className="w-10 h-10 rounded-full border-2 border-green-500 object-cover cursor-pointer hover:opacity-80"
         />
-        <IoIosArrowDown size={18} color='white' className="" />
+        <IoIosArrowDown 
+          size={18} 
+          className="text-black dark:text-white transition-colors duration-300" 
+        />
       </div>
 
       {isDropdownOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 top-0 mt-16 bg-white p-4 rounded-lg shadow-lg w-48 z-30"
+          className="absolute right-0 top-0 mt-16 bg-white dark:bg-[#1a3a2f] p-4 rounded-lg shadow-lg w-48 z-30 transition-colors duration-300"
         >
           <div
             onClick={goToSettings}
-            className="text-black hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all"
+            className="text-black dark:text-white hover:bg-gray-200 dark:hover:bg-[#2a4f42] p-2 rounded-md cursor-pointer transition-all"
           >
             Configurações
           </div>
           <div
+            onClick={toggleDarkMode}
+            className="text-black dark:text-white hover:bg-gray-200 dark:hover:bg-[#2a4f42] p-2 rounded-md cursor-pointer transition-all mt-1 flex items-center gap-2"
+          >
+            {darkMode ? (
+              <>
+                <MdSunny size={16} className="text-yellow-400" />
+                <span>Modo Claro</span>
+              </>
+            ) : (
+              <>
+                <MdDarkMode size={16} className="text-[#1a3a2f] dark:text-white" />
+                <span>Modo Escuro</span>
+              </>
+            )}
+          </div>
+          <div
             onClick={handleLogout}
-            className="text-red-500 hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all mt-1"
+            className="text-red-500 hover:bg-gray-200 dark:hover:bg-[#2a4f42] p-2 rounded-md cursor-pointer transition-all mt-1"
           >
             Terminar Sessão
           </div>

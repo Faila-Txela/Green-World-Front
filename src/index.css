@@ -1,11 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* @import "tailwindcss"; */
 
 @layer utilities {
   /* Ocultar scrollbar para Chrome, Safari e Opera */
@@ -15,8 +12,7 @@
 
   /* Ocultar scrollbar para IE e Edge */
   .scrollbar-hide {
-      -ms-overflow-style: none; /* IE e Edge */
-       /* Firefox */
+      -ms-overflow-style: none;
   }
 
   .blob-animation {
@@ -29,8 +25,7 @@
   }
 
   @keyframes morph {
-    0%,
-    100% {
+    0%, 100% {
       clip-path: polygon(
         50% 0%, 70% 15%, 100% 35%, 100% 65%, 
         75% 100%, 50% 85%, 25% 100%, 0% 65%, 
@@ -45,7 +40,6 @@
       );
     }
   }
-
 }
 
 ::-webkit-scrollbar{
@@ -72,10 +66,10 @@ html {
 .dark{
   --bg-color: #1a1a1a;
   --text-color: #ffffff;
-}
+} */
 
 body{ 
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background .5s, color .5s;
-}  */ 
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
