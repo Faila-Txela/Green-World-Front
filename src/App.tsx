@@ -15,7 +15,7 @@ import RegisterEnterprise from "./pages/user-enterprises/RegisterEnterprise";
 import SidebarAdmin from "./pages/admin/SidebarAdmin";
 import Blog from "./pages/Blog";
 import News from "./pages/News";
-import NotFound from "./pages/Not-found";
+import NotFound from "./pages/ErrorPage";
 import Terms from "./components/Terms";
 import PublicRoutesPersonal from "./routes/public_routes_personal";
 import Notifications from "./pages/Notifications";
