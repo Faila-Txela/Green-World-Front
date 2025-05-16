@@ -6,14 +6,18 @@ class ContactoService{
         return data;
     }
 
-    async getAll(contactoData: contacto){
-        return await axios.get("contacto", {
-            params: contactoData,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+    async getAll(){
+        return await axios.get("contacto")
     }
-}
+
+//         async getAll(contactoData: contacto){
+//         return await axios.get("contacto", {
+//             params: contactoData,
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         })
+//     }
+ }
 
 export const contactoService = new ContactoService()

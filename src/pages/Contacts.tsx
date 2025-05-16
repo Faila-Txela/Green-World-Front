@@ -14,8 +14,6 @@ interface contactoData {
   email: string;
   nome: string;
   mensagem: string;
-  userId: string;
-  empresaId: string;
 }
 
 export default function Contacts() {
@@ -24,9 +22,7 @@ export default function Contacts() {
   const [formData, setFormData] = useState<contactoData>({
     nome: "",
     email: "",
-    mensagem: "",
-    userId: "",
-    empresaId: ""
+    mensagem: ""
   });
 
   const [emailError, setEmailError] = useState("");
@@ -75,9 +71,8 @@ export default function Contacts() {
     try {
       const { data, status } = await contactoService.create({ ...formData });
       if (status === 201 || data?.success) {
+        console.log("mensagem enviada com sucesso.")
         setToast({ message: "Mensagem enviada com sucesso", type: "success" });
-        localStorage.setItem("user", JSON.stringify(data.data));
-        setTimeout(() => navigate("/terms"), 2000);
       }
     } catch (error) {
       console.error("Erro ao enviar a mensagem:", error);
@@ -99,12 +94,12 @@ export default function Contacts() {
       <div className="flex justify-center gap-8 mt-14 flex-wrap">
         <div className="flex flex-col justify-center items-center gap-3 p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
           <FiPhone color="green" size={40} />
-          <p className="text-lg">(+244) 934 156 335</p>
+          <a href="https://wa.link/pgmlf7" target="_blank" rel="noopener noreferrer" className="text-lg">(+244) 934 156 335</a>
         </div>
 
         <div className="flex flex-col justify-center items-center gap-3 p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
           <MdOutlineEmail color="green" size={40} />
-          <p className="text-lg">greenworld70@gmail.com</p>
+          <a href="mailto:albertinasauimbo17@gmail.com" className="text-lg">greenworld70@gmail.com</a>
         </div>
       </div>
 
