@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { userService } from "../../modules/service/api/user";
 import { empresaService } from "../../modules/service/api/empresa";
+import { FaUsers } from 'react-icons/fa'
 
 type User = {
   id: number;
@@ -60,6 +61,12 @@ function Users() {
   function TabelaUsuarios({ titulo, lista, tipo }: { titulo: string; lista: User[]; tipo: "comum" | "empresa" }) {
     return (
       <>
+        {/* Título da página */}
+        {/* <div className="flex items-center gap-3 mb-8">
+        <FaUsers className="h-9 w-9 text-green-600 animate-pulse" />
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel de Usuários</h1>
+        </div> */}
+
         <h3 className="text-lg font-semibold mb-4 mt-10">{titulo}</h3>
         <table className="w-full text-left border-collapse mb-8">
           <thead>

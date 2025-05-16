@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { provinciaService } from "../../modules/service/api/provincia"; 
+import { FaCity } from 'react-icons/fa'
 
 type Provincia = {
   id: number;
@@ -67,7 +68,11 @@ function ProvinceSettings() {
 
   return (
     <div className="rounded shadow-md p-3 mt-20">
-      <h3 className="text-lg font-semibold mb-2">Províncias</h3>
+      {/* Título da página */}
+      <div className="flex items-center gap-3 mb-8">
+      <FaCity className="h-9 w-9 text-green-600 animate-pulse" />
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Painel das Províncias</h1>
+      </div>
 
       <div className="mb-4 flex gap-2">
         <input

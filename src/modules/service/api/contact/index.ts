@@ -10,6 +10,12 @@ class ContactoService{
         return await axios.get("contacto")
     }
 
+    async sendReply(payload: { email: string; subject: string; message: string }) {
+      const { data } = await axios.post("/responder-contacto", payload);
+      return data;
+   }
+
+
 //         async getAll(contactoData: contacto){
 //         return await axios.get("contacto", {
 //             params: contactoData,

@@ -4,6 +4,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaUsers } from "react-icons/fa6";
 import { VscFeedback } from "react-icons/vsc";
 import { FaCity } from "react-icons/fa";
+import { MdPhone } from 'react-icons/md'
 import { MdOutlinePolicy } from "react-icons/md";
 import DashHeader from "../../components/Headers/DashHeader";
 import AdminDashboard from "../../components/Dashboards/AdminDashboard";
@@ -11,9 +12,10 @@ import Users from "../../components/client/users";
 import Feedback from "../../components/client/Feedback";
 import Provincia from "../../components/client/Provincia";
 import Municipio from "../../components/client/Municipio";
+import Contactos from "../../components/client/contacts";
 import Terms from "../../components/Terms";
 
-type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Users" | "Terms";
+type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Users" | "Contactos" | "Terms";
 
 
 const AdminSidebar = () => {
@@ -32,6 +34,7 @@ const AdminSidebar = () => {
     Provincias: <Provincia />,
     Municipios: <Municipio />,
     Users: <Users />,
+    Contactos: <Contactos />,
     Terms: <Terms />
   };
 
@@ -72,6 +75,12 @@ const AdminSidebar = () => {
               onClick={() => setActiveComponent("Users")}>
               <FaUsers size={20} />
               {isSidebarOpen && <span>Usuários</span>}
+            </div>
+
+            <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition"
+              onClick={() => setActiveComponent("Contactos")}>
+              <MdPhone size={20} />
+              {isSidebarOpen && <span>Contactos</span>}
             </div>
 
             <div className="flex items-center gap-3 p-2 hover:bg-green-700 rounded-md cursor-pointer transition ">
