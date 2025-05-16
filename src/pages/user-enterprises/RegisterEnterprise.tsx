@@ -25,7 +25,8 @@ const InputField = ({
   value,
   onChange,
   icon,
-  extraPaddingRight = false
+  extraPaddingRight = false,
+  required = true
 }: {
   label: string;
   type: string;
@@ -35,10 +36,11 @@ const InputField = ({
   icon: JSX.Element;
   extraPaddingRight?: boolean;
   autoComplete?: string;
+  required?: boolean;
 }) => (
   <div className="relative">
     <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
-      {label}
+      {label} {required && <span className="text-red-500">*</span>}
     </label>
     <div className="relative">
       <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
@@ -49,7 +51,7 @@ const InputField = ({
         name={name}
         value={value}
         onChange={onChange}
-        required
+        required={required}
         title={`Enter your ${label.toLowerCase()}`}
         placeholder={`Enter your ${label.toLowerCase()}`}
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
@@ -234,9 +236,14 @@ export default function EnterpriseForm() {
           </Link>
         </div>
 
+          {/* Adicionei este texto informativo */}
+        <p className="text-sm text-gray-600 mb-4">
+          Campos marcados com <span className="text-red-500">*</span> são obrigatórios
+        </p>
+
         <form className="flex flex-col gap-6" onSubmit={handleSubmit} action="Admindashboard">
           <InputField
-            label="Nome da Empresa *"
+            label="Nome da Empresa"
             type="text"
             name="nome"
             autoComplete="on"
@@ -311,6 +318,7 @@ export default function EnterpriseForm() {
               value={formData.site}
               onChange={handleChange}
               icon={<SiSitepoint />}
+              required={false}
             />
   
           <div>
@@ -318,7 +326,7 @@ export default function EnterpriseForm() {
               htmlFor="provincia"
               className="block text-gray-600 font-semibold mb-2"
             >
-              Sua Provincia
+              Sua Provincia <span className="text-red-500">*</span>
             </label>
             <select
             className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
@@ -326,6 +334,7 @@ export default function EnterpriseForm() {
               autoComplete="on"
               onChange={(e) => setProvincia(e.target.value)}
               title="Selecione sua província"
+              required
             >
               <option className="" key="" value="">Selecione a provincia</option>
               {provincias.map((provincia) => (
@@ -339,7 +348,7 @@ export default function EnterpriseForm() {
               htmlFor="municipio"
               className="font-semibold mb-2 block text-gray-600"
             >
-              Seu Municipio
+              Seu Municipio <span className="text-red-500">*</span>
             </label>
 
             <select
@@ -348,6 +357,7 @@ export default function EnterpriseForm() {
               autoComplete="on"
               onChange={(e) => setMunicipio(e.target.value)}
               title="Selecione seu município"
+              required
             >
               <option value="" key="" className="">Selecione o município</option>
               {municipios.map((municipio) => (
@@ -361,7 +371,7 @@ export default function EnterpriseForm() {
               htmlFor="tipoEmpresa"
               className="font-semibold mb-2 block text-gray-600"
             >
-              Com que você trabalha ?
+              Com que você trabalha ? <span className="text-red-500">*</span>
             </label>
 
             <select
@@ -370,6 +380,7 @@ export default function EnterpriseForm() {
               autoComplete="on"
               onChange={(e) => setTypeGarbage(e.target.value)}
               title="Selecione a sua área de actuação"
+              required
             >
               <option value="" key="" className="">Selecione a sua área de actuação</option>
               {typeGarbages.map((typeGarbage) => (
@@ -380,9 +391,9 @@ export default function EnterpriseForm() {
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span>
-              <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
+              <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" required />
             </span>
-            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
+            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World <span className="text-red-500">*</span></Link>
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">

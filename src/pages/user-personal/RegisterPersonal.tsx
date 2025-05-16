@@ -8,19 +8,21 @@ import Toast from "../../components/ui/Toast";
 import { typeUserService } from "../../modules/service/api/typeUser";
 
 
-const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false }: {
+const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false, required = true }: {
   label: string;
   type: string;
-  name: keyof user;
+  name: keyof User;
   autoComplete?: string;
   value: string;
-
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon: JSX.Element;
-  extraPaddingRight?: boolean; 
+  extraPaddingRight?: boolean;
+  required?: boolean;
 }) => (
   <div className="relative">
-    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">{label}</label>
+    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
     <div className="relative">
       <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
         {icon}
@@ -30,7 +32,7 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
         name={name}
         value={value}
         onChange={onChange}
-        required
+        required={required}
         placeholder={`Enter your ${label.toLowerCase()}`}
         title={label}
         className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
@@ -38,6 +40,7 @@ const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRigh
     </div>
   </div>
 );
+
 interface User {
   nome: string;
   email: string;
@@ -65,73 +68,71 @@ export default function UserForm() {
     setFormData((formData) => ({ ...formData, [name]: value }));
   };
 
-
-  // Função para cadastrar usuários comuns
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //console.log("Dados enviados:", formData);
     setToast({ message: "Cadastro feito com sucesso!", type: "success" })
 
     // Validações
-  if (!formData.nome.trim()) {
-    setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
-    return;
-  }
+    if (!formData.nome.trim()) {
+      setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
+      return;
+    }
 
-  if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
-    return;
-  }
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
+      return;
+    }
 
-  if (!formData.senha.trim() || formData.senha.length < 6) {
-    setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
-    return;
-  }
+    if (!formData.senha.trim() || formData.senha.length < 6) {
+      setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
+      return;
+    }
 
-  if (!formData.iban.trim()) {
-    setToast({ message: "O IBAN é obrigatório", type: "error" });
-    return;
-  }
+    if (!formData.iban.trim()) {
+      setToast({ message: "O IBAN é obrigatório", type: "error" });
+      return;
+    }
 
-  if (!formData.nome_titular.trim()) {
-    setToast({ message: "O nome de titular é obrigatório", type: "error" });
-    return;
-  }
+    if (!formData.nome_titular.trim()) {
+      setToast({ message: "O nome de titular é obrigatório", type: "error" });
+      return;
+    }
 
-  if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
-    setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
-    return;
-  }
+    if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
+      setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
+      return;
+    }
     
-    try{
+    try {
       const typeId = await typeUserService.getTypeIdByDeafault();
       const userData = {...formData, tipoUser_id: typeId}
 
-    const response = await userService.create(userData);
+      const response = await userService.create(userData);
       if (response.status === 201) {
-       setTimeout(() => navigate("/personal-login"), 2000)
+        setTimeout(() => navigate("/personal-login"), 2000)
       }
-
-    } catch (error){
-      //console.error("Erro ao enviar os dados de cadastro ❌", error)
+    } catch (error) {
       setToast({ message: "Erro ao enviar os dados de cadastro", type: "error" })
     }
-
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="w-full max-w-2xl p-8 bg-white shadow-xl rounded-2xl">
         <div className="text-center mb-6 flex flex-col items-center justify-center gap-2">
-        <Logo className="w-20 h-20" />
+          <Logo className="w-20 h-20" />
           <h2 className="text-2xl font-bold text-gray-800">Cadastro do Cidadão</h2>
         </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
           <Link to='/register-personal' className="text-lg font-semibold flex items-center justify-center underline hover:text-green-800">Cidadão Comum</Link>
           <Link to='/register-enterprise' className="text-lg font-semibold flex items-center justify-center hover:text-green-800">Empresa</Link>
-         </div>
+        </div>
 
+        {/* Adicionei a mensagem informativa */}
+        <p className="text-sm text-gray-600 mb-4">
+          Campos marcados com <span className="text-red-500">*</span> são obrigatórios
+        </p>
 
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <InputField label="Nome" autoComplete="on" type="text" name="nome" value={formData.nome} onChange={handleChange} icon={<FaUser />} />
@@ -148,64 +149,62 @@ export default function UserForm() {
               icon={<FaLock />} 
               extraPaddingRight 
             />
-          <button
-            type="button"
-            className="absolute inset-y-7 top-14 right-3 flex items-center text-gray-600 hover:text-gray-800"
-            onClick={() => setIsShowPassword(!isShowPassword)}
-          >
-            {isShowPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-          </button>
+            <button
+              type="button"
+              className="absolute inset-y-7 top-14 right-3 flex items-center text-gray-600 hover:text-gray-800"
+              onClick={() => setIsShowPassword(!isShowPassword)}
+            >
+              {isShowPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </button>
           </div>
 
           <InputField 
-          label="IBAN"
-          type="text" 
-          name="iban" 
-          autoComplete="on" 
-          value={formData.iban} 
-          onChange={handleChange} 
-          icon={<FaUniversity />} 
+            label="IBAN"
+            type="text" 
+            name="iban" 
+            autoComplete="on" 
+            value={formData.iban} 
+            onChange={handleChange} 
+            icon={<FaUniversity />} 
           />
 
           <InputField 
-          label="Nome do Titular" 
-          type="text" 
-          name="nome_titular" 
-          autoComplete="on" 
-          value={formData.nome_titular} 
-          onChange={handleChange} 
-          icon={<FaIdCard />} 
+            label="Nome do Titular" 
+            type="text" 
+            name="nome_titular" 
+            autoComplete="on" 
+            value={formData.nome_titular} 
+            onChange={handleChange} 
+            icon={<FaIdCard />} 
           />
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
-          <span>
-            <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" />
-            
-          </span>
-          <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World</Link>
+            <span>
+              <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" required />
+            </span>
+            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">
+              Concordo com os termos e política de privacidade da Green World <span className="text-red-500">*</span>
+            </Link>
           </div>
 
           <div className="col-span-1 md:col-span-2 mt-4">
             <PrimaryButton 
-            addClassName="" 
-            name="Cadastrar"
+              addClassName="" 
+              name="Cadastrar"
             />
           </div>
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
-          <span>Já tem uma conta?</span>
+            <span>Já tem uma conta?</span>
             <Link to="/personal-login" className="text-[#068a5b] text-base hover:underline transition duration-500">Entrar</Link>
           </div>
-
         </form>
 
-           {/* Exibe o Toast se houver mensagem */}
-          {toast && <Toast message={toast.message} 
+        {/* Exibe o Toast se houver mensagem */}
+        {toast && <Toast message={toast.message} 
           type={toast.type} 
           onClose={() => setToast(null)} />}
-          
       </div>
     </div>
   );
 }
-
