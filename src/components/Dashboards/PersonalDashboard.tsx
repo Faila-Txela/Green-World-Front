@@ -19,7 +19,7 @@ export default function PersonalDashboard() {
     <div className="flex justify-center items-center mt-40">
       {/* Título da tela */}
       <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
-        <MdOutlineSpaceDashboard className="h-9 w-9" />
+        <MdOutlineSpaceDashboard className="h-9 w-9 text-green-600 animate-pulse" />
         <h1 className="text-xl md:text-2xl font-semibold text-left">Painel Principal do Cidadão</h1>
       </div>
 

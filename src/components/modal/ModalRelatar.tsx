@@ -8,6 +8,7 @@ import { validatorImagesService } from "../../modules/service/api/ImagesValidato
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { format } from "date-fns";
+import Confetti from 'react-confetti';
 
 interface RelatarFormData {
   userId: string;
@@ -108,6 +109,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
     dataHora: string;
   }>(null);
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const isFormValid = Boolean(
     formData.descricao.trim() &&
@@ -115,7 +117,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
     formData.longitude &&
     provincia &&
     municipio &&
-    formData.bairro.trim() && // Agora verifica o bairro
+    formData.bairro.trim() &&
     prioridade &&
     imagens !== null &&
     isImageValid &&
@@ -204,7 +206,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
         descricao: true,
         provincia: true,
         municipio: true,
-        bairro: true, // Adicionado bairro
+        bairro: true,
         prioridade: true,
         latitude: true,
         longitude: true
@@ -212,7 +214,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
       setTouchedFields(allFields);
       
       return setToast({ 
-        message: "Preencha todos os campos obrigatórios corretamente (incluindo o bairro).", 
+        message: "Preencha todos os campos corretamente.", 
         type: "error" 
       });
     }
@@ -240,10 +242,15 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
           descricao: formData.descricao,
           dataHora: format(new Date(), "dd/MM/yyyy HH:mm"),
         });
-  
+        
+        setShowConfetti(true);
         setToast({ message: "Relato enviado com sucesso!", type: "success" });
         onRelatoSuccess();
-        setTimeout(() => closeModal(), 1500);
+        
+        setTimeout(() => {
+          setShowConfetti(false);
+          closeModal();
+        }, 6000);
       }
     } catch (erro) {
       console.error("Erro ao enviar relato:", erro);
@@ -279,178 +286,188 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
       axios.get(`/pontos/${userId}`).then(res => {
         setPontos(res.data.pontos);
       }).catch(() => {
-        setPontos(0); //caso ainda não tenha pontuação
+        setPontos(0);
       });
     }
    }, []);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        {submittedRelato && (
-          <div className="bg-green-100 p-4 border border-green-400 rounded mb-4">
-            <p><strong>Relato enviado:</strong> {submittedRelato.descricao}</p>
-            <p className="text-sm text-gray-600">Enviado em: {submittedRelato.dataHora}</p>
-          </div>
-        )}
+    <>
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={200}
+          gravity={0.2}
+        />
+      )}
 
-        <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">Relatar Novo Amontoado</h2>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div>
-            <label htmlFor="Descrição" className="block text-gray-700 font-semibold">
-              Descrição <span className="text-red-500">*</span></label>
-            <TextArea
-              name="descricao"
-              id="descricao"
-              placeholder="Descreva o problema..."
-              value={formData.descricao}
-              onChange={handleChange}
-            />
-            {isFieldInvalid("descricao", formData.descricao) && (
-              <p className="text-red-500 text-sm mt-1">Por favor, descreva o problema</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold">
-              Província <span className="text-red-500">*</span>
-            </label>
-            <select 
-              className={`w-full p-3 border rounded-md ${isFieldInvalid("provincia", provincia) ? "border-red-500" : ""}`}
-              title="provincia" 
-              value={provincia}
-              onChange={(e) => handleSelectChange(e, setProvincia)}
-            >
-              <option value="">Selecione a Província</option>
-              {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
-            </select>
-            {isFieldInvalid("provincia", provincia) && (
-              <p className="text-red-500 text-sm mt-1">Selecione uma província</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold">
-              Município <span className="text-red-500">*</span>
-            </label>
-            <select 
-              className={`w-full p-3 border rounded-md ${isFieldInvalid("municipio", municipio) ? "border-red-500" : ""}`}
-              title="municipio" 
-              value={municipio}
-              onChange={(e) => handleSelectChange(e, setMunicipio)}
-              disabled={!provincia}
-            >
-              <option value="">Selecione o Município</option>
-              {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
-            </select>
-            {isFieldInvalid("municipio", municipio) && (
-              <p className="text-red-500 text-sm mt-1">Selecione um município</p>
-            )}
-          </div>
-
-          <div>
-            <InputField 
-              label="Bairro" 
-              type="text" 
-              name="bairro" 
-              value={formData.bairro} 
-              onChange={handleChange}
-              required={true}
-            />
-            {isFieldInvalid("bairro", formData.bairro) && (
-              <p className="text-red-500 text-sm mt-1">Por favor, informe o bairro</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold">
-              Prioridade <span className="text-red-500">*</span>
-            </label>
-            <select 
-              className={`w-full p-3 border rounded-md ${isFieldInvalid("prioridade", prioridade) ? "border-red-500" : ""}`}
-              title="prioridade" 
-              value={prioridade}
-              onChange={(e) => handleSelectChange(e, setPrioridade)}
-            >
-              <option value="">Selecione a Prioridade</option>
-              <option value="BAIXA">Baixa</option>
-              <option value="ALTA">Alta</option>
-            </select>
-            {isFieldInvalid("prioridade", prioridade) && (
-              <p className="text-red-500 text-sm mt-1">Selecione uma prioridade</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Foto do amontoado <span className="text-red-500">*</span>
-            </label>
-            <UploadArea onChange={handleImageValidation} />
-            {isImageLoading && (
-              <p className="text-green-600 text-sm mt-1">Validando imagem... <span className="animate-pulse">⏳</span></p>
-            )}
-            {isImageValid === false && (
-              <p className="text-red-500 text-sm mt-1">A imagem enviada não parece conter lixo. Tente outra.</p>
-            )}
-            {touchedFields.latitude && !formData.latitude && (
-              <p className="text-red-500 text-sm mt-1">Selecione um local no mapa</p>
-            )}
-          </div>
-
-          {locationDenied && (
-            <div className="relative">
-              <label className="block text-gray-700 font-semibold mb-2">
-                Localização <span className="text-red-500">*</span>
-              </label>
-              <p className="mb-2 text-sm text-gray-600">Clique no mapa para selecionar o local:</p>
-              <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-sm">
-                <MapContainer 
-                  center={[-8.8383, 13.2344]} 
-                  zoom={14} 
-                  className="h-full w-full"
-                  style={{ minHeight: '198px' }}
-                >
-                  <TileLayer 
-                    className="cursor-pointer"
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <LocationSelector setCoords={setCoords} />
-                  {formData.latitude && formData.longitude && (
-                    <Marker
-                      position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
-                      icon={L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
-                      })}
-                    />
-                  )}
-                </MapContainer>
-              </div>
-              {(!formData.latitude || !formData.longitude) && touchedFields.latitude && (
-                <p className="text-red-500 text-sm mt-1">Por favor, selecione um local no mapa</p>
-              )}
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+          {submittedRelato && (
+            <div className="bg-green-100 p-4 border border-green-400 rounded mb-4">
+              <p><strong>Relato enviado:</strong> {submittedRelato.descricao}</p>
+              <p className="text-sm text-gray-600">Enviado em: {submittedRelato.dataHora}</p>
             </div>
           )}
 
-          <PrimaryButton
-            name={loading ? "Enviando..." : "Enviar Relato"}
-            addClassName={`w-full ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={!isFormValid || loading}
-          />
+          <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">Relatar Novo Amontoado</h2>
 
-          <PrimaryButton
-            name="Fechar"
-            addClassName="bg-gray-300 text-black hover:bg-gray-400"
-            onClick={() => !loading && closeModal()}
-            disabled={loading}
-          />
-          {/* <p className="text-sm text-gray-600">Seus pontos acumulados:</p>
-          <p className="text-3xl font-bold text-green-700">{pontos}</p> */}
-        </form>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div>
+              <label htmlFor="Descrição" className="block text-gray-700 font-semibold">
+                Descrição <span className="text-red-500">*</span></label>
+              <TextArea
+                name="descricao"
+                id="descricao"
+                placeholder="Descreva o problema..."
+                value={formData.descricao}
+                onChange={handleChange}
+              />
+              {isFieldInvalid("descricao", formData.descricao) && (
+                <p className="text-red-500 text-sm mt-1">Por favor, descreva o problema</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-semibold">
+                Província <span className="text-red-500">*</span>
+              </label>
+              <select 
+                className={`w-full p-3 border rounded-md ${isFieldInvalid("provincia", provincia) ? "border-red-500" : ""}`}
+                title="provincia" 
+                value={provincia}
+                onChange={(e) => handleSelectChange(e, setProvincia)}
+              >
+                <option value="">Selecione a Província</option>
+                {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
+              </select>
+              {isFieldInvalid("provincia", provincia) && (
+                <p className="text-red-500 text-sm mt-1">Selecione uma província</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-semibold">
+                Município <span className="text-red-500">*</span>
+              </label>
+              <select 
+                className={`w-full p-3 border rounded-md ${isFieldInvalid("municipio", municipio) ? "border-red-500" : ""}`}
+                title="municipio" 
+                value={municipio}
+                onChange={(e) => handleSelectChange(e, setMunicipio)}
+                disabled={!provincia}
+              >
+                <option value="">Selecione o Município</option>
+                {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
+              </select>
+              {isFieldInvalid("municipio", municipio) && (
+                <p className="text-red-500 text-sm mt-1">Selecione um município</p>
+              )}
+            </div>
+
+            <div>
+              <InputField 
+                label="Bairro" 
+                type="text" 
+                name="bairro" 
+                value={formData.bairro} 
+                onChange={handleChange}
+                required={true}
+              />
+              {isFieldInvalid("bairro", formData.bairro) && (
+                <p className="text-red-500 text-sm mt-1">Por favor, informe o bairro</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-semibold">
+                Prioridade <span className="text-red-500">*</span>
+              </label>
+              <select 
+                className={`w-full p-3 border rounded-md ${isFieldInvalid("prioridade", prioridade) ? "border-red-500" : ""}`}
+                title="prioridade" 
+                value={prioridade}
+                onChange={(e) => handleSelectChange(e, setPrioridade)}
+              >
+                <option value="">Selecione a Prioridade</option>
+                <option value="BAIXA">Baixa</option>
+                <option value="ALTA">Alta</option>
+              </select>
+              {isFieldInvalid("prioridade", prioridade) && (
+                <p className="text-red-500 text-sm mt-1">Selecione uma prioridade</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                Foto do amontoado <span className="text-red-500">*</span>
+              </label>
+              <UploadArea onChange={handleImageValidation} />
+              {isImageLoading && (
+                <p className="text-green-600 text-sm mt-1">Validando imagem... <span className="animate-pulse">⏳</span></p>
+              )}
+              {isImageValid === false && (
+                <p className="text-red-500 text-sm mt-1">A imagem enviada não parece conter lixo. Tente outra.</p>
+              )}
+              {touchedFields.latitude && !formData.latitude && (
+                <p className="text-red-500 text-sm mt-1">Selecione um local no mapa</p>
+              )}
+            </div>
+
+            {locationDenied && (
+              <div className="relative">
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Localização <span className="text-red-500">*</span>
+                </label>
+                <p className="mb-2 text-sm text-gray-600">Clique no mapa para selecionar o local:</p>
+                <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-sm">
+                  <MapContainer 
+                    center={[-8.8383, 13.2344]} 
+                    zoom={14} 
+                    className="h-full w-full"
+                    style={{ minHeight: '198px' }}
+                  >
+                    <TileLayer 
+                      className="cursor-pointer"
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <LocationSelector setCoords={setCoords} />
+                    {formData.latitude && formData.longitude && (
+                      <Marker
+                        position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]}
+                        icon={L.icon({
+                          iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                          iconSize: [25, 41],
+                          iconAnchor: [12, 41],
+                        })}
+                      />
+                    )}
+                  </MapContainer>
+                </div>
+                {(!formData.latitude || !formData.longitude) && touchedFields.latitude && (
+                  <p className="text-red-500 text-sm mt-1">Por favor, selecione um local no mapa</p>
+                )}
+              </div>
+            )}
+
+            <PrimaryButton
+              name={loading ? "Enviando..." : "Enviar Relato"}
+              addClassName={`w-full ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={!isFormValid || loading}
+            />
+
+            <PrimaryButton
+              name="Fechar"
+              addClassName="bg-gray-300 text-black hover:bg-gray-400"
+              onClick={() => !loading && closeModal()}
+              disabled={loading}
+            />
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
