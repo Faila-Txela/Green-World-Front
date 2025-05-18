@@ -16,7 +16,7 @@ function PersonalPerfil() {
   // Verificar tema ao carregar
   useEffect(() => {
     const isDark = localStorage.theme === 'dark' || 
-                  (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
     setDarkMode(isDark);
   }, []);
 
@@ -58,20 +58,35 @@ function PersonalPerfil() {
   };
 
   const handleLogout = async () => {
-    alert("Logout feito");
-    try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error("Usuário não encontrado.");
-      await userService.logOut();
-      localStorage.removeItem('userId');
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      localStorage.removeItem('userFoto'); 
-      navigate("/");
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
+  try {
+    const userId = localStorage.getItem('userId');
+    const empresaId = localStorage.getItem('empresaId');
+
+    if (userId || empresaId) {
+      await userService.logOut(); 
     }
-  };
+
+    // Remover dados do usuário
+    localStorage.removeItem('userId');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userFoto');
+
+    // Remover dados da empresa
+    localStorage.removeItem('empresaId');
+    localStorage.removeItem('empresa');
+    localStorage.removeItem('empresaFoto');
+    localStorage.removeItem('empresaNome');
+
+    localStorage.removeItem('token');
+
+    // Redirecionar
+    navigate("/");
+
+  } catch (error) {
+    console.error("Erro ao fazer logout:", error);
+    alert("Erro ao encerrar a sessão. Tente novamente.");
+  }
+};
 
   const goToSettings = () => {
     navigate('/settings');
