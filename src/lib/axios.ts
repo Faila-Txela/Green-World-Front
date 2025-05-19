@@ -2,7 +2,8 @@ import axios from "axios";
 
 export default axios.create(
     {
-        baseURL: 'http://localhost:3003',
+        baseURL: 'https://green-world-back.onrender.com/',
         withCredentials: true
+        //baseURL: 'localhost://3003'
     }
 )
