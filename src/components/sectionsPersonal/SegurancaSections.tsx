@@ -1,5 +1,6 @@
 // sections/SegurancaSection.tsx
 import { useState } from 'react';
+import { userService } from '../../modules/service/api/user';
 
 const SegurancaSection = () => {
   const [email, setEmail] = useState('teresachilingo109@gmail.com');
