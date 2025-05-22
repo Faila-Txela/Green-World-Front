@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { IoLogoInstagram } from "react-icons/io";
-import { CiLinkedin } from "react-icons/ci";
 import Logo from "../../assets/Logo";
 import Skeleton from "../ui/Skeleton";
 import FooterLinks from "../../components/FooterLinks";
+import { CiInstagram, CiLinkedin } from "react-icons/ci";
 
 export default function Footer() {
 
@@ -17,7 +16,7 @@ export default function Footer() {
       { label: "Inicio", link: "" },
       { label: "Notícias", link: "news" },
       { label: "Blog", link: "blog" },
-      { label: "Empresas", link: "enterprises" },
+      { label: "Empresas", link: "/enterprises" },
       { label: "Contactos", link: "contacts" },
     ],
   };
@@ -41,7 +40,7 @@ export default function Footer() {
           <span className="text-center">Siga-nos nas redes sociais</span>
           <div className="flex gap-4 mx-auto">
             <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/albertinafaila/" title="Instagram">
-              <IoLogoInstagram size={40} color="white" />
+              <CiInstagram size={40} color="white" />
             </a>
 
             <a href="#" title="LinkedIn">

@@ -1,11 +1,11 @@
 function CardRelatosResolvidos() {
   const cards = [
     {
-      img: "https://noticiasdeangola.co.ao/wp-content/uploads/2023/05/limpeza-lixo-angola.jpg",
+      img: "https://media.imperatriz.ma.gov.br/49ABVPuoPcVl_WycN2ITo_fRq3E=/750x0/novo.imperatriz.ma.gov.br/media/site/content/article/WhatsApp_Image_2023-02-24_at_12.28.21_1.jpeg",
       alt: "amontoado1",
       feedback: "A remoção desse amontoado trouxe mais dignidade e segurança para todos nós.",
-      name: "Carlos Mavungo",
-      role: "Morador do Bairro Palanca",
+      name: "Maurício Finda",
+      role: "Morador do Bairro Cacuaco",
     },
     {
       img: "https://s.alicdn.com/@sc04/kf/Hc790f72c1a9e494a8307bec2fe6f0a565.jpg_720x720q50.jpg",
@@ -15,9 +15,9 @@ function CardRelatosResolvidos() {
       role: "Líder comunitária do Cazenga",
     },
     {
-      img: "https://img.rtp.pt/icm/noticias/images/destaques/1237229.jpg",
+      img: "https://lh3.googleusercontent.com/proxy/x3l-1Ut3Wt5gvkpHkhMNAfOUEJF4rdXWU_Komd-tZ4f3JPWTw0XZtRy8ZjOHAr7-5qqhCZsFi_67XPOAmoHIQMjUK8Ap2p9eVrwrlWJsZZmiIYUYsw",
       alt: "amontoado3",
-      feedback: "O mau cheiro e os insetos sumiram depois que a limpeza foi feita. Excelente trabalho!",
+      feedback: "O mau cheiro e os insetos desapareceram depois que a limpeza foi feita. Excelente trabalho!",
       name: "Tomás Lemos",
       role: "Empresário local",
     },
@@ -49,7 +49,7 @@ function CardRelatosResolvidos() {
   return (
     <div className="overflow-hidden bg-gray-100 py-32 px-8 md:px-16">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="font-semibold text-lg md:text-2xl text-green-700 mb-10">
+        <h2 className="font-semibold text-lg md:text-3xl text-green-700 mb-10">
           Amontoados já resolvidos com sucesso
         </h2>
 

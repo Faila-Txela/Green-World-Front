@@ -33,7 +33,7 @@ export default function CardBeneficios() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.2 }}
       >
-        <h2 className="text-3xl font-bold text-green-700 mb-2">Guia de uso da Green World</h2>
+        <h2 className="text-lg md:text-3xl font-bold text-green-700 mb-2">Guia de uso da Green World</h2>
         <p className="text-gray-600 mb-10 px-4 max-w-3xl mx-auto">
           Siga estes passos para aproveitar ao máximo todas as funcionalidades da Green World.
         </p>

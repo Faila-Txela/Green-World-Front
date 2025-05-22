@@ -54,7 +54,7 @@ export default function Enterprises() {
       {/* Seção de Vantagens */}
       <div className="bg-gray-50 py-16 px-8 md:px-16">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-semibold text-3xl text-gray-800 mb-6">
+          <h2 className="font-semibold text-3xl text-green-700 mb-6">
             Vantagens de Registrar sua Empresa Conosco
           </h2>
           <p className="text-lg text-gray-600 mb-8">

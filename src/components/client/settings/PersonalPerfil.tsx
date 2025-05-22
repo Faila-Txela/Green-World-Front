@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdSunny, MdDarkMode } from 'react-icons/md';
+import { CiLogout, CiSettings } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import { userService } from '../../../modules/service/api/user';
 import defaultPic from '../../../assets/default-avatar-profile-picture-male-icon.png';
@@ -136,6 +137,7 @@ function PersonalPerfil() {
           >
             Configurações
           </div>
+          <CiSettings color='' size={24} className='' />
           <div
             onClick={toggleDarkMode}
             className="text-black dark:text-white hover:bg-gray-200 dark:hover:bg-[#2a4f42] p-2 rounded-md cursor-pointer transition-all mt-1 flex items-center gap-2"
@@ -158,6 +160,7 @@ function PersonalPerfil() {
           >
             Terminar Sessão
           </div>
+          <CiLogout color='' size={24} className='cursor-pointer' />
         </div>
       )}
     </div>

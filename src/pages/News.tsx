@@ -22,16 +22,16 @@ function News() {
   return (
     <div>
       <Header />
-      <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 py-8">
-        <h1 className="text-lg md:text-2xl font-bold text-global-color-three mb-10 p-20">
+      <div className="min-h-screen flex flex-col justify-center items-center py-8">
+        <h1 className="text-lg md:text-3xl font-bold text-global-color-three mb-4 p-20">
           Últimas Notícias
         </h1>
 
         {isLoading ? (
           // Exibe 4 skeletons
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-6xl animate-pulse">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-5xl p-6 animate-pulse">
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="flex flex-col gap-4 bg-global-color-three p-4 rounded-lg shadow-lg">
+              <div key={index} className="flex flex-col gap-4 bg-green-600 p-4 rounded-lg shadow-lg">
                 <div className="flex gap-6 items-center">
                   <Skeleton width="30%" height="20px" className="rounded-full" />
                 </div>

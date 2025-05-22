@@ -105,7 +105,7 @@ export default function Contacts() {
       <div className="flex items-center justify-center h-auto w-full mt-12 mb-12">
         <div className="max-w-xl mx-auto px-6">
           <div className="max-w-xl mt-6 mb-4">
-            <h2 className="text-3xl text-center font-semibold">Entre em contacto connosco</h2>
+            <h2 className="text-3xl text-center font-semibold text-green-700">Entre em contacto connosco</h2>
             <p className="text-center text-[14px] mt-2 md:text-lg text-gray-600">Envie suas dúvidas para nós</p>
           </div>
 
