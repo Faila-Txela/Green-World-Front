@@ -103,25 +103,31 @@ import { pt } from 'date-fns/locale';
       return (
         <div className="flex flex-col h-screen">
           {/* Header */}
-          <div className="flex items-center justify-between px-8 py-4 bg-white shadow-md fixed gap-12 mt-20 top-0 z-10">
-            <div className="flex items-center gap-3">
-              <MdOutlineReport size={28} className="animate-pulse text-green-800" />
-              <h1 className="text-xl font-semibold">Painel de Relatos</h1>
+          <div className="fixed top-0 z-10 bg-white shadow-md px-4 py-3 md:px-8 md:py-4 flex flex-col md:flex-row items-center gap-4 md:gap-12 mt-20">
+            {/* Título e ícone */}
+            <div className="flex items-center gap-2 md:gap-3">
+              <MdOutlineReport size={24} className="text-green-800 animate-pulse" />
+              <h1 className="text-lg md:text-xl font-semibold text-gray-800">
+                Painel de Relatos
+              </h1>
             </div>
-            <div className="flex gap-4">
+
+            {/* Botões */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full md:w-auto justify-center md:justify-end">
               <PrimaryButton 
                 name="Atualizar Relatos" 
-                addClassName="" 
+                addClassName="w-full sm:w-auto" 
                 onClick={fetchRelatos} 
                 disabled={loading}
               />
               <PrimaryButton 
                 name="Relatar Novo Amontoado" 
-                addClassName="" 
+                addClassName="w-full sm:w-auto" 
                 onClick={openModal} 
               />
             </div>
           </div>
+
 
           {/* Conteúdo principal */}
           <div className="flex flex-1 mt-36 transition-all duration-300">
