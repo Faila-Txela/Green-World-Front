@@ -15,12 +15,17 @@ class UserService{
         })
   }
 
-    async delete(id: string) {
+  async verifyPassword(senha: string) {
+        const { data } = await axios.post("/user/verify-password", { senha });
+        return data;
+  }
+
+  async delete(id: string) {
         const { data } = await axios.delete(`/users/${id}`);
         return data;
     }
 
-      async logOut() {
+  async logOut() {
         return await axios.post("/empresas/logOut");
       //return await axios.post("/users/logOut");
       }

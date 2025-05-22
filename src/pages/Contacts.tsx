@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Headers/Header";
 import Footer from "../components/Footers/Footer";
 import image from '../assets/contactos.jpg';
@@ -17,7 +16,6 @@ interface contactoData {
 }
 
 export default function Contacts() {
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<contactoData>({
     nome: "",
@@ -71,11 +69,11 @@ export default function Contacts() {
     try {
       const { data, status } = await contactoService.create({ ...formData });
       if (status === 201 || data?.success) {
-        console.log("mensagem enviada com sucesso.")
+        //console.log("mensagem enviada com sucesso.")
         setToast({ message: "Mensagem enviada com sucesso", type: "success" });
       }
     } catch (error) {
-      console.error("Erro ao enviar a mensagem:", error);
+      //console.error("Erro ao enviar a mensagem:", error);
       setToast({ message: "Erro ao enviar sua mensagem", type: "error" });
     }
   };

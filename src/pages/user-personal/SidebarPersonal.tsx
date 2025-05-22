@@ -13,7 +13,6 @@ import Feedback from "../../components/client/Feedback";
 
 type ComponentKey = "PersonalDashboard" | "Feedback" | "Relatos" | "Notificacao" | "PersonalSettings";
 
-
 const PersonalSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeComponente, setActiveComponent] = useState<ComponentKey>("PersonalDashboard");
@@ -21,7 +20,6 @@ const PersonalSidebar = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   // Definindo o tipo correto das chaves do ComponentMap
   const ComponentMap = {

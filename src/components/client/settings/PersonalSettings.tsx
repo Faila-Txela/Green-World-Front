@@ -4,7 +4,7 @@ import { FiSettings } from "react-icons/fi";
 import GeralSection from '../../sectionsPersonal/GeralSection';
 import SegurancaSection from '../../sectionsPersonal/SegurancaSections';
 import NotificacoesSection from '../../sectionsEnterprise/Notifications';
-import ExcluirConta from '../../sectionsEnterprise/ExcluirConta';
+import ExcluirConta from '../../sectionsPersonal/ExcluirConta';
 
 const SettingsLayout = () => {
   const [activeTab, setActiveTab] = useState('geral');

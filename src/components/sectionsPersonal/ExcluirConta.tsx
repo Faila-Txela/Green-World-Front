@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { empresaService } from '../../modules/service/api/empresa';
-
+import { userService } from '../../modules/service/api/user';
 
 const ExcluirConta = () => {
   const [checked, setChecked] = useState(false);
@@ -31,22 +30,22 @@ const ExcluirConta = () => {
       setErro('');
   
       // 1. Verifica a senha
-      await empresaService.verifyPassword(senha);
+      await userService.verifyPassword(senha);
   
       // 2. Faz logOut
-      await empresaService.logOut();
+      await userService.logOut();
   
       // 3. Excluir a conta
-      const empresaId = localStorage.getItem('empresaId');
-      if (!empresaId) {
-        setErro('ID da empresa não encontrado.');
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        setErro('ID do usuário não encontrado.');
         setLoading(false);
         return;
       }
-      await empresaService.delete(empresaId);
+      await userService.delete(userId);
   
       alert('Conta excluída com sucesso.');
-      window.location.href = '/enterprise-login'; 
+      window.location.href = '/personal-login'; 
     } catch (err: any) {
       if (err.response?.status === 400 || err.response?.status === 401) {
         setErro('Senha incorreta.');

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import pic from '../../assets/default-avatar-profile-picture-male-icon.png';
 import axios from '../../lib/axios';
+import Toast from '../ui/Toast';
 
 const GeralSection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +13,7 @@ const GeralSection = () => {
   const [nome, setNome] = useState('');
   const [biografia, setBiografia] = useState('');
   const [iban, setIban] = useState('');
+  const [toast, setToast] = useState<{ message: string; type: "error" | "success" } | null>(null);
 
   // Dados da base de dados
   const [nomeDB, setNomeDB] = useState('');
@@ -24,7 +26,7 @@ const GeralSection = () => {
   useEffect(() => {
     axios.get(`/users/${userId}`).then((res) => {
       const user = res.data;
-      setNomeDB(user.nome || '');
+      setNomeDB(user.nome || user.nome_titular || '');
       setBiografiaDB(user.biografia || '');
       setIbanDB(user.iban || '');
       setFotoDB(user.imagemPerfil || null);
@@ -61,11 +63,13 @@ const GeralSection = () => {
         imagemPerfil,
       });
 
-      alert('Alterações salvas com sucesso!');
+      //alert('Alterações salvas com sucesso!');
+      setToast({ message: "Alterações salvas com sucesso!", type: "success" });
       if (imagemPerfil) localStorage.setItem("userFoto", imagemPerfil);
     } catch (err) {
       console.error(err);
-      alert('Erro ao salvar alterações');
+      //alert('Erro ao salvar alterações');
+      setToast({ message: "Erro ao salvar alterações", type: "error" });
     }
   };
 
@@ -101,14 +105,14 @@ const GeralSection = () => {
       <div className="space-y-4 mb-6">
         <input
           type="text"
-          placeholder={nomeDB || "Nome da Empresa"}
+          placeholder={nomeDB || "Nome do usuário"}
           className="w-full px-4 py-2 rounded-md border shadow-sm focus:ring-2 focus:ring-green-500 text-black"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
 
         <textarea
-          placeholder={biografiaDB || "Biografia / Descrição da empresa"}
+          placeholder={biografiaDB || "Biografia / Descrição do usuário"}
           className="w-full px-4 py-2 rounded-md border shadow-sm resize-none focus:ring-2 focus:ring-green-500 text-black"
           rows={4}
           value={biografia}
@@ -142,6 +146,16 @@ const GeralSection = () => {
           Salvar Alterações
         </button>
       </div>
+
+        {/* Toast de feedback */}
+        {toast && (
+        <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast(null)}
+        />
+        )}
+
     </section>
   );
 };
