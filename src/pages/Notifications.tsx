@@ -66,7 +66,7 @@ export default function Notifications() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
         <IoNotificationsCircleOutline size={64} className="text-green-500 animate-spin mb-4" />
-        <p className="text-lg text-gray-600">Carregando notificações...</p>
+        <p className="text-lg text-gray-600">Carregando Notificações...</p>
       </div>
     );
   }

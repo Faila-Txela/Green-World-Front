@@ -46,7 +46,7 @@ import { pt } from 'date-fns/locale';
           
           // Verifique se os dados têm a estrutura esperada
           if (!Array.isArray(response.data)) {
-            throw new Error("Dados recebidos não são um array");
+            throw new Error("Os dados recebidos não são um array");
           }
           
           // Mapeie os dados com verificações de segurança
@@ -138,13 +138,14 @@ import { pt } from 'date-fns/locale';
               }`}
             >
     {loading ? (
-      <div className="flex justify-center items-center h-full">
-        <p className="text-gray-500">Carregando relatos...</p>
+      <div className="flex flex-col items-center justify-center text-center mt-10">
+        <MdOutlineReport size={64} className="text-green-500 animate-spin mb-4" />
+        <p className="text-lg text-gray-600">Carregando Relatos...</p>
       </div>
     ) : relatos.length === 0 ? (
       <div className="flex flex-col items-center justify-center h-full text-center p-8">
         <MdOutlineReport size={48} className="text-gray-400 mb-4" />
-        <h3 className="text-xl font-semibold text-gray-600">Nenhum amontoado reportado</h3>
+        <h3 className="text-xl font-semibold text-gray-600">Nenhum Amontoado Reportado</h3>
         <p className="text-gray-500 mb-6">Não encontramos relatos recentes de amontoados de lixo.</p>
         <PrimaryButton 
           name="Relatar Primeiro Amontoado" 
