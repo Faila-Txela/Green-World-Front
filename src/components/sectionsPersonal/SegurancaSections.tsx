@@ -12,12 +12,15 @@ const SegurancaSection = () => {
 
     const userId = localStorage.getItem('userId');
 
-      useEffect(() => {
-        axios.get(`/users/${userId}`).then((res) => {
-          const user = res.data;
-          setEmailDB(user.emailDB || '')
-        });
-      }, []);
+  useEffect(() => {
+    if (!userId) return;
+    axios.get(`/users/${userId}`).then((res) => {
+      const user = res.data;
+      setEmailDB(user.email || '');
+    }).catch((err) => {
+      console.error("Erro ao buscar email da empresa:", err);
+    });
+  }, [userId]);
 
     const handleSave = async () => {
       try {
@@ -28,7 +31,7 @@ const SegurancaSection = () => {
         }
 
         await axios.put(`/users/${userId}`, {
-          nome: email || emailDB,
+          email: email || emailDB,
         });
 
         //alert('Alterações salvas com sucesso!')
@@ -48,9 +51,10 @@ const SegurancaSection = () => {
         <label className="block text-sm">Email da conta:</label>
         <input
           type="email"
-          placeholder={emailDB || "Email do usuário"}
+          title="email"
+          value={emailDB || 'Email do usuário'}
           readOnly
-          className="w-full px-4 py-2 rounded-md border bg-gray-100 cursor-not-allowed"
+          className="w-full px-4 py-2 rounded-md border bg-gray-100 text-gray-400 cursor-not-allowed"
         />
       </div>
 

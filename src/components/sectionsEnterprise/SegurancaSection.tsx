@@ -10,27 +10,38 @@ const SegurancaSection = () => {
   const [senha, setSenha] = useState('');
 
   const empresaId = localStorage.getItem('empresaId');
-  
-     useEffect(() => {
-       axios.get(`/empresa/${empresaId}`).then((res) => {
-         const user = res.data;
-         setEmailDB(user.email || '');
-       });
-     }, []);
 
-    const handleSave = async () => {
+  useEffect(() => {
+    if (!empresaId) return;
+    axios.get(`/empresas/${empresaId}`).then((res) => {
+      const user = res.data;
+      setEmailDB(user.email || '');
+    }).catch((err) => {
+      console.error("Erro ao buscar email da empresa:", err);
+    });
+  }, [empresaId]);
+
+ const handleSave = async () => {
       try {
-        await axios.put(`/empresa/${empresaId}`, {
-          email: email || emailDB || 'Email da empresa',
+        if (!empresaId) {
+          //alert('Usuário não identificado.');
+          setToast({message: "Usuario não identificado", type: "error"});
+          return;
+        }
+
+        await axios.put(`/empresas/${empresaId}`, {
+          email: email || emailDB,
         });
-  
-        setToast({ message: "Alterações salvas com sucesso!", type: "success" });
+
+        //alert('Alterações salvas com sucesso!')
+        setToast({message: "Alterações salvas com sucesso!", type: "success"});
       } catch (err) {
-        console.error("erro grave:",err);
-        //alert('Erro ao salvar alterações');
-        setToast({ message: "Erro ao salvar alterações", type: "error" });
+        console.error(err)
+        //alert('Erro ao salvar alterações')
+        setToast({message: "Erro ao salvar alterações", type: "error"});
       }
-    }  
+    };
+
 
   return (
     <section className="max-w-3xl mx-auto space-y-6">
@@ -39,11 +50,11 @@ const SegurancaSection = () => {
       <div className="space-y-2">
         <label className="block text-sm">Email da conta:</label>
         <input
-          title="email"
+          title='email'
           type="email"
-          value={emailDB}
+          value={emailDB || 'email da empresa'}
           readOnly
-          className="w-full px-4 py-2 rounded-md border bg-gray-100 cursor-not-allowed"
+          className="w-full px-4 py-2 rounded-md border bg-gray-100 text-gray-400 cursor-not-allowed"
         />
       </div>
 
@@ -58,24 +69,21 @@ const SegurancaSection = () => {
         />
 
         <button
-         className="mt-2 bg-green-600 text-black px-4 py-2 rounded-md hover:bg-green-700"
-         type='button'
-         onClick={handleSave}
-         >
+          className="mt-2 bg-green-600 text-black px-4 py-2 rounded-md hover:bg-green-700"
+          type="button"
+          onClick={handleSave}
+        >
           Atualizar senha
         </button>
-
       </div>
 
-      {/* Toast de feedback */}
       {toast && (
-      <Toast
-      message={toast.message}
-      type={toast.type}
-      onClose={() => setToast(null)}
-      />
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
-
     </section>
   );
 };
