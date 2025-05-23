@@ -47,7 +47,7 @@ function CardRelatosResolvidos() {
   );
 
   return (
-    <div className="overflow-hidden bg-gray-100 py-32 px-8 md:px-16">
+    <div className="overflow-hidden py-32 px-8 md:px-16">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="font-semibold text-lg md:text-3xl text-green-700 mb-10">
           Amontoados já resolvidos com sucesso

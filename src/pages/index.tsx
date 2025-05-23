@@ -12,6 +12,7 @@ import image4 from '../assets/carta.jpg';
 import CardBeneficios from "../components/CardBeneficio";
 import CardRelatos from "../components/CardRelatos";
 import { motion } from "framer-motion"; 
+import Slide from "./slide";
 
 interface ModalProps {
   item: {
@@ -186,8 +187,8 @@ export default function Home() {
   animate={{ opacity: 1, y: 0 }} 
   transition={{ duration: 1 }}>
   <div className="w-full">
-      <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20" alt="handsWithPlant" />
-    </div>
+    <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20" alt="handsWithPlant" />
+  </div>
 
     <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
       <h2 className="text-lg md:text-3xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
@@ -195,6 +196,19 @@ export default function Home() {
       <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
       <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
     </div>
+</motion.div>
+
+{/* Seçcão slide */}
+<motion.div
+className=""
+initial={{ opacity: 0, y: 50 }}
+animate={{ opacity: 1, y: 0 }}
+transition={{ duration: 1, delay: 0.2 }}>
+
+ <div className="">
+   <Slide />
+ </div>
+
 </motion.div>
 
 {/* Seçcão Benefícios */}
@@ -205,7 +219,7 @@ export default function Home() {
 
 {/* Sessão Notícias */}
 <motion.div
-        className="min-h-screen flex flex-col items-center justify-center gap-6 p-6"
+        className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-gray-50"
         initial={{ opacity: 0, y: 50 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 1, delay: 0.2 }}

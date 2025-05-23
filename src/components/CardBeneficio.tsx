@@ -26,7 +26,7 @@ const passos = [
 
 export default function CardBeneficios() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center">
       <motion.section
         className="py-20 text-center w-full"
         initial={{ opacity: 0 }}
