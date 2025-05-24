@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import image1 from '../assets/11.png';
-import video1 from '../assets/video/Green World.mp4'
+import video1 from '../assets/video/greenWorld.mp4'
 
 type Midia = {
   id: number;
