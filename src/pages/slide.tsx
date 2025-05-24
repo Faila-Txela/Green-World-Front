@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import image1 from '../assets/11.png';
+import video1 from '../assets/video/Green World.mp4'
 
 type Midia = {
   id: number;
@@ -8,8 +10,8 @@ type Midia = {
 };
 
 const midias: Midia[] = [
-  { id: 1, tipo: 'imagem', url: 'src/assets/11.png' },
-  { id: 2, tipo: 'video', url: 'src/assets/video/Green World.mp4' },
+  { id: 1, tipo: 'imagem', url: image1 },
+  { id: 2, tipo: 'video', url: video1 },
 ];
 
 export default function Slide() {
@@ -42,7 +44,7 @@ export default function Slide() {
           {midiaSelecionada.tipo === 'imagem' ? (
             <img
               src={midiaSelecionada.url}
-              alt="Imagem ampliada"
+              alt="Green Wolrd Celular"
               className="max-h-[65vh] object-contain rounded-xl shadow-lg transition-transform duration-500"
             />
           ) : (
