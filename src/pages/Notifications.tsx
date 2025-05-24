@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import NotificacaoCard from "../components/notificacao/notificacao_card";
-import { IoNotificationsCircleOutline } from "react-icons/io5";
+import { IoNotificationsCircleOutline, IoNotificationsOffCircleOutline } from "react-icons/io5";
 import axios from "./../lib/axios";
 
 interface Notificacao {
@@ -74,7 +74,7 @@ export default function Notifications() {
   if (notifications.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
-        <IoNotificationsCircleOutline size={64} className="text-gray-300 mb-4" />
+        <IoNotificationsOffCircleOutline size={64} className="text-gray-300 mb-4" />
         <h2 className="text-xl font-semibold text-gray-600">Você não tem notificações.</h2>
         <p className="text-gray-400 mt-2">Volte mais tarde para ver se há novidades.</p>
       </div>

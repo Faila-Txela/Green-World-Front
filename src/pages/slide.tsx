@@ -8,9 +8,8 @@ type Midia = {
 };
 
 const midias: Midia[] = [
-  { id: 1, tipo: 'imagem', url: 'src/assets/sistema1.png' },
-  { id: 2, tipo: 'imagem', url: 'src/assets/11.png' },
-  { id: 4, tipo: 'video', url: 'src/assets/video/Green World - Google Chrome 2025-02-09 21-49-00.mp4' },
+  { id: 1, tipo: 'imagem', url: 'src/assets/11.png' },
+  { id: 2, tipo: 'video', url: 'src/assets/video/Green World.mp4' },
 ];
 
 export default function Slide() {
@@ -50,6 +49,8 @@ export default function Slide() {
             <video
               src={midiaSelecionada.url}
               controls
+              autoPlay
+              muted
               className="max-h-[65vh] object-contain rounded-xl shadow-lg transition-transform duration-500"
             />
           )}
