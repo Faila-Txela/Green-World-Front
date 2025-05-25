@@ -35,9 +35,9 @@ export default function AdminDashboard() {
   const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
 
   useEffect(() => {
-    userService.getAll().then(res => setUsers(res.data));
-    empresaService.getAll().then(res => setEmpresas(res.data));
-    relatarService.getAll().then(res => setRelatos(res.data));
+    userService.getAll().then(response => setUsers(response.data));
+    empresaService.getAll().then(response => setEmpresas(response.data));
+    relatarService.getAll().then(response => setRelatos(response.data));
   }, []);
 
   return (

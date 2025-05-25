@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import MapComponent from "../../components/Map";
 import { FaTrashAlt, FaMapMarkerAlt, FaChartLine } from "react-icons/fa";
+import { relatarService } from "../../modules/service/api/relatar/index";
 
 export default function PersonalDashboard() {
   // Dados simulados
@@ -11,9 +13,18 @@ export default function PersonalDashboard() {
     { month: "Abril", relatos: 5 },
   ];
 
-  const totalRelatos = 5;
+  const [relatosAll, setRelatosAll] = useState([]);
+
   const tipoMaisComum = "Orgânico";
   const ultimoLocal = "Samba";
+
+  // Fetch all reports when component mounts
+  useEffect(() => {
+    relatarService.getAll().then((response) => {
+      setRelatosAll(response.data);
+    });
+
+  }, []);
 
   return (
     <div className="flex justify-center items-center mt-40">
@@ -36,7 +47,7 @@ export default function PersonalDashboard() {
           <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
             <FaTrashAlt className="text-4xl text-green-600 mb-2" />
             <h3 className="text-lg font-semibold">Total de Relatos</h3>
-            <p className="text-2xl text-blue-500 font-bold">{totalRelatos}</p>
+            <p className="text-2xl text-blue-500 font-bold">{relatosAll.length}</p>
           </div>
 
           <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">

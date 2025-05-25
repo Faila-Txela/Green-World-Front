@@ -155,7 +155,7 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!formData.nif.trim() || formData.nif.length < 10) {
+  if (!formData.nif.trim() || formData.nif.length <= 10) {
     setToast({ message: "O NIF da empresa deve conter 10 dígitos!", type: "error" });
     return;
   }
@@ -411,7 +411,10 @@ export default function EnterpriseForm() {
           </div>
         </form>
               {/* Exibe o Toast se houver mensagem */}
-            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+            {toast && 
+            <Toast message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)} />}
       </div>
     </div>
   );

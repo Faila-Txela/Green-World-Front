@@ -22,7 +22,7 @@ class UserService{
 
   async delete(id: string) {
         const { data } = await axios.delete(`/users/${id}`);
-        return data;
+        return data; 
     }
 
   async logOut() {
