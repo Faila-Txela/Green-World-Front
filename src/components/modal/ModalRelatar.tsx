@@ -5,6 +5,7 @@ import TextArea from "../ui/TextArea";
 import UploadArea from "../upload-area/single";
 import { relatarService } from "../../modules/service/api/relatar";
 import { validatorImagesService } from "../../modules/service/api/ImagesValidator";
+import { LiaSpinnerSolid } from "react-icons/lia";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { format } from "date-fns";
@@ -312,8 +313,8 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
           width={window.innerWidth}
           height={window.innerHeight}
           recycle={false}
-          numberOfPieces={200}
-          gravity={0.5}
+          numberOfPieces={250}
+          gravity={0.7}
         />
       )}
 
@@ -420,7 +421,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
               </label>
               <UploadArea onChange={handleImageValidation} />
               {isImageLoading && (
-                <p className="text-green-600 text-sm mt-1 animate-bounce">Validando imagem... <span className="animate-spin">⏳</span></p>
+                <p className="text-green-600 text-sm mt-1 flex gap-2">Validando imagem... <LiaSpinnerSolid size={24} color="" className="animate-spin" /></p>
               )}
               {isImageValid === false && (
                 <p className="text-red-500 text-sm mt-1">A imagem enviada não parece conter lixo. Tente outra.</p>

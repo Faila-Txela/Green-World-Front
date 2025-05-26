@@ -155,11 +155,10 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!/^\d{10}$/.test(formData.nif)) {
-    setToast({ message: "O NIF da empresa deve conter 10 dígitos!", type: "error" });
+  if (!formData.nif.trim()) {
+    setToast({ message: "O NIF da empresa deve conter 9 dígitos válidos!", type: "error" });
     return;
   }
-
 
   if (!provincia) {
     setToast({ message: "Selecione uma província!", type: "error" });
@@ -194,7 +193,7 @@ export default function EnterpriseForm() {
         setTimeout(() => navigate("/enterprise-login"), 2000)
       }
     } catch (error) {
-      //console.log("❌ Erro ao cadastrar sua empresa:", error);
+      console.error("❌ Erro ao cadastrar sua empresa:", error);
       setToast({ message: "Erro ao cadastrar sua empresa", type: "error" })
     }
   };

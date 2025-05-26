@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import NotificacaoCard from "../components/notificacao/notificacao_card";
 import { IoNotificationsCircleOutline, IoNotificationsOffCircleOutline } from "react-icons/io5";
+import Toast from "../components/ui/Toast";
 import axios from "./../lib/axios";
 
 interface Notificacao {
@@ -15,6 +16,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState<Notificacao[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [filtro, setFiltro] = useState<"todas" | "lidas" | "nao-lidas">("todas");
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const user = JSON.parse(
     localStorage.getItem("user") || localStorage.getItem("empresa") || "{}"
@@ -47,12 +49,13 @@ export default function Notifications() {
 
   const marcarComoLida = async (id: string) => {
     try {
-      await axios.put(`/notificacao/${id}/marcar-como-lida`); // Simule se não existir
+      await axios.put(`/notificacao/${id}/marcar-lida`); // Simule se não existir
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
       );
     } catch (error) {
-      console.error("Erro ao marcar como lida", error);
+      console.error("Erro ao marcar notificação como lida", error);
+      setToast({ message: "Erro ao marcar notificação como lida.", type: "error"});
     }
   };
 
@@ -140,6 +143,16 @@ export default function Notifications() {
           ))}
         </div>
       </div>
+
+      {/* Toast para mensagens de feedback */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
     </div>
   );
 }
