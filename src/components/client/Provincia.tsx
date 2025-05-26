@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { provinciaService } from "../../modules/service/api/provincia"; 
 import { FaCity } from 'react-icons/fa'
+import { MdOutlineLocationOff } from 'react-icons/md';
 
 type Provincia = {
   id: number;
@@ -90,53 +91,61 @@ function ProvinceSettings() {
         </button>
       </div>
 
-      <ul className="space-y-2">
-        {provincias.map((prov) => (
-          <li key={prov.id} className="flex items-center justify-between bg-gray-100 px-3 py-2 rounded">
-            {editandoId === prov.id ? (
-              <>
-                <input
-                  value={nomeEditado}
-                  onChange={(e) => setNomeEditado(e.target.value)}
-                  className="border px-2 py-1 rounded w-full mr-2"
-                  placeholder="Editar nome da província"
-                />
-                <button
-                  type="button"
-                  onClick={() => confirmarAcao("atualizar", prov.id, nomeEditado)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                >
-                  Salvar
-                </button>
-              </>
-            ) : (
-              <>
-                <span>{prov.nome}</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                    setEditandoId(prov.id);
-                    setNomeEditado(prov.nome);
-                    }}
-                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition-all duration-300"
-                  >
-                    Editar
-                  </button>
+{provincias.length === 0 ? (
+  <div className="flex flex-col items-center justify-center text-gray-500 mt-10">
+    <MdOutlineLocationOff className="text-5xl text-gray-400" />
+    <p className="text-center">Nenhuma província encontrada no momento.</p>
+  </div>
+) : (
+  <ul className="space-y-2">
+    {provincias.map((prov) => (
+      <li key={prov.id} className="flex items-center justify-between bg-gray-100 px-3 py-2 rounded">
+        {editandoId === prov.id ? (
+          <>
+            <input
+              value={nomeEditado}
+              onChange={(e) => setNomeEditado(e.target.value)}
+              className="border px-2 py-1 rounded w-full mr-2"
+              placeholder="Editar nome da província"
+            />
+            <button
+              type="button"
+              onClick={() => confirmarAcao("atualizar", prov.id, nomeEditado)}
+              className="bg-blue-500 text-white px-2 py-1 rounded"
+            >
+              Salvar
+            </button>
+          </>
+        ) : (
+          <>
+            <span>{prov.nome}</span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditandoId(prov.id);
+                  setNomeEditado(prov.nome);
+                }}
+                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition-all duration-300"
+              >
+                Editar
+              </button>
 
-                  <button
-                    type="button"
-                    onClick={() => confirmarAcao("remover", prov.id, prov.nome)}
-                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 transition-all duration-300"
-                  >
-                    Excluir
-                  </button>
-                </div>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+              <button
+                type="button"
+                onClick={() => confirmarAcao("remover", prov.id, prov.nome)}
+                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 transition-all duration-300"
+              >
+                Excluir
+              </button>
+            </div>
+          </>
+        )}
+      </li>
+    ))}
+  </ul>
+)}
+
 
       {/* Modal */}
       {modalVisible && acaoModal && (

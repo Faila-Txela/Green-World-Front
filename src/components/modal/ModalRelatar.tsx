@@ -212,6 +212,20 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
         longitude: true
       };
       setTouchedFields(allFields);
+
+      // Validação dos campos de "bairro" e "descrição"
+      const descricao = formData.descricao.trim();
+      const bairro = formData.bairro.trim();
+
+      if (!/^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/.test(descricao)) {
+      setToast({ message: "A descrição deve conter apenas letras e não pode ter espaços em excesso!", type: "error" });
+      return;
+      }
+
+      if (!/^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/.test(bairro)) {
+      setToast({ message: "O bairro deve conter apenas letras e não pode ter espaços em excesso!", type: "error" });
+      return;
+      }
       
       return setToast({ 
         message: "Preencha todos os campos corretamente.", 
@@ -299,7 +313,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
           height={window.innerHeight}
           recycle={false}
           numberOfPieces={200}
-          gravity={0.2}
+          gravity={0.5}
         />
       )}
 
@@ -406,7 +420,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
               </label>
               <UploadArea onChange={handleImageValidation} />
               {isImageLoading && (
-                <p className="text-green-600 text-sm mt-1">Validando imagem... <span className="animate-pulse">⏳</span></p>
+                <p className="text-green-600 text-sm mt-1 animate-bounce">Validando imagem... <span className="animate-spin">⏳</span></p>
               )}
               {isImageValid === false && (
                 <p className="text-red-500 text-sm mt-1">A imagem enviada não parece conter lixo. Tente outra.</p>

@@ -155,10 +155,11 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!formData.nif.trim() || formData.nif.length <= 10) {
+  if (!/^\d{10}$/.test(formData.nif)) {
     setToast({ message: "O NIF da empresa deve conter 10 dígitos!", type: "error" });
     return;
   }
+
 
   if (!provincia) {
     setToast({ message: "Selecione uma província!", type: "error" });
