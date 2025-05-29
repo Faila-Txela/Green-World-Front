@@ -1,10 +1,12 @@
 import {
-  BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart, Line
+  BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart, Line
 } from "recharts";
 import { useEffect, useState } from "react";
 import { userService } from "../../modules/service/api/user";
 import { empresaService } from "../../modules/service/api/empresa";
 import { relatarService } from "../../modules/service/api/relatar";
+import { IoBusinessOutline, IoPeopleOutline, IoWarningOutline, IoDocumentTextOutline } from "react-icons/io5";
+
 //import { recolhaService } from "../../modules/service/api/recolha";
 
 export default function AdminDashboard() {
@@ -13,126 +15,102 @@ export default function AdminDashboard() {
   const [relatos, setRelatos] = useState([]);
   const [recolhas, setRecolhas] = useState([]);
 
-  // Gráficos estáticos (pode substituir depois por dados dinâmicos)
-  const locationsData = [
-    { name: "Centro da Cidade", relatos: 120 },
-    { name: "Mutamba", relatos: 85 },
-    { name: "Viana", relatos: 65 },
-  ];
-
-  const monthsData = [
-    { name: "Janeiro", coletados: 80 },
-    { name: "Fevereiro", coletados: 45 },
-    { name: "Março", coletados: 10 },
-  ];
-
-  const wasteTypesData = [
-    { name: "Plástico", value: 26 },
-    { name: "Orgânico", value: 38 },
-    { name: "Metal", value: 10 },
-  ];
-
-  const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
-
   useEffect(() => {
     userService.getAll().then(response => setUsers(response.data));
     empresaService.getAll().then(response => setEmpresas(response.data));
     relatarService.getAll().then(response => setRelatos(response.data));
   }, []);
 
+    // Preparando os dados para o gráfico de Estatísticas do Sistema
+  const statisticsData = [
+    { name: "Usuários", value: users.length },
+    { name: "Empresas", value: empresas.length },
+    { name: "Relatos", value: relatos.length },
+    { name: "Recolhas", value: recolhas.length },
+  ];
+
   return (
     <div className="p-6">
       {/* Indicadores numéricos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        <div className="bg-white p-4 rounded-xl shadow text-center">
-          <h3 className="text-sm text-gray-500 font-semibold">Usuários Cadastrados</h3>
-          <p className="text-2xl font-bold text-green-600">{users.length}</p>
+        
+        {/* Seção Users */}
+        <div className="bg-white p-4 text-center flex items-center space-x-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
+          <div className="bg-gray-100 p-3 rounded-md">
+            <IoPeopleOutline size={36} color="green" className="" />
+          </div>
+
+          <div className="flex flex-col items-start">
+            <h3 className="text-sm text-gray-500 font-semibold">Usuários Cadastrados</h3>
+            <p className="text-2xl font-bold text-green-600">{users.length}</p>
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow text-center">
-          <h3 className="text-sm text-gray-500 font-semibold">Empresas Ativas</h3>
+
+        {/* Seção Empresa */}
+        <div className="bg-white p-4 text-center flex items-center space-x-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
+          <div className="bg-gray-100 p-3 rounded-md">
+            <IoBusinessOutline size={36} color="green" className="" />
+          </div>
+          <div className="flex flex-col items-start">
+            <h3 className="text-sm text-gray-500 font-semibold">Empresas Ativas</h3>
           <p className="text-2xl font-bold text-green-600">{empresas.length}</p>
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow text-center">
-          <h3 className="text-sm text-gray-500 font-semibold">Relatos Recebidos</h3>
-          <p className="text-2xl font-bold text-green-600">{relatos.length}</p>
+
+        {/* Seção Relatos Feitos */}
+        <div className="bg-white p-4 text-center flex items-center space-x-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
+          <div className="bg-gray-100 p-3 rounded-md">
+            <IoWarningOutline size={36} color="green" className="" />
+          </div>
+          <div className="flex flex-col items-start">
+            <h3 className="text-sm text-gray-500 font-semibold">Relatos Feitos</h3>
+            <p className="text-2xl font-bold text-green-600">{relatos.length}</p>
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow text-center">
-          <h3 className="text-sm text-gray-500 font-semibold">Recolhas Concluídas</h3>
-          <p className="text-2xl font-bold text-green-600">{recolhas.length}</p>
+
+        {/* Seção Relatos Resolvidos */}
+        <div className="bg-white p-4 text-center flex items-center space-x-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
+          <div className="bg-gray-100 p-3 rounded-md">
+            <IoDocumentTextOutline size={36} color="green" className="" />
+          </div>
+          <div className="flex flex-col items-start">
+            <h3 className="text-sm text-gray-500 font-semibold">Relatos Resolvidos</h3>
+            <p className="text-2xl font-bold text-green-600">{recolhas.length}</p>
+          </div>
         </div>
       </div>
 
-      {/* Gráficos organizados em grid responsivo */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
-        <div className="bg-white p-4 shadow rounded-xl w-full">
-          <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
+      <div className="min-h-screen flex flex-col justify-center items-center gap-8 mt-16 w-full">
+        {/* Gráfico único com estatísticas */}
+        <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
+          <h2 className="text-lg font-semibold mb-4 text-center">Estatísticas do Sistema</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={locationsData}>
+            <BarChart data={statisticsData}>
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="relatos" fill="#82ca9d" />
+              <Bar dataKey="value" fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-4 shadow rounded-xl w-full">
-          <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={monthsData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="coletados" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white p-4 shadow rounded-xl w-full">
-          <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie data={wasteTypesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                {wasteTypesData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white p-4 shadow rounded-xl w-full md:col-span-2 lg:col-span-3">
-          <h2 className="text-lg font-semibold mb-4 text-center">Evolução dos Relatos por Mês</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={monthsData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="coletados" stroke="#00C49F" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+        {/* Lista de últimos relatos */}
+        <div className="bg-white p-6 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
+          <h2 className="text-lg font-semibold mb-4">Últimos Relatos</h2>
+          <ul className="divide-y divide-gray-200">
+            {relatos.slice(-5).reverse().map((r: any, idx) => (
+              <li key={idx} className="py-3 flex justify-between">
+                <span>{r.municipio?.nome} - {new Date(r.createdAt).toLocaleDateString()}</span>
+                <span className={`text-sm px-2 rounded ${r.status === "Pendente" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
+                  {r.status}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-      {/* Lista de últimos relatos */}
-      <div className="bg-white p-4 rounded-xl shadow">
-        <h2 className="text-lg font-semibold mb-4">Últimos Relatos</h2>
-        <ul className="divide-y divide-gray-200">
-          {relatos.slice(-5).reverse().map((r: any, idx) => (
-            <li key={idx} className="py-2 flex justify-between">
-              <span>{r.municipio?.nome} - {new Date(r.createdAt).toLocaleDateString()}</span>
-              <span className={`text-sm px-2 rounded ${r.status === "Pendente" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
-                {r.status}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+  </div>
   );
 }

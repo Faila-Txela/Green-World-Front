@@ -1,4 +1,3 @@
-import { Autocomplete } from "@react-google-maps/api";
 import PropTypes from "prop-types"
 
 interface InputProps {

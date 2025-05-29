@@ -32,7 +32,7 @@ export default function Notifications() {
 
       const comEstadoLido = response.data.map((n: Notificacao) => ({
         ...n,
-        lida: n.lida ?? false, // Preserva ou simula valor de leitura
+        lida: n.lida ?? false, 
       }));
 
       setNotifications(comEstadoLido);
@@ -49,7 +49,7 @@ export default function Notifications() {
 
   const marcarComoLida = async (id: string) => {
     try {
-      await axios.put(`/notificacao/${id}/marcar-lida`); // Simule se não existir
+      await axios.put(`/notificacao/${id}/marcar-lida`); 
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
       );

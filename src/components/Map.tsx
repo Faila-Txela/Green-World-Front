@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect, useState } from 'react';
 import { relatarService } from '../modules/service/api/relatar';
+import { LiaSpinnerSolid } from "react-icons/lia";
+import { MdError } from "react-icons/md";
 
 // Dados estáticos como fallback
 const staticLocations = [
@@ -37,6 +39,8 @@ const getMarkerIcon = (relatos: number) => {
 
 const MapComponent = () => {
   const [locations, setLocations] = useState(staticLocations);
+  const [loading, setLoading] = useState(true);  // Para mostrar o estado de carregamento
+  const [error, setError] = useState<string | null>(null); // Para mostrar um erro, caso ocorra
 
   useEffect(() => {
     const fetchAmontoados = async () => {
@@ -47,30 +51,50 @@ const MapComponent = () => {
         // Agrupar por município
         const grouped = new Map<string, { name: string; relatos: number; lat: number; lon: number }>();
 
-        for (const item of data) {
-          const municipio = item.municipio?.nome || 'Desconhecido';
+        data.forEach((item: any) => {
+          const municipio = item.municipio?.nome || 'Desconhecido'; // Garantir que o nome do município é acessado corretamente
+          const lat = parseFloat(item.latitude);
+          const lon = parseFloat(item.longitude);
+
           if (!grouped.has(municipio)) {
             grouped.set(municipio, {
               name: municipio,
               relatos: 1,
-              lat: parseFloat(item.latitude),
-              lon: parseFloat(item.longitude),
+              lat,
+              lon,
             });
           } else {
             const current = grouped.get(municipio)!;
             current.relatos += 1;
             grouped.set(municipio, current);
           }
-        }
+        });
 
         setLocations(Array.from(grouped.values()));
+        setLoading(false);  // Dados carregados, desativa o estado de carregamento
       } catch (error) {
-        console.error("Erro ao carregar dados dinâmicos, usando estáticos", error);
+        setError('Erro ao carregar dados dinâmicos. Exibindo dados estáticos.');
+        setLoading(false);  // Se falhar, desativa o carregamento
       }
     };
 
     fetchAmontoados();
   }, []);
+
+  // Se ainda estiver carregando ou se ocorreu um erro
+  if (loading) {
+    return <div className='flex gap-4'>
+      <p>Carregando mapa...</p>
+      <LiaSpinnerSolid size={28} className='animate-spin' />
+      </div>;
+  }
+
+  if (error) {
+    return <div className='flex gap-4 text-red-600'>
+      {error}
+      <MdError size={28} className='animate-pulse'/>
+      </div>;
+  }
 
   return (
     <MapContainer center={[-8.83833, 13.2571]} zoom={12} className='z-10' style={{ height: '400px', width: '100%' }}>
