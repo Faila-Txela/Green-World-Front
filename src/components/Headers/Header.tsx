@@ -140,7 +140,7 @@ export default function Header() {
       className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-10"
     />
     <div className="fixed top-16 right-2 shadow-2xl rounded-xl p-5 backdrop-blur-md bg-black/60 border border-white/20 transition-all duration-500 md:hidden z-20">
-      <nav className="flex flex-col justify-center items-center gap-6 p-3">
+      <nav className="flex flex-col justify-start items-start gap-6 p-3">
 
         <div className="flex items-center gap-3 group hover:text-green-500 transition duration-300 transform hover:scale-105 cursor-pointer">
           <CiHome size={26} className="text-white group-hover:text-green-500 transition duration-300" />

@@ -68,7 +68,7 @@ function Users() {
         </div> */}
 
         <h3 className="text-lg font-semibold mb-4 mt-10">{titulo}</h3>
-        <table className="w-full text-left border-collapse mb-8">
+        <table className="w-full text-left border-collapse mb-8 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
           <thead>
             <tr className="bg-gray-200">
               <th className="p-2 border-b">Nome</th>

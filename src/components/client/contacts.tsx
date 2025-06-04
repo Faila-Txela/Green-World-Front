@@ -70,10 +70,10 @@ async function enviarResposta() {
       ) : contacto.length === 0 ? (
         <p className="text-gray-600">Nenhuma mensagem encontrada.</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow border border-gray-200">
+        <div className="overflow-x-auto border border-gray-200 shadow hover:shadow-lg transition-all duration-300 rounded-xl">
           <table className="min-w-full divide-y divide-gray-200 bg-white">
             <thead className="bg-gray-100">
-              <tr>
+              <tr className="">
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Nome</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Mensagem</th>
@@ -84,7 +84,7 @@ async function enviarResposta() {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {contacto.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-50">
+                <tr key={c.id} className="hover:bg-green-100 transition-all duration-150">
                   <td className="px-4 py-3 text-sm text-gray-800">{c.nome}</td>
                   <td className="px-4 py-3 text-sm text-gray-800">{c.email}</td>
                   <td className="px-4 py-3 text-sm text-gray-800">

@@ -6,7 +6,6 @@ import { userService } from "../../modules/service/api/user";
 import { empresaService } from "../../modules/service/api/empresa";
 import { relatarService } from "../../modules/service/api/relatar";
 import { IoBusinessOutline, IoPeopleOutline, IoWarningOutline, IoDocumentTextOutline } from "react-icons/io5";
-
 //import { recolhaService } from "../../modules/service/api/recolha";
 
 export default function AdminDashboard() {

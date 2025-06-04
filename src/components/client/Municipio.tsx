@@ -45,7 +45,7 @@ function Municipio() {
   }
 
   return (
-    <div className="rounded shadow-md p-3 mt-20">
+    <div className="shadow hover:shadow-lg transition-all duration-300 rounded-xl p-3 mt-20">
       {/* Título */}
       <div className="flex items-center gap-3 mb-8">
         <FaCity className="h-9 w-9 text-green-600 animate-pulse" />

@@ -28,7 +28,9 @@ export default function Notifications() {
     try {
       const response = user?.tipoEmpresa_id
         ? await axios.get(`/notificacao/${user.id}/empresa`)
-        : await axios.get(`/notificacao/${user.id}/user`);
+        : await axios.get(`/notificacao/${user.id}/user`)
+
+        console.log
 
       const comEstadoLido = response.data.map((n: Notificacao) => ({
         ...n,

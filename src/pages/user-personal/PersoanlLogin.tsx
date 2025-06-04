@@ -72,7 +72,7 @@ export default function PersonalLogin() {
     try {
       setLoading(true);
       const { data, status } = await axios.post("user/login", {email, senha});
-      console.log("Login data:", data.data);
+      //console.log("Login data:", data.data);
 
       if (status === 200) {
         setToast({ message: "Login feito com sucesso!", type: "success" });
@@ -85,12 +85,13 @@ export default function PersonalLogin() {
           localStorage.setItem("userId", userId);
         } else {
           console.warn("ID do usuário não encontrado no login.");
+          setToast({ message: "ID do usuário não encontrado no login.", type: "error" });
         }
       
         setTimeout(() => navigate("/personal-dashboard"), 2000);
       }
        else {
-        console.error(data.error);
+       // console.error(data.error);
         setToast({ message: "Erro ao fazer login.", type: "error" });
       }
      } 
