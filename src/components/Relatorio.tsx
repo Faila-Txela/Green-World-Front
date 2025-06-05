@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TbReport } from "react-icons/tb";
+import { FaDownload } from "react-icons/fa6";
 import axios from '../lib/axios';
 import Toast from './ui/Toast';
 import { jsPDF } from 'jspdf';
@@ -169,14 +170,16 @@ const Relatorio = () => {
         <button 
         type='button'
         onClick={exportToPDF} 
-        className="bg-blue-600 text-white px-4 py-2 rounded">
+        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded">
+          <FaDownload />
           Exportar PDF
         </button>
 
         <button 
         type='button'
         onClick={exportToExcel} 
-        className="bg-green-600 text-white px-4 py-2 rounded">
+        className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded">
+          <FaDownload />
           Exportar Excel
         </button>
 

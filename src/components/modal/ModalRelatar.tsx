@@ -223,8 +223,8 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
       return;
       }
 
-      if (!/^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/.test(bairro)) {
-      setToast({ message: "O bairro deve conter apenas letras e não pode ter espaços em excesso!", type: "error" });
+      if (!/^[A-Za-zÀ-ÿ0-9]+(?: [A-Za-zÀ-ÿ0-9]+)*$/.test(bairro)) {
+      setToast({ message: "O bairro não pode ter espaços em excesso e símbolos!", type: "error" });
       return;
       }
       

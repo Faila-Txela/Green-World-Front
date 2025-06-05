@@ -155,7 +155,8 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!formData.nif.trim()) {
+  //const nifLimpo = formData.nif.replace(/\s+/g, '');
+  if (!formData.nif.trim() || !/^\d{9}$/.test(formData.nif)) {
     setToast({ message: "O NIF da empresa deve conter 9 dígitos válidos!", type: "error" });
     return;
   }
@@ -391,7 +392,7 @@ export default function EnterpriseForm() {
 
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span>
-              <input type="checkbox" name="terms" id="terms" title="Agree to terms and privacy policy" required />
+              <input type="checkbox" name="terms" id="terms" className="bg-green-600" title="Agree to terms and privacy policy" required />
             </span>
             <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World <span className="text-red-500">*</span></Link>
           </div>

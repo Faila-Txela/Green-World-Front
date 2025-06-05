@@ -45,7 +45,7 @@ function Agendar() {
     const end = new Date(form.end_time);
 
     if (!form.contexto.trim() || !form.start_time || !form.end_time) {
-      setToast({ message: "Por favor, preencha todos os dados de forma correcta.", type: "error" });
+      setToast({ message: "Por favor, preencha todos os dados correctamente.", type: "error" });
       return;
     }
 
@@ -67,7 +67,7 @@ function Agendar() {
       });
     }
 
-    if (!form.contexto.trim()) {
+    if (!/^[A-Za-zÀ-ÿ0-9]+(?: [A-Za-zÀ-ÿ0-9]+)*$/.test(form.contexto)) {
       setToast({ message: "Por favor, insira um contexto válido (sem apenas espaços).", type: "error" });
       return;
     }    
