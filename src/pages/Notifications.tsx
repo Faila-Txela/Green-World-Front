@@ -23,27 +23,33 @@ export default function Notifications() {
   );
 
   const fetchNotifications = useCallback(async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      const response = user?.tipoEmpresa_id
-        ? await axios.get(`/notificacao/${user.id}/empresa`)
-        : await axios.get(`/notificacao/${user.id}/user`)
+  if (!user?.id) return; // Verifica se o user.id existe
+  setLoading(true);
+  try {
+    const response = user?.tipoEmpresa_id
+      ? await axios.get(`/notificacao/${user.id}/empresa`)
+      : await axios.get(`/notificacao/${user.id}/user`);
 
-        console.log
+    console.log('Resposta da API:', response.data); // Log útil para debug
 
+    if (response.data && Array.isArray(response.data)) {
       const comEstadoLido = response.data.map((n: Notificacao) => ({
         ...n,
-        lida: n.lida ?? false, 
+        createAt: new Date(n.createAt), // Garante que é um Date object
+        lida: n.lida ?? false,
       }));
 
       setNotifications(comEstadoLido);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    } else {
+      setNotifications([]);
     }
-  }, [user]);
+  } catch (error) {
+    console.error('Erro ao buscar notificações:', error);
+    setToast({ message: "Erro ao carregar notificações.", type: "error" });
+  } finally {
+    setLoading(false);
+  }
+}, [user?.id, user?.tipoEmpresa_id]); // Dependências mais específicas
 
   useEffect(() => {
     fetchNotifications();
