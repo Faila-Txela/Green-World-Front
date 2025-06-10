@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useProfile } from "../../routes/profileContext";
 import pic from '../../assets/default-avatar-profile-picture-male-icon.png';
 import axios from '../../lib/axios';
 import Toast from '../ui/Toast';
@@ -6,7 +7,9 @@ import Toast from '../ui/Toast';
 const GeralSection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const { setProfilePic: setProfilePicGlobal } = useProfile();
+  const { profilePic, setProfilePic } = useProfile()
+  //const [profilePic, setProfilePic] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Inputs preenchidos pelo usuário
@@ -31,6 +34,9 @@ const GeralSection = () => {
       setIbanDB(user.iban || '');
       setFotoDB(user.imagemPerfil || null);
       setProfilePic(user.imagemPerfil || null);
+
+      // Atualiza também no contexto a foto que vem do banco!
+      setProfilePicGlobal(user.imagemPerfil || null);
     });
   }, []);
 
@@ -60,15 +66,19 @@ const GeralSection = () => {
         nome: nome || nomeDB,
         biografia: biografia || biografiaDB,
         iban: iban || ibanDB,
-        imagemPerfil,
+        if (imagemPerfil: any) {
+          setProfilePic(imagemPerfil)
+        }
       });
 
-      //alert('Alterações salvas com sucesso!');
       setToast({ message: "Alterações salvas com sucesso!", type: "success" });
-      if (imagemPerfil) localStorage.setItem("userFoto", imagemPerfil);
+
+      if (imagemPerfil) {
+        localStorage.setItem("userFoto", imagemPerfil);
+        setProfilePicGlobal(imagemPerfil); // Atualiza a foto no contexto global!
+      }
     } catch (err) {
       console.error(err);
-      //alert('Erro ao salvar alterações');
       setToast({ message: "Erro ao salvar alterações", type: "error" });
     }
   };
@@ -147,15 +157,14 @@ const GeralSection = () => {
         </button>
       </div>
 
-        {/* Toast de feedback */}
-        {toast && (
+      {/* Toast de feedback */}
+      {toast && (
         <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast(null)}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
-        )}
-
+      )}
     </section>
   );
 };

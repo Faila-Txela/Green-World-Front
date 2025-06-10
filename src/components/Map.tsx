@@ -39,7 +39,7 @@ const getMarkerIcon = (relatos: number) => {
 
 const MapComponent = () => {
   const [locations, setLocations] = useState(staticLocations);
-  const [loading, setLoading] = useState(true);  // Para mostrar o estado de carregamento
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); // Para mostrar um erro, caso ocorra
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const MapComponent = () => {
         setLocations(Array.from(grouped.values()));
         setLoading(false);  // Dados carregados, desativa o estado de carregamento
       } catch (error) {
-        setError('Erro ao carregar dados dinâmicos. Exibindo dados estáticos.');
+        setError('Erro ao carregar dados dinâmicos. Por favor conecte-se a internet');
         setLoading(false);  // Se falhar, desativa o carregamento
       }
     };

@@ -8,9 +8,9 @@ import { relatarService } from "../../modules/service/api/relatar/index";
 export default function PersonalDashboard() {
   // Dados simulados
   const userReportsData = [
-    { month: "Fevereiro", relatos: 3 },
-    { month: "Março", relatos: 7 },
-    { month: "Abril", relatos: 5 },
+    { month: "Março", relatos: 2 },
+    { month: "Abril", relatos: 2 },
+    { month: "Junho", relatos: 1 },
   ];
 
   const [relatosAll, setRelatosAll] = useState([]);
@@ -38,7 +38,7 @@ export default function PersonalDashboard() {
 
         {/* Mapa com pontos de lixo */}
         <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full mb-10">
-          <h2 className="text-lg font-semibold mb-4 text-start">Mapa de Locais com Mais Relatos</h2>
+          <h2 className="text-lg font-semibold mb-4 text-start">Mapa de Locais com Relatos</h2>
           <MapComponent />
         </div>
 

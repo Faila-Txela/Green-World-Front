@@ -30,7 +30,7 @@ export default function Notifications() {
       ? await axios.get(`/notificacao/${user.id}/empresa`)
       : await axios.get(`/notificacao/${user.id}/user`);
 
-    console.log('Resposta da API:', response.data); // Log útil para debug
+    console.log('Resposta da API:', response.data);
 
     if (response.data && Array.isArray(response.data)) {
       const comEstadoLido = response.data.map((n: Notificacao) => ({
