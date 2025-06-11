@@ -26,9 +26,11 @@ export default function Notifications() {
   if (!user?.id) return; // Verifica se o user.id existe
   setLoading(true);
   try {
-    const response = user?.tipoEmpresa_id
-      ? await axios.get(`/notificacao/${user.id}/empresa`)
-      : await axios.get(`/notificacao/${user.id}/user`);
+    const response = user.tipoEmpresa_id ?
+     await axios.get(`/notificacao/${user.id}/empresa`)
+     : await axios.get(`/notificacao/${user.id}/user`);
+
+    console.log('Resposta', response, user);
 
     console.log('Resposta da API:', response.data);
 
