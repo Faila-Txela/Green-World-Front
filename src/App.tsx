@@ -39,12 +39,12 @@ export default function App() {
           </ProfileProvider>
         }
       />
-      {/* <Route path="/personal-login" element={<PersonalLogin />} />
+       <Route path="/personal-login" element={<PersonalLogin />} />
       <Route path="/notificacao" element={<Notifications />} />
       <Route path="/login-enter" element={<EnterpriseLogin />} />
       <Route path="/dash-enter" element={<EnterpriseSidebar />} />
       <Route path="/admin" element={<SidebarAdmin />} />
-      <Route path="/dash-per" element={<PersonalSidebar />} /> */}
+      <Route path="/dash-per" element={<PersonalSidebar />} /> 
        <Route
         path="/personal-login"
         element={
