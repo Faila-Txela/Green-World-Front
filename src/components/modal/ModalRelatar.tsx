@@ -350,7 +350,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
                 Província <span className="text-red-500">*</span>
               </label>
               <select 
-                className={`w-full p-3 border rounded-md ${isFieldInvalid("provincia", provincia) ? "border-red-500" : ""}`}
+                className={`w-full p-3 border rounded-md cursor-pointer ${isFieldInvalid("provincia", provincia) ? "border-red-500" : ""}`}
                 title="provincia" 
                 value={provincia}
                 onChange={(e) => handleSelectChange(e, setProvincia)}
@@ -368,7 +368,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
                 Município <span className="text-red-500">*</span>
               </label>
               <select 
-                className={`w-full p-3 border rounded-md ${isFieldInvalid("municipio", municipio) ? "border-red-500" : ""}`}
+                className={`w-full p-3 border rounded-md cursor-pointer ${isFieldInvalid("municipio", municipio) ? "border-red-500" : ""}`}
                 title="municipio" 
                 value={municipio}
                 onChange={(e) => handleSelectChange(e, setMunicipio)}
@@ -401,7 +401,7 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
                 Prioridade <span className="text-red-500">*</span>
               </label>
               <select 
-                className={`w-full p-3 border rounded-md ${isFieldInvalid("prioridade", prioridade) ? "border-red-500" : ""}`}
+                className={`w-full p-3 border rounded-md cursor-pointer ${isFieldInvalid("prioridade", prioridade) ? "border-red-500" : ""}`}
                 title="prioridade" 
                 value={prioridade}
                 onChange={(e) => handleSelectChange(e, setPrioridade)}
