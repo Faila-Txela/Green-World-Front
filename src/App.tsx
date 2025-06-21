@@ -31,7 +31,14 @@ export default function App() {
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/register-enterprise" element={<RegisterEnterprise />} />
       <Route path="/register-personal" element={<RegisterPersonal />} />
-      
+      <Route
+        path="/personal-register"
+        element={
+          <ProfileProvider>
+            <Routes>{/* ... */}</Routes>
+          </ProfileProvider>
+        }
+      />
       {/* <Route path="/personal-login" element={<PersonalLogin />} />
       <Route path="/notificacao" element={<Notifications />} />
       <Route path="/login-enter" element={<EnterpriseLogin />} />
