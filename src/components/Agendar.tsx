@@ -25,9 +25,10 @@ function Agendar() {
     start_time: "",
     end_time: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     agendarService
       .getAll({
         contexto: form.contexto,
@@ -36,7 +37,8 @@ function Agendar() {
         end_time: form.end_time,
       })
       .then((res) => setAgendamentos(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleAgendar = async () => {
@@ -118,6 +120,14 @@ function Agendar() {
     link.click();
     document.body.removeChild(link);
   };
+
+    if (loading) {
+    return (
+      <div className="p-6 md:p-10 mt-12 flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-6 mt-12">

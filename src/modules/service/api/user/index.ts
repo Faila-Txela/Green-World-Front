@@ -7,6 +7,10 @@ class UserService{
         return {data, status};
   }
 
+    async logOut() {
+        return await axios.post("/empresas/logOut");
+      }
+
   async getAll(){
         return await axios.get("users", {
           headers: {
@@ -21,13 +25,9 @@ class UserService{
   }
 
   async delete(id: string) {
-        const { data } = await axios.delete(`/users/${id}`);
-        return data; 
+        const response = await axios.delete(`/user/delete-account/${id}`);
+        return response.data; 
     }
 
-  async logOut() {
-        return await axios.post("/empresas/logOut");
-      //return await axios.post("/users/logOut");
-      }
 }
 export const userService = new UserService();

@@ -24,7 +24,7 @@ import { pt } from 'date-fns/locale';
       prioridade: "BAIXA" | "ALTA";
       statusColeta?: "RETIRADO" | "NAO_RETIRADO" | "PENDENTE";
       user?: {
-        nome: string;
+        nome_titular: string;
       };
     }
 
@@ -43,6 +43,7 @@ import { pt } from 'date-fns/locale';
         try {
           setLoading(true);
           const response = await relatarService.getAll();
+          console.log("Dados recebidos:", response.data);
           
           // Verifique se os dados têm a estrutura esperada
           if (!Array.isArray(response.data)) {
@@ -61,7 +62,7 @@ import { pt } from 'date-fns/locale';
             municipio: relato.municipio || { nome: 'N/A' },
             prioridade: relato.prioridade,
             statusColeta: relato.statusColeta,
-            user: relato.user || { nome: 'Anônimo' }
+            user: relato.user || { nome_titular: 'Anônimo' }
           }));
           
           setRelatos(relatosFormatados);
@@ -79,16 +80,20 @@ import { pt } from 'date-fns/locale';
         setToast({ message: "Novo relato adicionado com sucesso!", type: "success" });
       };
       
-      const formatarData = (dataString: string) => {
-        try {
-          // Se a data já estiver no formato ISO (como "2023-01-01T12:00:00Z")
-          const data = parseISO(dataString);
-          return format(data, "dd/MM/yyyy HH:mm", { locale: pt });
-        } catch (error) {
-          console.error("Erro ao formatar data:", error);
-          return "Data inválida";
-        }
-      };
+    const formatarData = (dataString?: string) => {
+      if (!dataString || typeof dataString !== "string") {
+        return "Data inválida";
+      }
+
+      try {
+        const data = parseISO(dataString);
+        return format(data, "dd/MM/yyyy HH:mm", { locale: pt });
+      } catch (error) {
+        console.error("Erro ao formatar data:", error);
+        return "Data inválida";
+      }
+    };
+
 
       const getStatus = (relato: Relato) => {
         if (relato.statusColeta === "RETIRADO") return "resolvido";
@@ -209,7 +214,7 @@ import { pt } from 'date-fns/locale';
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 font-semibold">Reportado por</p>
-                    <p className="text-gray-600">{relatoSelecionado.user?.nome || "Anônimo"}</p>
+                    <p className="text-gray-600">{relatoSelecionado.user?.nome_titular || "Anônimo"}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 font-semibold">Localização</p>
@@ -277,7 +282,7 @@ import { pt } from 'date-fns/locale';
                     onClick={async () => {
                       try {
                         // Aqui implemento a chamada para atualizar o status
-                        await relatarService.updateStatus(relatoSelecionado.id, "resolvido");
+                        await relatarService.updateStatus(relatoSelecionado.id, "RETIRADO");
                         setToast({ message: "Relato marcado como resolvido!", type: "success" });
                         fetchRelatos();
                         handleFecharPainel();

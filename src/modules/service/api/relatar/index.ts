@@ -22,7 +22,7 @@ class RelatarService {
     return response.data;
   }
 
-  async updateStatus(id: string, status: "pendente" | "resolvido" | "rejeitado") {
+  async updateStatus(id: string, status: "PENDENTE" | "NAO_RETIRADO" | "RETIRADO") {
     return await axios.patch(`/relatar/${id}/status`, { status }, {
       headers: {
         "Content-Type": "application/json",

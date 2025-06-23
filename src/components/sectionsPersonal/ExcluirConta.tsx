@@ -19,43 +19,53 @@ const ExcluirConta = () => {
     setErro('');
     setShowModal(false);
   };
+
   const confirmarExclusao = async () => {
-    if (!senha.trim()) {
-      setErro('Digite sua senha.');
+  if (!senha.trim()) {
+    setErro('Digite sua senha.');
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setErro('');
+
+    // 1. Verifica a senha
+    await userService.verifyPassword(senha);
+
+    // 2. Excluir a conta
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      setErro('ID do usuário não encontrado.');
+      setLoading(false);
       return;
     }
-  
-    try {
-      setLoading(true);
-      setErro('');
-  
-      // 1. Verifica a senha
-      await userService.verifyPassword(senha);
-  
-      // 2. Faz logOut
-      await userService.logOut();
-  
-      // 3. Excluir a conta
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        setErro('ID do usuário não encontrado.');
-        setLoading(false);
-        return;
-      }
-      await userService.delete(userId);
-  
-      alert('Conta excluída com sucesso.');
-      window.location.href = '/personal-login'; 
-    } catch (err: any) {
-      if (err.response?.status === 400 || err.response?.status === 401) {
-        setErro('Senha incorreta.');
-      } else {
-        setErro('Erro ao excluir a conta. Tente novamente.');
-      }
-    } finally {
-      setLoading(false);
+
+    await userService.delete(userId);
+
+    // 3. Faz logOut após a exclusão bem-sucedida
+    await userService.logOut();
+
+    // Limpa os dados locais
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+
+    alert('Conta excluída com sucesso.');
+    window.location.href = '/personal-login'; 
+  } catch (error: any) {
+    if (error.response?.status === 400 || error.response?.status === 401) {
+      setErro('Senha incorreta.');
+    } else if (error.response?.status === 403) {
+      console.error("Sessão expirada", error);
+      setErro('Sessão expirada. Por favor, faça login novamente.');
+    } else {
+      console.error('Erro ao excluir conta:', error);
+      setErro('Erro ao excluir a conta. Tente novamente.');
     }
-  };  
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section className="min-h-screen mt-12 flex flex-col gap-4">

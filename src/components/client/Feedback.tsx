@@ -15,6 +15,7 @@ interface FeedbackItem {
 
 function Feedback() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error"; } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([ 
     { nome: "Maria", texto: "Seria bom ter uma opção para ver os relatos por prioridade.", data: new Date("2025-04-14") },
     { nome: "João", texto: "A interface está ótima, mas poderiam adicionar um modo escuro.", data: new Date("2025-04-13") },
@@ -70,6 +71,7 @@ function Feedback() {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
+        setLoading(true);
         const { data } = await feedbackService.getAll();
         const formatted = data.map((f: any) => {
           const nome = f.user ? f.user.nome : f.empresa ? f.empresa.nome : "Usuário";
@@ -91,10 +93,21 @@ function Feedback() {
       } catch (err) {
         console.error("Erro ao buscar feedbacks:", err);
       }
+      finally {
+        setLoading(false);
+      }
     };
 
     fetchFeedbacks();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen px-8 py-20">

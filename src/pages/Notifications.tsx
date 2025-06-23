@@ -57,17 +57,17 @@ export default function Notifications() {
     fetchNotifications();
   }, []);
 
-  const marcarComoLida = async (id: string) => {
-    try {
-      await axios.put(`/notificacao/${id}/marcar-lida`); 
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
-      );
-    } catch (error) {
-      console.error("Erro ao marcar notificação como lida", error);
-      setToast({ message: "Erro ao marcar notificação como lida.", type: "error"});
-    }
-  };
+ const marcarComoLida = async (id: string) => {
+  try {
+    await axios.put(`/notificacao/${id}/marcar-lida`, { lida: true }); // Envia o status
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
+    );
+  } catch (error) {
+    console.error("Erro ao marcar notificação como lida", error);
+    setToast({ message: "Erro ao marcar notificação como lida.", type: "error"});
+  }
+};
 
   const notificacoesFiltradas = notifications.filter((n) => {
     if (filtro === "lidas") return n.lida;
