@@ -145,7 +145,7 @@ const Relatorio = () => {
 
   if (loading) {
     return (
-      <div className="p-6 md:p-10 mt-12 flex justify-center items-center h-screen">
+      <div className="p-6 md:p-10 mt-8 flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
       </div>
     );

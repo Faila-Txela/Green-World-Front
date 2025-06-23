@@ -143,7 +143,7 @@ import { pt } from 'date-fns/locale';
               }`}
             >
     {loading ? (
-      <div className="flex flex-col items-center justify-center text-center mt-10">
+      <div className="flex flex-col items-center justify-center text-center mt-12">
         <MdOutlineReport size={64} className="text-green-500 animate-spin mb-4" />
         <p className="text-lg text-gray-600">Carregando Relatos...</p>
       </div>
