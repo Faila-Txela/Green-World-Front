@@ -167,7 +167,9 @@ export default function ModalRelatar({ closeModal, setToast, onRelatoSuccess }: 
       formData.append("image", file);
   
       const result = await validatorImagesService.create(formData);
+      console.log("Resultado da validação de imagem:", result);
       const conceitos = result.data?.conceitos || [];
+
 
       const lixoDetectado = conceitos.some((c: any) =>
         ["garbage", "trash", "rubbish", "pollution", "waste", "recycling", "dirty", "messy", "pile", "landfill", "litter", "junk", "enviroment", "dust", "plastic", "glass", "dump", "industry"].includes(c.name.toLowerCase())

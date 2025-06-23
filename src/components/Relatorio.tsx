@@ -12,7 +12,7 @@ interface Relato {
   imagem?: string;
   data: string;
   localizacao: string;
-  prioridade: 'Alta' | 'Baixa';
+  prioridade: 'ALTA' | 'BAIXA';
   statusColeta: 'PENDENTE' | 'NAO_RETIRADO' | 'RETIRADO';
   userId?: string;
 }
@@ -62,24 +62,43 @@ const Relatorio = () => {
     setRelatosFiltrados(filtrados);
   }, [statusFilter, prioridadeFilter, relatos]);
 
-  const handleStatusChange = async (id: string) => {
-    const novoStatus = statusTemp[id];
-    if (!novoStatus) return;
+   // Função para lidar com a mudança de status dos relatos
+const handleStatusChange = async (relatoId: string) => {
+  const novoStatus = statusTemp[relatoId];
+  if (!novoStatus) return;
 
-    try {
-      await axios.put(`/relatorio-coleta/:${id}/status`, { statusColeta: novoStatus });
-      setRelatos(prev => prev.map(r => r.id === id ? { ...r, statusColeta: novoStatus } : r));
-      setToast({ message: "Status atualizado com sucesso!", type: 'success' });
-      setRelatoSelecionado(null);
-    } catch (error) {
-      console.error("Erro ao atualizar status:", error);
-      setToast({ message: "Erro ao atualizar status.", type: 'error' });
+  try {
+    setLoading(true);
+    const response = await axios.put(`/relatorio-coleta/${relatoId}/status`, { 
+      statusColeta: novoStatus 
+    });
+
+    if (response.data.success) {
+      setRelatos(prev => prev.map(r => 
+        r.id === relatoId ? { ...r, status: novoStatus } : r
+      ));
+      setToast({
+        message: "Status atualizado e notificação enviada!",
+        type: 'success'
+      });
+    } else {
+      throw new Error(response.data.error || "Erro ao atualizar status");
     }
-  };
+  } catch (error: any) {
+    console.error("Erro ao atualizar status:", error);
+    setToast({
+      message: error.response?.data?.error || "Erro ao atualizar status",
+      type: 'error'
+    });
+  } finally {
+    setLoading(false);
+    setRelatoSelecionado(null);
+  }
+};
 
   // Funções auxiliares para formatação
   const formatarPrioridade = (prioridade: string) => {
-    return prioridade.includes('Alta') ? '🟢 Baixa Prioridade' : '🔴 Alta Prioridade';
+    return prioridade.includes('ALTA') ? '🟢 Baixa Prioridade' : '🔴 Alta Prioridade';
   };
 
   const getCorPrioridade = (prioridade: string) => {
@@ -362,3 +381,5 @@ const Relatorio = () => {
 };
 
 export default Relatorio;
+
+// Markup message bug fixed🐛✅
