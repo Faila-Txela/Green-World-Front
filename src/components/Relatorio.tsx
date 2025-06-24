@@ -54,8 +54,8 @@ const Relatorio = () => {
       const prioridadeRelato = r.prioridade.toLowerCase();
       const prioridadeFiltro = prioridadeFilter.toLowerCase();
       const passaPrioridade = !prioridadeFilter || 
-        (prioridadeFiltro.includes('alta') && prioridadeRelato.includes('alta')) || 
-        (prioridadeFiltro.includes('baixa') && prioridadeRelato.includes('baixa'));
+        (prioridadeFiltro.includes('ALTA') && prioridadeRelato.includes('ALTA')) || 
+        (prioridadeFiltro.includes('BAIXA') && prioridadeRelato.includes('BAIXA'));
       
       return passaStatus && passaPrioridade;
     });
