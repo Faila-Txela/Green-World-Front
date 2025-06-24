@@ -19,7 +19,7 @@ class RelatorioColetaService {
     }
 
     async updateStatus(id: string, status: "RETIRADO" | "NAO_RETIRADO" | "PENDENTE") {
-        return await axios.patch(`relatorio/:${id}/status`, { statusColeta: status }, {
+        return await axios.put(`/relatorio-amontoado/${id}/status`, { statusColeta: status }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -27,7 +27,7 @@ class RelatorioColetaService {
     }
     
     async delete(id: string) {
-        return await axios.delete(`relatorio/:${id}`);
+        return await axios.delete(`relatorio-amontoado/${id}`);
     }
 }
 
