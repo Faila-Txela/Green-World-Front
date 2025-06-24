@@ -11,14 +11,16 @@ import {
   ResponsiveContainer,
   CartesianGrid
 } from "recharts";
+import { useState, useEffect } from "react";
 import { PiCity } from "react-icons/pi";
 import { MdOutlineCalendarMonth, MdOutlineMergeType, MdOutlineSpaceDashboard } from "react-icons/md";
-import { FaRecycle } from "react-icons/fa";
+import { FaRecycle, FaCity } from "react-icons/fa";
 import MapComponent from "../../components/Map";
+import { relatarService } from "../../modules/service/api/relatar";
 
 
 export default function EnterpriseDashboard() {
-  
+
   const locationsData = [
     { name: "Rangel", relatos: 65 },
     { name: "Mutamba", relatos: 86 },
@@ -46,6 +48,22 @@ export default function EnterpriseDashboard() {
 
   const COLORS = ["#FF0000", "#964B00", "#FFBB28"];
 
+          const [relatosAll, setRelatosAll] = useState<any[]>([]);
+        
+          useEffect(() => {
+            relatarService.getAll().then((response) => {
+              setRelatosAll(response.data);
+            });
+          }, []);
+        
+          const relatosFormatados = relatosAll.map((relato: any) => ({
+            id: relato.id,
+            latitude: relato.latitude,
+            longitude: relato.longitude,
+            bairro: relato.bairro,
+            municipio: relato.municipio,
+          }));
+
   return (
     <div className="">
       <div className="flex justify-center items-center flex-col">
@@ -58,7 +76,7 @@ export default function EnterpriseDashboard() {
         {/* Gráficos organizados em grid responsivo */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 mt-36">
           {/* Locais */}
-          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
+          {/* <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Locais com Mais Relatos</h2>
               <PiCity className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#82ca9d] text-white rounded" />
@@ -72,10 +90,10 @@ export default function EnterpriseDashboard() {
                 <Bar dataKey="relatos" fill="#82ca9d" />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
 
           {/* Meses */}
-          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
+          {/* <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Meses com Mais Recolhas</h2>
               <MdOutlineCalendarMonth className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#8884d8] text-white rounded" />
@@ -89,10 +107,10 @@ export default function EnterpriseDashboard() {
                 <Bar dataKey="coletados" fill="#8884d8" />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
 
           {/* Tipos de lixo */}
-          <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
+          {/* <div className="bg-white p-4 shadow hover:shadow-lg transition-all duration-300 rounded-xl w-full">
             <div className="flex items-center justify-center gap-5 mb-4">
               <h2 className="text-lg font-semibold mb-4 text-center">Tipos de Lixo Mais Retirados</h2>
               <MdOutlineMergeType className="shadow-lg p-1 h-9 w-9 mb-3 bg-[#FFBB28] text-white rounded" />
@@ -108,12 +126,33 @@ export default function EnterpriseDashboard() {
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
         </div>
+
+    <div className="mt-6 mb-10 w-full">
+      <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+        <FaCity className="text-green-600" />
+        Locais com Relatos Registrados
+      </h3>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {relatosFormatados.map((relato: any, index: any) => (
+          <div key={relato.id || index} className="bg-white p-4 rounded-xl shadow hover:shadow-md transition duration-300 cursor-pointer">
+            <h4 className="font-semibold text-green-700 mb-2">{relato.bairro || "Bairro desconhecido"}</h4>
+            <p className="text-sm text-gray-600">
+              <span className="font-medium">Latitude:</span> {relato.latitude || "N/A"}
+            </p>
+            <p className="text-sm text-gray-600">
+              <span className="font-medium">Longitude:</span> {relato.longitude || "N/A"}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
 
           {/* Mapa com iframe mostrando locais com mais relatos de lixo */}
           <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full mb-10">
-          <h2 className="text-lg font-semibold mb-4 text-start">Mapa de Locais com Mais Relatos</h2>
+          <h2 className="text-lg font-semibold mb-4 text-start">Mapa de Locais com Relatos</h2>
           <MapComponent />
           {/* <div className="w-full h-[400px]">
             <iframe
@@ -128,7 +167,7 @@ export default function EnterpriseDashboard() {
         </div>
 
           {/* Gráfico: Fluxo de Recolha */}
-          <div className="bg-white p-6 shadow hover:shadow-lg transition-all duration-300 rounded-2xl w-full max-w-6xl mb-20">
+          {/* <div className="bg-white p-6 shadow hover:shadow-lg transition-all duration-300 rounded-2xl w-full max-w-6xl mb-20">
             <div className="flex items-center justify-start gap-4 mb-6">
               <h2 className="text-2xl font-semibold text-gray-700 text-center">Fluxo de Recolha de Lixo por Semana</h2>
               <FaRecycle className="h-9 w-9 bg-[#06D6A0] text-white rounded p-1 shadow-lg" />
@@ -167,7 +206,7 @@ export default function EnterpriseDashboard() {
                 <Bar dataKey="Concluído" stackId="a" fill="#06D6A0" radius={[4, 4, 0, 0]} />
                 </BarChart>
                 </ResponsiveContainer>
-                </div>
+                </div> */}
       </div>
     </div>
   );
