@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TbReport } from "react-icons/tb";
 import { FaDownload } from "react-icons/fa6";
+import { relatorioColetaService } from '../modules/service/api/relatorioColeta';
 import axios from '../lib/axios';
 import Toast from './ui/Toast';
 import { jsPDF } from 'jspdf';
@@ -32,9 +33,35 @@ const Relatorio = () => {
     const buscarRelatos = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/relatar'); 
-        setRelatos(res.data);
-        setRelatosFiltrados(res.data);
+        const res = await axios.get('/relatar', {
+          params: {
+            include: 'relatorioColeta'
+          }
+        });
+        
+        // Tipagem para os dados da API
+        interface ApiRelato {
+          id: string;
+          imagemUrl?: string;
+          createAt: string;
+          bairro: string;
+          municipio: { nome: string };
+          prioridade: 'ALTA' | 'BAIXA';
+          relatorioColeta?: { statusColeta?: 'PENDENTE' | 'NAO_RETIRADO' | 'RETIRADO' };
+        }
+
+        // Formata os dados com fallback para PENDENTE
+        const relatosFormatados: Relato[] = res.data.map((relato: ApiRelato) => ({
+          id: relato.id,
+          imagem: relato.imagemUrl,
+          data: relato.createAt,
+          localizacao: `${relato.bairro}, ${relato.municipio?.nome || 'Luanda'}`,
+          prioridade: relato.prioridade,
+          statusColeta: relato.relatorioColeta?.statusColeta || 'PENDENTE' // Fallback seguro
+        }));
+
+        setRelatos(relatosFormatados);
+        setRelatosFiltrados(relatosFormatados);
       } catch (error) {
         console.error("Erro ao buscar relatos:", error);
         setToast({ message: "Erro ao carregar relatos", type: 'error' });
@@ -42,54 +69,82 @@ const Relatorio = () => {
         setLoading(false);
       }
     };
+    
     buscarRelatos();
   }, []);
 
-  // Filtragem dos relatos com base nos filtros selecionados
+  // Filtragem dos relatos
   useEffect(() => {
     const filtrados = relatos.filter((r) => {
       const passaStatus = !statusFilter || r.statusColeta === statusFilter;
-      
-      // Corrigido: Compara apenas a parte relevante da string de prioridade
-      const prioridadeRelato = r.prioridade.toLowerCase();
-      const prioridadeFiltro = prioridadeFilter.toLowerCase();
       const passaPrioridade = !prioridadeFilter || 
-        (prioridadeFiltro.includes('ALTA') && prioridadeRelato.includes('ALTA')) || 
-        (prioridadeFiltro.includes('BAIXA') && prioridadeRelato.includes('BAIXA'));
+        (prioridadeFilter.toUpperCase().includes('ALTA') && r.prioridade.includes('ALTA')) || 
+        (prioridadeFilter.toUpperCase().includes('BAIXA') && r.prioridade.includes('BAIXA'));
       
       return passaStatus && passaPrioridade;
     });
     setRelatosFiltrados(filtrados);
   }, [statusFilter, prioridadeFilter, relatos]);
 
-   // Função para lidar com a mudança de status dos relatos
-const handleStatusChange = async (relatoId: string) => {
+  // Atualização de status
+  // const handleStatusChange = async (relatoId: string) => {
+  //   const novoStatus = statusTemp[relatoId];
+  //   if (!novoStatus) return;
+
+  //   try {
+  //     setLoading(true);
+  //     // const response = await axios.put(`/relatorio-coleta/:${relatoId}/status`, { 
+  //     //   statusColeta: novoStatus 
+  //     // });
+
+  //     const response = await relatorioColetaService.updateStatus(relatoId, novoStatus);
+
+  //     if (response.data.success) {
+  //       setRelatos(prev => prev.map(r => 
+  //         r.id === relatoId ? { ...r, statusColeta: novoStatus } : r
+  //       ));
+  //       setToast({
+  //         message: "Status atualizado com sucesso!",
+  //         type: 'success'
+  //       });
+  //     } else {
+  //       throw new Error(response.data.error || "Erro ao atualizar status");
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Erro ao atualizar status:", error);
+  //     setToast({
+  //       message: error.response?.data?.error || "Erro ao atualizar status",
+  //       type: 'error'
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //     setRelatoSelecionado(null);
+  //   }
+  // };
+
+    const handleStatusChange = async (relatoId: string) => {
   const novoStatus = statusTemp[relatoId];
   if (!novoStatus) return;
 
   try {
     setLoading(true);
-    const response = await axios.put(`/relatorio-coleta/${relatoId}/status`, { 
-      statusColeta: novoStatus 
+    const response = await axios.patch(`/relatorio/:${relatoId}/status`, { 
+      status: novoStatus 
     });
+    console.log("RESPOSTA", response)
 
     if (response.data.success) {
       setRelatos(prev => prev.map(r => 
-        r.id === relatoId ? { ...r, status: novoStatus } : r
+        r.id === relatoId ? { ...r, statusColeta: novoStatus } : r
       ));
       setToast({
-        message: "Status atualizado e notificação enviada!",
+        message: "Status atualizado com sucesso! O usuário foi notificado.",
         type: 'success'
       });
-    } else {
-      throw new Error(response.data.error || "Erro ao atualizar status");
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erro ao atualizar status:", error);
-    setToast({
-      message: error.response?.data?.error || "Erro ao atualizar status",
-      type: 'error'
-    });
+    setToast({ message: 'Erro ao actualizar status', type:'error' })
   } finally {
     setLoading(false);
     setRelatoSelecionado(null);
@@ -98,55 +153,141 @@ const handleStatusChange = async (relatoId: string) => {
 
   // Funções auxiliares para formatação
   const formatarPrioridade = (prioridade: string) => {
-    return prioridade.includes('ALTA') ? '🟢 Baixa Prioridade' : '🔴 Alta Prioridade';
+    return prioridade.includes('ALTA') ? '🔴 Alta Prioridade' : '🔵 Baixa Prioridade';
   };
 
   const getCorPrioridade = (prioridade: string) => {
-    return prioridade.includes('Alta') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+    return prioridade.includes('ALTA') ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700';
   };
 
-  const formatarStatus = (status: string) => {
-    switch (status) {
+  const formatarStatus = (status?: string) => {
+    const statusValidado = status || 'PENDENTE';
+    switch (statusValidado) {
       case 'PENDENTE': return '⌛ PENDENTE';
       case 'NAO_RETIRADO': return '❌ NAO_RETIRADO';
       case 'RETIRADO': return '✅ RETIRADO';
-      default: return status;
+      default: return '⌛ PENDENTE';
     }
   };
 
-  const getCorStatus = (status: string) => {
-    switch (status) {
+  const getCorStatus = (status?: string) => {
+    const statusValidado = status || 'PENDENTE';
+    switch (statusValidado) {
       case 'PENDENTE': return 'bg-yellow-100 text-yellow-700';
       case 'NAO_RETIRADO': return 'bg-red-100 text-red-700';
       case 'RETIRADO': return 'bg-green-100 text-green-700';
-      default: return 'bg-gray-300';
+      default: return 'bg-yellow-100 text-yellow-700';
     }
   };
 
-  // Funções para exportar os dados
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.text('Relatório de Relatos Recebidos', 20, 20);
-    const rowHeight = 10;
-    doc.setFillColor(220, 220, 220);
-    doc.rect(20, 30, 170, rowHeight, 'F');
-    doc.text('ID', 22, 37);
-    doc.text('Data', 35, 37);
-    doc.text('Localização', 80, 37);
-    doc.text('Prioridade', 130, 37);
-    doc.text('Status', 160, 37);
+   // Funções para exportar os dados
+  // const exportToPDF = () => {
+  //   alert('Exportando para PDF.');
+  //   const doc = new jsPDF();
+  //   doc.text('Relatório de Relatos Recebidos', 20, 20);
+  //   const rowHeight = 10;
+  //   doc.setFillColor(220, 220, 220);
+  //   doc.rect(20, 30, 170, rowHeight, 'F');
+  //   doc.text('ID', 22, 37);
+  //   doc.text('Data', 35, 37);
+  //   doc.text('Localização', 80, 37);
+  //   doc.text('Prioridade', 130, 37);
+  //   doc.text('Status', 160, 37);
     
-    relatosFiltrados.forEach((r, i) => {
-      const y = 40 + i * rowHeight;
-      if (y > 280) doc.addPage();
-      doc.text(r.id, 22, y);
-      doc.text(new Date(r.data).toLocaleDateString(), 35, y);
-      doc.text(r.localizacao, 80, y);
-      doc.text(r.prioridade, 130, y);
-      doc.text(r.statusColeta, 160, y);
+  //   relatosFiltrados.forEach((r, i) => {
+  //   const y = 40 + i * rowHeight;
+  //   if (y > 280) doc.addPage();
+
+  //   doc.text(String(r.id), 22, y);
+  //   doc.text(new Date(r.data).toLocaleDateString(), 35, y);
+  //   doc.text(String(r.localizacao), 80, y);
+  //   doc.text(formatarPrioridade(r.prioridade), 130, y);
+  //   doc.text(formatarStatus(r.statusColeta), 160, y);
+  //   });
+
+  //   doc.save('relatorio.pdf');
+  // };
+
+
+const exportToPDF = () => {
+  try {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 10;
+    const rowHeight = 10;
+    let y = 20;
+
+    doc.setFontSize(16);
+    doc.text('Relatório de Relatos Recebidos', pageWidth / 2, y, { align: 'center' });
+    y += 12;
+
+    doc.setFontSize(12);
+    doc.setFillColor(220, 220, 220);
+    doc.rect(margin, y, pageWidth - 2 * margin, rowHeight, 'F');
+
+    const headers = ['ID', 'Data', 'Localização', 'Prioridade', 'Status'];
+    const colWidths = [30, 25, 60, 30, 30]; // Total ~175 com margem
+    let x = margin;
+
+    headers.forEach((header, index) => {
+      doc.text(header, x + 1, y + 7);
+      x += colWidths[index];
     });
-    doc.save('relatorio.pdf');
-  };
+
+    y += rowHeight;
+    doc.setFontSize(10);
+
+    relatosFiltrados.forEach((r) => {
+      if (y > doc.internal.pageSize.getHeight() - 20) {
+        doc.addPage();
+        y = 20;
+      }
+
+      const id = doc.splitTextToSize(r.id, colWidths[0] - 2);
+      const data = [new Date(r.data).toLocaleDateString()];
+      const local = doc.splitTextToSize(r.localizacao, colWidths[2] - 2);
+      const prioridade = [r.prioridade === 'ALTA' ? 'Alta' : 'Baixa'];
+      const status = [formatarStatus(r.statusColeta)];
+
+      const linhas = Math.max(id.length, data.length, local.length, prioridade.length, status.length);
+      const alturaTotal = linhas * 6;
+
+      let linhaY = y;
+      for (let i = 0; i < linhas; i++) {
+        let xi = margin;
+
+        doc.text(id[i] || '', xi + 1, linhaY);
+        xi += colWidths[0];
+
+        doc.text(data[i] || '', xi + 1, linhaY);
+        xi += colWidths[1];
+
+        doc.text(local[i] || '', xi + 1, linhaY);
+        xi += colWidths[2];
+
+        doc.text(prioridade[i] || '', xi + 1, linhaY);
+        xi += colWidths[3];
+
+        doc.text(status[i] || '', xi + 1, linhaY);
+        linhaY += 6;
+      }
+
+      y += alturaTotal + 2;
+    });
+
+    doc.save(`Relatorio_Green_World_${new Date().toISOString().slice(0, 10)}.pdf`);
+    setToast({ message: "Relatório exportado com sucesso!", type: 'success' });
+  } catch (error) {
+    console.error("Erro ao gerar PDF:", error);
+    setToast({
+      message: "Erro ao exportar para PDF. Verifique os dados e tente novamente.",
+      type: 'error'
+    });
+  }
+};
+
+
 
   const exportToExcel = () => {
     const dados = relatosFiltrados.map(r => ({
@@ -158,8 +299,8 @@ const handleStatusChange = async (relatoId: string) => {
     }));
     const ws = XLSX.utils.json_to_sheet(dados);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Relatos');
-    XLSX.writeFile(wb, 'relatorio.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Relatório Green World');
+    XLSX.writeFile(wb, 'Relatorio_Green_World.xlsx');
   };
 
   if (loading) {
@@ -211,7 +352,7 @@ const handleStatusChange = async (relatoId: string) => {
           type='button'
           onClick={exportToPDF} 
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded"
-          disabled={relatosFiltrados.length === 0}
+        
         >
           <FaDownload />
           Exportar PDF

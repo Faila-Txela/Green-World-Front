@@ -1,15 +1,15 @@
 import axios from "../../../../lib/axios";
 
 class RelatorioColetaService {
-    async create(relatorioColeta: RelatorioColeta){
-        return await axios.post("relatorio", relatorioColeta, {
+    async create(relatorioColeta: RelatorioColeta) {
+        return await axios.post("relatorio-coleta", relatorioColeta, {
             headers: {
                 "Content-Type": "application/json",
             },
         })
     }
 
-    async getAll(relatorioColeta: RelatorioColeta){
+    async getAll(relatorioColeta: Partial<RelatorioColeta>) {
         return await axios.get("relatorio", {
             params: relatorioColeta,
             headers: {
@@ -19,13 +19,16 @@ class RelatorioColetaService {
     }
 
     async updateStatus(id: string, status: "RETIRADO" | "NAO_RETIRADO" | "PENDENTE") {
-        return await axios.patch(`/relatorio-coleta/${id}/status`, { status }); //relatorio-coleta/:id/status 
-      }
+        return await axios.patch(`relatorio/:${id}/status`, { statusColeta: status }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
     
-      async delete(id: string) {
-        return await axios.delete(`/relatorio-coleta/${id}`);
-      }
-
+    async delete(id: string) {
+        return await axios.delete(`relatorio/:${id}`);
+    }
 }
 
 export const relatorioColetaService = new RelatorioColetaService()
