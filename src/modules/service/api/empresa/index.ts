@@ -1,4 +1,5 @@
 import axios from "../../../../lib/axios";
+import type { empresa } from "modules/types/empresa";
 
 class EmpresaService {
   async create(empresaData: empresa) {
@@ -14,11 +15,7 @@ class EmpresaService {
   }
 
   async getAll(){
-    return await axios.get("/empresas", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return await axios.get("/empresas");
   }
 
   async getTipoEmpresaIdByNome() {

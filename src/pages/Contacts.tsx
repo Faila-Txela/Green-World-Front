@@ -67,8 +67,10 @@ export default function Contacts() {
     try {
       const { data, status } = await contactoService.create({ ...formData });
       if (status === 201 || data?.success) {
+        console.log("Mensagem envida com sucesso.")
         setToast({ message: "Mensagem enviada com sucesso", type: "success" });
       }
+
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
       setToast({ message: "Erro ao enviar sua mensagem", type: "error" });
@@ -76,7 +78,7 @@ export default function Contacts() {
   };
 
   return (
-    <div className="max-h-screen">
+    <div className="min-h-screen">
       <Header />
 
       {/* Imagem e Título */}
@@ -170,7 +172,7 @@ export default function Contacts() {
 
             {/* Botão */}
             <div className="flex justify-center mt-6">
-              <PrimaryButton name="Enviar" addClassName="w-full md:w-60" />
+              <PrimaryButton type="submit" name="Enviar" addClassName="w-full md:w-60" />
             </div>
           </form>
         </div>

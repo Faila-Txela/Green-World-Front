@@ -1,4 +1,3 @@
-// modules/service/api/municipio.ts
 import axios from "../../../../lib/axios";
 
 class MunicipioService {

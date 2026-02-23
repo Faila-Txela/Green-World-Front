@@ -1,4 +1,5 @@
 import axios from "../../../../lib/axios";
+import { type contacto } from "modules/types/contact";
 
 class ContactoService{
     async create(contactoData: contacto){
@@ -7,23 +8,15 @@ class ContactoService{
     }
 
     async getAll(){
-        return await axios.get("contacto")
+        return await axios.get("/contacto")
     }
 
+    // Envio de email, sem funcionamento ainda
     async sendReply(payload: { email: string; subject: string; message: string }) {
       const { data } = await axios.post("/responder-contacto", payload);
       return data;
    }
 
-
-//         async getAll(contactoData: contacto){
-//         return await axios.get("contacto", {
-//             params: contactoData,
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         })
-//     }
  }
 
 export const contactoService = new ContactoService()

@@ -1,4 +1,3 @@
-// components/SettingsLayout.tsx
 import { useState } from 'react';
 import { FiSettings } from "react-icons/fi";
 import GeralSection from '../../sectionsPersonal/GeralSection';

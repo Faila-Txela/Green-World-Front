@@ -1,5 +1,5 @@
 import axios from "../../../../lib/axios";
-
+import type {address} from "../../../types/address"
 class AddressService {
     async getEnderecoIdByBairro(bairro: string, municipio: string, provinciaId: string) {
         try {
@@ -15,18 +15,12 @@ class AddressService {
         }
     }
 
-    async create(bairro: string, municipioId: string, provinciaId: string, telefone: string) {
-        try {
-            const response = await axios.post(`/address`, {
-                bairro, municipioId, provinciaId, telefone
-            }
-            );
-            return response;
-        }
-        catch (error) {
-            console.error("Erro ao buscar endereco", error);
-            throw error;
-        }
+    async create(adressData: address){
+        return await axios.post("/address", adressData, {
+            headers: {
+                "Content-Type": "application/json",
+              },
+        })
     }
 }
 export const addressService = new AddressService();

@@ -1,7 +1,8 @@
 import axios from "../../../../lib/axios";
+import type { relatorioColeta } from "modules/types/relatorioColeta";
 
 class RelatorioColetaService {
-    async create(relatorioColeta: RelatorioColeta) {
+    async create(relatorioColeta: relatorioColeta) {
         return await axios.post("relatorio-coleta", relatorioColeta, {
             headers: {
                 "Content-Type": "application/json",
@@ -9,7 +10,7 @@ class RelatorioColetaService {
         })
     }
 
-    async getAll(relatorioColeta: Partial<RelatorioColeta>) {
+    async getAll(relatorioColeta: Partial<relatorioColeta>) {
         return await axios.get("relatorio", {
             params: relatorioColeta,
             headers: {

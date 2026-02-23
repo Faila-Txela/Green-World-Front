@@ -1,4 +1,4 @@
-type endereco = {
+export type address = {
     telefone: string
     rua: string
     bairro: string

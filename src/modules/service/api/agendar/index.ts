@@ -1,4 +1,5 @@
 import axios from "../../../../lib/axios";
+import { type agendar } from "modules/types/agendar";
 
 class AgendarService {
     async create(agendarData: agendar){
@@ -11,10 +12,7 @@ class AgendarService {
 
     async getAll(agendarData: agendar){
         return await axios.get("agendar", {
-            params: agendarData,
-            headers: {
-                "Content-Type": "application/json",
-              },
+            params: agendarData
         })
     }
 }

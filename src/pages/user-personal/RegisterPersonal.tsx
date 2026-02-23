@@ -5,7 +5,6 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import Logo from "../../assets/Logo";
 import { userService } from "../../modules/service/api/user";
 import Toast from "../../components/ui/Toast";
-import { typeUserService } from "../../modules/service/api/typeUser";
 
 const InputField = ({ label, type, name, value, onChange, icon, extraPaddingRight = false, required = true }: {
   label: string;
@@ -145,10 +144,8 @@ const formatIban = (input: string) => {
     }
 
     try {
-      const typeId = await typeUserService.getTypeIdByDeafault();
       const userData = {
         ...formData,
-        tipoUser_id: typeId,
         iban: formData.iban.trim() === "" ? "" : formData.iban.trim()
       };
 

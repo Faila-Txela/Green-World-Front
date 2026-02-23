@@ -1,4 +1,4 @@
-type relatar = {
+export type relatar = {
     userId: string
     descricao: string
     latitude: string

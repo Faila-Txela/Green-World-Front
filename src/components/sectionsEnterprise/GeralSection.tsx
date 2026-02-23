@@ -13,25 +13,18 @@ const GeralSection = () => {
   const [biografia, setBiografia] = useState('');
   const [nif, setNif] = useState('');
   const [site, setSite] = useState('');
-  const [typeGarbage, setTypeGarbage] = useState('');
 
   // Dados vindos da base
   const [nomeDB, setNomeDB] = useState('');
   const [biografiaDB, setBiografiaDB] = useState('');
   const [nifDB, setNifDB] = useState('');
   const [siteDB, setSiteDB] = useState('');
-  const [typeGarbageDB, setTypeGarbageDB] = useState('');
 
-  const [typeGarbages, setTypeGarbages] = useState<{ id: string, nome: string }[]>([]);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const empresaId = localStorage.getItem("empresaId");
 
   useEffect(() => {
-    axios.get("/tipo-empresa").then(res => {
-      setTypeGarbages(res.data);
-    });
-
     axios.get(`/empresas/${empresaId}`).then(res => {
       const empresa = res.data;
       setNomeDB(empresa.nome || '');
@@ -39,7 +32,6 @@ const GeralSection = () => {
       setNifDB(empresa.nif || '');
       setSiteDB(empresa.site || '');
       setProfilePic(empresa.imagemPerfil || '');
-      setTypeGarbageDB(empresa.tipoEmpresaId || '');
     });
   }, []);
 
@@ -70,7 +62,6 @@ const GeralSection = () => {
         biografia: biografia || biografiaDB,
         nif: nif || nifDB,
         site: site || siteDB,
-        tipoEmpresaId: typeGarbage || typeGarbageDB,
         imagemPerfil,
       });
 
@@ -87,7 +78,6 @@ const GeralSection = () => {
     setBiografia('');
     setNif('');
     setSite('');
-    setTypeGarbage('');
     setProfilePic(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -121,17 +111,6 @@ const GeralSection = () => {
           value={biografia}
           onChange={(e) => setBiografia(e.target.value)}
         />
-        <select
-          title="type"
-          className="w-full px-4 py-2 rounded-md border text-black"
-          value={typeGarbage || typeGarbageDB}
-          onChange={(e) => setTypeGarbage(e.target.value)}
-        >
-          <option value="">Selecione a sua área de actuação</option>
-          {typeGarbages.map((t) => (
-            <option key={t.id} value={t.id}>{t.nome}</option>
-          ))}
-        </select>
         <input
           type="text"
           placeholder={nifDB || "NIF"}

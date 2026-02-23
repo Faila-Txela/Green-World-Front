@@ -10,11 +10,7 @@ class RelatarService {
   }
 
   async getAll() {
-    return await axios.get("/relatar", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return await axios.get("/relatar");
   }
 
   async delete(id: string){

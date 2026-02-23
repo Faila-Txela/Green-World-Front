@@ -171,11 +171,6 @@ export default function EnterpriseForm() {
     return;
   }
 
-  if (!typeGarbage) {
-    setToast({ message: "Selecione a área de atuação da empresa!", type: "error" });
-    return;
-  }
-
   if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
     setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
     return;
@@ -186,8 +181,8 @@ export default function EnterpriseForm() {
         ...formData,
       };
 
-      const {data} = await addressService.create(empresaData.bairro, municipio, provincia, empresaData.phone)
-      const response = await empresaService.create({email: empresaData.email, enderecoId:data.id, nif: empresaData.nif, nome: empresaData.nome, senha: empresaData.senha, tipoEmpresa_id: typeGarbage, site: empresaData.site});
+      const {data} = await addressService.create({bairro: formData.bairro, municipioId: municipio, provinciaId: provincia, telefone: formData.phone, rua: formData.bairro})
+      const response = await empresaService.create({email: empresaData.email, enderecoId:data.id, nif: empresaData.nif, nome: empresaData.nome, senha: empresaData.senha, site: empresaData.site});
       
       //console.log("Resposta do servidor:", response);
       if (response.status === 201) {
@@ -367,29 +362,6 @@ export default function EnterpriseForm() {
             </select>
           </div>
 
-          <div>
-            <label
-              htmlFor="tipoEmpresa"
-              className="font-semibold mb-2 block text-gray-600"
-            >
-              Com que você trabalha ? <span className="text-red-500">*</span>
-            </label>
-
-            <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={typeGarbage}
-              autoComplete="on"
-              onChange={(e) => setTypeGarbage(e.target.value)}
-              title="Selecione a sua área de actuação"
-              required
-            >
-              <option value="" key="" className="">Selecione a sua área de actuação</option>
-              {typeGarbages.map((typeGarbage) => (
-                <option value={typeGarbage.id}>{typeGarbage.nome}</option>
-              ))}
-            </select>
-          </div>
-
           <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
             <span>
               <input type="checkbox" name="terms" id="terms" className="bg-green-600" title="Agree to terms and privacy policy" required />
@@ -411,7 +383,8 @@ export default function EnterpriseForm() {
             </Link>
           </div>
         </form>
-              {/* Exibe o Toast se houver mensagem */}
+
+          {/* Exibe o Toast se houver mensagem */}
             {toast && 
             <Toast message={toast.message}
             type={toast.type}

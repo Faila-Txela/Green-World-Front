@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { userService } from "../../modules/service/api/user";
 import { empresaService } from "../../modules/service/api/empresa";
-import { FaUsers } from 'react-icons/fa'
 
 type User = {
   id: number;

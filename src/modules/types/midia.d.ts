@@ -1,4 +1,4 @@
-type validatorImage = {
+export type validatorImage = {
     imageURL: File
     labels: string[]
     analysisDate: Date

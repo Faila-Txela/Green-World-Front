@@ -10,7 +10,6 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { format } from "date-fns";
 import Confetti from 'react-confetti';
-
 interface RelatarFormData {
   userId: string;
   descricao: string;

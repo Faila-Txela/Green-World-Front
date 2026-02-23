@@ -1,9 +1,10 @@
 import axios from "../../../../lib/axios";
+import type { user } from "modules/types/user";
 
 class UserService{
 
   async create(dados: user){
-        const { data, status } = await axios.post("users",  dados );
+        const { data, status } = await axios.post("/users",  dados );
         return {data, status};
   }
 
@@ -12,11 +13,7 @@ class UserService{
       }
 
   async getAll(){
-        return await axios.get("users", {
-          headers: {
-           "Content-Type": "application/json",
-          },
-        })
+        return await axios.get("/users")
   }
 
   async verifyPassword(senha: string) {

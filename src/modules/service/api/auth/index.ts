@@ -1,4 +1,5 @@
 import axios from "lib/axios";
+import type { loginData } from "modules/types/login";
 
 class AuthService {
     async login(dataToLogin: loginData) {

@@ -1,4 +1,5 @@
 import axios from "../../../../lib/axios";
+import type { feedback } from "modules/types/feedback";
 
 class FeedbackService{
     async create(feedbackData: feedback){
