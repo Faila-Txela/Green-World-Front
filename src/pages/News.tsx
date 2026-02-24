@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Skeleton from "../components/ui/Skeleton";
-import Header from "../components/Headers/Header";
-import Footer from "../components/Footers/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
 function News() {
   const [news, setNews] = useState<{ title: string; description: string }[]>([]); // Estado para armazenar as notícias

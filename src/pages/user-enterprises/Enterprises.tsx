@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Headers/Header';
-import Footer from '../../components/Footers/Footer';
+import Header from '../../components/layout/Header';
+import Footer from '../../components/layout/Footer';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import image from '../../assets/Law firm-bro.png';
 

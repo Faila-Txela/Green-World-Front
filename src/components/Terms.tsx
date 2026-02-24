@@ -1,5 +1,5 @@
-import Header from "../components/Headers/Header";
-import Footer from "../components/Footers/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
 function Terms() {
   const sectionTitle = "font-semibold text-2xl text-green-800";

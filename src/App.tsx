@@ -13,7 +13,6 @@ import EnterpriseSidebar from "./pages/user-enterprises/SidebarEnterprise";
 import RegisterPersonal from "./pages/user-personal/RegisterPersonal";
 import RegisterEnterprise from "./pages/user-enterprises/RegisterEnterprise";
 import SidebarAdmin from "./pages/admin/SidebarAdmin";
-import Blog from "./pages/Blog";
 import News from "./pages/News";
 import NotFound from "./pages/ErrorPage";
 import Terms from "./components/Terms";
@@ -26,7 +25,6 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/news" element={<News />} />
-      <Route path="/blog" element={<Blog />} />
       <Route path="/enterprises" element={<Empresas />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/register-enterprise" element={<RegisterEnterprise />} />

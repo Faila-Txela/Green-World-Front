@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Headers/Header";
-import Footer from "../components/Footers/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { useNavigate, Link } from "react-router-dom";
 import video from '../assets/video/coletaSelectiva.mp4';
-import image from '../assets/enviroment.png'
-import Clock from "../components/clock";
+import image from '../assets/world.png'
 import image2 from '../assets/coleta.jpg';
 import video2 from '../assets/video/catadores.mp4';
 import image4 from '../assets/carta.jpg';
 import CardBeneficios from "../components/CardBeneficio";
 import CardRelatos from "../components/CardRelatos";
 import { motion } from "framer-motion"; 
-import Slide from "./slide";
+import Slide from "../components/slide";
 
 interface ModalProps {
   item: {
@@ -134,134 +133,104 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       
-<Header />
+     <Header />
+ 
+    <motion.div 
+      className="min-h-screen flex md:flex-row flex-col items-center justify-center"
+      initial={{ opacity: 0, y: 50 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 1 }}
+    >
+      <div 
+        className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
 
-{/* Seçcão principal */}      
-<motion.div 
-  className="min-h-screen flex md:flex-row flex-col items-center justify-center"
-  initial={{ opacity: 0, y: 50 }} 
-  animate={{ opacity: 1, y: 0 }} 
-  transition={{ duration: 1 }}
->
-  <div 
-    className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
-     <div>
-        {/* ⏰ Hora Atual */}
-        <Clock />
-     </div>
-    <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 text-center px-4">
-      <div className="tracking-wide">
-        <AnimatedText 
-        text="Luanda mais limpa começa com você!"
-        className="text-white text-3xl md:text-4xl font-semibold text-start"
-        />
-        <motion.p
-          className="text-lg text-gray-300 mt-4 text-start"
-          variants={sentence}
-          initial="hidden"
-          animate="visible"
-          >
-            {"Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!".split("").map((char, index) => (
-              <motion.span key={index} variants={letter}>
-                {char}
-              </motion.span>
-            ))}
-        </motion.p>
-      </div>
-    </div>
-
-    <div className="absolute top-80 md:top-44 mx-0 md:mx-32 inset-0 flex justify-center md:justify-start items-center">
-      <PrimaryButton 
-        onClick={() => navigate("/register-personal")} 
-        name="Comece a Relatar" 
-        addClassName="px-16 py-3 text-lg" 
-      />
-    </div>
-  </div>
-</motion.div>
-
-{/* Seçcão sobre */}
-<motion.div 
-  className="min-h-screen flex md:flex-row flex-col items-center justify-around"
-  initial={{ opacity: 0, y: 50 }} 
-  animate={{ opacity: 1, y: 0 }} 
-  transition={{ duration: 1 }}>
-  <div className="w-full">
-    <img src={image} className="w-full md:w-8/12 h-96 md:h-3/6 py-20" alt="handsWithPlant" />
-  </div>
-
-    <div className="w-full md:w-1/2 text-gray-600 text-center md:text-left mx-3 px-6 md:px-2">
-      <h2 className="text-lg md:text-3xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
-      <p className="text-sm md:text-base text-justify dark:text-black">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
-      <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
-      <p className="text-sm md:text-base text-justify mt-4 dark:text-black">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
-    </div>
-</motion.div>
-
-{/* Seçcão slide */}
-<motion.div
-className=""
-initial={{ opacity: 0, y: 50 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 1, delay: 0.2 }}>
-
- <div className="">
-   <Slide />
- </div>
-
-</motion.div>
-
-{/* Seçcão Benefícios */}
-  <div>
-    <CardBeneficios />
-  </div>
-
-
-{/* Sessão Notícias */}
-<motion.div
-        className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-gray-50"
-        initial={{ opacity: 0, y: 50 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 1, delay: 0.2 }}
-      >
-        <div className="text-center">
-          <h2 className="text-lg md:text-3xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
-          <p className="text-gray-600 dark:text-black">
-            Tenha as notícias sempre perto de si, sem precisar sair de casa.
-          </p>
+        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 text-center px-4">
+          <div className="tracking-wide">
+            <AnimatedText 
+            text="Luanda mais limpa começa com você!"
+            className="text-white text-3xl md:text-4xl font-semibold text-start"
+            />
+            <motion.p
+              className="text-lg text-gray-300 mt-4 text-start"
+              variants={sentence}
+              initial="hidden"
+              animate="visible"
+              >
+                {"Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!".split("").map((char, index) => (
+                  <motion.span key={index} variants={letter}>
+                    {char}
+                  </motion.span>
+                ))}
+            </motion.p>
+          </div>
         </div>
 
-<section className="columns-2 md:columns-2 gap-2 space-y-6">
-          {midiaItens.map((item, index) => (
-<motion.div
-              key={index}
-              className="relative overflow-hidden rounded-md transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
-              onClick={() => setSelectedItem(item)}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: index * 0.3 }}
-            >
-              {item.type === "image" ? (
-                <img className="w-full md:h-70 h-52 md:w-[32rem] rounded-md" src={item.src} alt={item.title} />
-              ) : (
-                <video className="w-full md:h-70 md:w-[32rem] rounded-md" src={item.src} autoPlay muted loop playsInline />
-              )}
-            </motion.div>
-          ))}
-</section>
-<Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
-</motion.div>
+        <div className="absolute top-80 md:top-44 mx-0 md:mx-32 inset-0 flex justify-center md:justify-start items-center">
+          <PrimaryButton 
+            onClick={() => navigate("/register-personal")} 
+            name="Comece a Relatar" 
+            addClassName="px-16 py-3 text-lg" 
+          />
+        </div>
+      </div>
+    </motion.div>
 
-      
-      {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />} 
-
-{/* Seção cardRelatos */}
-      <div className="mt-10">
-        <CardRelatos />
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center gap-8 px-4 md:px-12">
+      <div className="w-full md:w-1/2 flex justify-center">
+        <img src={image} className="w-full max-w-lg h-80 md:h-[500px] object-cover" alt="world image" />
       </div>
 
+        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start p-4">
+          <h2 className="text-lg md:text-3xl font-bold text-global-color-three text-center mb-4 md:mb-16">Sobre Nós</h2>
+          <div className="space-y-4 text-sm md:text-base text-center md:text-left">
+            <p className="text-sm md:text-base text-justify text-gray-600">A Green World é a plataforma que veio para revolucionar a gestão dos resíduos sólidos na cidade de Luanda.</p>
+            <p className="text-sm md:text-base text-justify text-gray-600">Desde já mantemos nossa posição como agentes da oposição no quisito poluição ambiental.</p>
+            <p className="text-sm md:text-base text-justify text-gray-600">Promovendo a igualdade de valores humanos, a natureza também merece ser tratada como um ser vivente,até porque ela o é.</p>
+          </div>
+        </div>
+    </div>
 
-{/* Seçcão fixedImage */}
+      <Slide />
+
+      <CardBeneficios />
+
+    <motion.div
+            className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-gray-50"
+            initial={{ opacity: 0, y: 50 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            <div className="text-center">
+              <h2 className="text-lg md:text-3xl font-bold text-global-color-three">Estado do saneamento em Luanda</h2>
+              <p className="text-gray-600">
+                Tenha as notícias sempre perto de si, sem precisar sair de casa.
+              </p>
+            </div>
+
+          <section className="columns-2 md:columns-2 gap-2 space-y-6">
+              {midiaItens.map((item, index) => (
+              <motion.div
+                  key={index}
+                  className="relative overflow-hidden rounded-md transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                  onClick={() => setSelectedItem(item)}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: index * 0.3 }}
+                >
+                  {item.type === "image" ? (
+                    <img className="w-full md:h-70 h-52 md:w-[32rem] rounded-md" src={item.src} alt={item.title} />
+                  ) : (
+                    <video className="w-full md:h-70 md:w-[32rem] rounded-md" src={item.src} autoPlay muted loop playsInline />
+                  )}
+                </motion.div>
+              ))}
+          </section>
+          <Link to="news" className="hover:underline transition delay-50 hover:text-green-800">Ver mais Notícias</Link>
+    </motion.div>
+      {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />} 
+
+      <CardRelatos />
+
     <div className="relative w-full h-[80vh] bg-[url('https://images.pexels.com/photos/3174349/pexels-photo-3174349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-fixed bg-center">
         <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
           <h2 className="text-white text-lg md:text-3xl font-semibold p-20">UM POR TODOS, E TODOS ACABANDO O LIXO!</h2>
@@ -269,36 +238,34 @@ transition={{ duration: 1, delay: 0.2 }}>
     </div>
 
 
-{/* Seção FAQ */}
-<motion.div
-  className="p-6 md:px-16 flex flex-col md:flex-row justify-center items-center mt-14 mb-16 gap-8"
-  initial={{ opacity: 0, y: 50 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1 }}>
+  <motion.div
+    className="p-6 md:px-16 flex flex-col md:flex-row justify-center items-center mt-14 mb-16 gap-8"
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}>
 
-  <div className="text-start w-full max-w-xl md:max-w-2xl">
-    <p className="text-gray-600 dark:text-black font-semibold text-lg sm:text-xl">FAQ</p>
-    <h2 className="text-2xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
-  </div>
-  
-  <div className="w-full max-w-2xl space-y-4">
-    {faqs.map((faq, index) => (
-      <div key={index} className="border-b border-gray-300">
-        <div
-          className="py-4 text-lg sm:text-xl font-medium cursor-pointer hover:text-green-600"
-          onClick={() => setSelectedFAQ(selectedFAQ === index ? null : index)}
-        >
-          <span className="font-bold">{index + 1}.</span> {faq.question}
+    <div className="text-start w-full max-w-xl md:max-w-2xl">
+      <p className="text-gray-600 dark:text-black font-semibold text-lg sm:text-xl">FAQ</p>
+      <h2 className="text-2xl sm:text-4xl font-semibold text-global-color-three mb-6">Perguntas e Respostas Mais Frequentes</h2>
+    </div>
+    
+    <div className="w-full max-w-2xl space-y-4">
+      {faqs.map((faq, index) => (
+        <div key={index} className="border-b border-gray-300">
+          <div
+            className="py-4 text-lg sm:text-xl font-medium cursor-pointer hover:text-green-600"
+            onClick={() => setSelectedFAQ(selectedFAQ === index ? null : index)}
+          >
+            <span className="font-bold">{index + 1}.</span> {faq.question}
+          </div>
+          {selectedFAQ === index && (
+            <p className="text-gray-600 mt-2 text-sm sm:text-base">{faq.answer}</p>
+          )}
         </div>
-        {selectedFAQ === index && (
-          <p className="text-gray-600 mt-2 text-sm sm:text-base">{faq.answer}</p>
-        )}
-      </div>
-    ))}
-  </div>
-</motion.div>
+      ))}
+    </div>
+  </motion.div>
 
-{/* Seçcão rodapé */}
       <Footer />
     </div>
   );

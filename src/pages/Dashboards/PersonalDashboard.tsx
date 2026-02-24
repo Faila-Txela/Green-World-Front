@@ -46,7 +46,7 @@ export default function PersonalDashboard() {
 
   return (
     <div className="flex justify-center items-center mt-40">
-      {/* Título da tela */}
+      {/* Título */}
       <div className="flex items-center p-4 gap-3 absolute top-20 left-72">
         <MdOutlineSpaceDashboard className="h-9 w-9 text-green-600 animate-pulse" />
         <h1 className="text-xl md:text-2xl font-semibold text-left">
@@ -55,15 +55,7 @@ export default function PersonalDashboard() {
       </div>
 
       <div className="w-full">
-        {/* Mapa */}
-        <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full mb-10">
-          <h2 className="text-lg font-semibold mb-4 text-start">
-            Mapa de Locais com Relatos
-          </h2>
-          <MapComponent />
-        </div>
-
-        {/* Cards principais */}
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
             <FaTrashAlt className="text-4xl text-green-600 mb-2" />
@@ -85,7 +77,16 @@ export default function PersonalDashboard() {
             <p className="text-xl text-gray-700">{ultimoLocal}</p>
           </div>
         </div>
+
+        {/* Mapa */}
+        <div className="bg-white p-4 shadow rounded-xl hover:shadow-lg transition-all duration-300 w-full mb-10">
+          <h2 className="text-lg font-semibold mb-4 text-start">
+            Mapa de Locais com Relatos
+          </h2>
+          <MapComponent />
+        </div>
       </div>
+
     </div>
   );
 }

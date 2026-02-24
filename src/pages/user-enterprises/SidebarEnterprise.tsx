@@ -3,8 +3,8 @@ import { MdOutlineSpaceDashboard, MdOutlineCalendarMonth } from "react-icons/md"
 import { FiSettings } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
-import DashHeader from "../../components/Headers/DashHeader";
-import EnterpriseDashboard from "../../components/Dashboards/EnterpriseDashboard";
+import DashHeader from "../../components/layout/DashHeader";
+import EnterpriseDashboard from "../Dashboards/EnterpriseDashboard";
 import Relatorio from "../../components/Relatorio";
 import Agendar from "../../components/Agendar";
 import EnterpriseSettings from "../../components/client/settings/EnterpriseSettings";

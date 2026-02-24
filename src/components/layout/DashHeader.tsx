@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
-import PersonalPerfil from "../../components/client/settings/PersonalPerfil";
+import PersonalPerfil from "../client/settings/PersonalPerfil";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdArrowBack } from "react-icons/io";
 

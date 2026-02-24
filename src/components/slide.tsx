@@ -28,7 +28,6 @@ export default function Slide() {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50">
-      <h2 className="text-lg md:text-3xl font-bold mb-8 text-center text-green-700">Sistema Green World</h2>
 
       <div className="flex items-center justify-between gap-6">
         <button

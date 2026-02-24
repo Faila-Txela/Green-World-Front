@@ -6,8 +6,8 @@ import { VscFeedback } from "react-icons/vsc";
 import { FaCity } from "react-icons/fa";
 import { MdPhone } from 'react-icons/md'
 import { MdOutlinePolicy } from "react-icons/md";
-import DashHeader from "../../components/Headers/DashHeader";
-import AdminDashboard from "../../components/Dashboards/AdminDashboard";
+import DashHeader from "../../components/layout/DashHeader";
+import AdminDashboard from "../Dashboards/AdminDashboard";
 import Users from "../../components/client/users";
 import Feedback from "../../components/client/Feedback";
 import Provincia from "../../components/client/Provincia";

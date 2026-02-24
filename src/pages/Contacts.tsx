@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Header from "../components/Headers/Header";
-import Footer from "../components/Footers/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 import image from '../assets/contactos.jpg';
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
