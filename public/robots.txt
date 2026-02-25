@@ -1,0 +1,12 @@
+# Regras para todos os robôs
+User-agent: *
+
+# Permitir que tudo seja indexado (já que é um site público)
+Allow: /
+
+# Bloquear pastas sensíveis ou de sistema (opcional)
+Disallow: /node_modules/
+Disallow: /dist/
+
+# O CAMINHO PARA O SEU MAPA (Troque pela sua URL real)
+Sitemap: https://greenworld-eight.vercel.app/sitemap.xml

@@ -144,11 +144,11 @@ export default function Home() {
       <div 
         className="relative w-full h-[100vh] bg-[url('/mine.png')] bg-no-repeat bg-cover bg-fixed bg-center">
 
-        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 text-center px-4">
-          <div className="tracking-wide">
+        <div className="absolute inset-0 flex items-center bg-black bg-opacity-50 p-4">
+          <div className="tracking-wide mx-0 md:mx-32">
             <AnimatedText 
             text="Luanda mais limpa começa com você!"
-            className="text-white text-3xl md:text-4xl font-semibold text-start"
+            className="text-white text-3xl md:text-5xl font-semibold text-start"
             />
             <motion.p
               className="text-lg text-gray-300 mt-4 text-start"
@@ -156,7 +156,7 @@ export default function Home() {
               initial="hidden"
               animate="visible"
               >
-                {"Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa. Empresas de reciclagem e recolha de lixo estão prontas para agir!".split("").map((char, index) => (
+                {"Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa!".split("").map((char, index) => (
                   <motion.span key={index} variants={letter}>
                     {char}
                   </motion.span>
@@ -165,11 +165,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute top-80 md:top-44 mx-0 md:mx-32 inset-0 flex justify-center md:justify-start items-center">
+        <div className="absolute top-80 md:top-44 mx-0 md:mx-32 mt-8 inset-0 flex justify-center md:justify-start items-center">
           <PrimaryButton 
             onClick={() => navigate("/register-personal")} 
             name="Comece a Relatar" 
-            addClassName="px-16 py-3 text-lg" 
+            addClassName="px-16 py-3 text-lg rounded-full" 
           />
         </div>
       </div>

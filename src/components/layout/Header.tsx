@@ -45,7 +45,7 @@ export default function Header() {
 
   return (
     <header className={
-      `flex fixed px-[5vw] w-full h-max justify-between items-center shadow-lg z-50 transition-all bg-white`}
+      `flex fixed px-[5vw] w-full h-max justify-around items-center shadow-lg z-50 transition-all bg-white`}
     >
 
       <div>
@@ -86,13 +86,13 @@ export default function Header() {
             <Link className={commonLinkStylesBlack} to="/contacts">Contactos</Link>
           </div>
 
-          <PrimaryButton
+        </nav>
+
+            <PrimaryButton
             onClick={handleLoginClick}
             name="Entrar"
-            addClassName="w-full px-20"
+            addClassName="w-full px-24 rounded-full"
           />
-
-        </nav>
       </div>
 
       {/* Menu Mobile */}
