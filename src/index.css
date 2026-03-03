@@ -42,7 +42,7 @@
   }
 }
 
-::-webkit-scrollbar{
+/* ::-webkit-scrollbar{
   width: 4px;
   overflow-x: hidden;
 }
@@ -52,8 +52,9 @@
   background-color: #006943;
   border-radius: 15px;
   border-radius: 0px 15px 0px 15px;
-}
+} */
 
 html {
-  font-family: 'inter', serif;
+  font-family: 'Raleway', sans-serif;
 }
+

@@ -38,14 +38,18 @@ export default function Header() {
   }, [isMobileMenuOpen]);
 
   const commonLinkStylesBlack =
-    "text-black text-[16px] hover:text-[#006943] transition duration-200 cursor-pointer";
+    "text-gray-600 text-[16px] hover:text-primary font-semibold transition duration-200 cursor-pointer";
   const commonLinkStylesWhite =
-    "text-white text-[16px] hover:text-[#006943] transition duration-200 cursor-pointer";
+    "text-white text-[16px] hover:text-primary font-semibold transition duration-200 cursor-pointer";
 
 
   return (
     <header className={
-      `flex fixed px-[5vw] w-full h-max justify-around items-center shadow-lg z-50 transition-all bg-white`}
+      `flex fixed px-[5vw] w-full h-max justify-around items-center z-50 transition-all ${
+        isScrolled
+        ? "shadow-lg bg-white" // A ? simboliza a 1ª ação se o scroll estiver ativo
+        : "bg-white" // O : simboliza a 2ª ação, se o scroll não estiver ativo
+      }`}
     >
 
       <div>
@@ -91,7 +95,7 @@ export default function Header() {
             <PrimaryButton
             onClick={handleLoginClick}
             name="Entrar"
-            addClassName="w-full px-24 rounded-full"
+            addClassName="px-24 rounded-lg hover:scale-105 font-bold text-lg hover:bg-emerald-100 text-primary border border-primary"
           />
       </div>
 
@@ -128,7 +132,7 @@ export default function Header() {
         <PrimaryButton
           onClick={handleLoginClick}
           name="Entrar"
-          addClassName="w-full bg-global-color-secondary px-20 mt-2"
+          addClassName="w-full bg-primary hover:scale-105 font-semibold text-white rounded-full px-20 mt-2"
         />
 
       </nav>

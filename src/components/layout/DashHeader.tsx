@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { IoNotificationsCircleOutline } from "react-icons/io5";
 import PersonalPerfil from "../client/settings/PersonalPerfil";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdArrowBack } from "react-icons/io";
@@ -10,8 +8,7 @@ interface DashHeaderProps {
   onLogout: () => void;
 }
 
-const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, onLogout }) => {
-  const navigate = useNavigate()  
+const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {  
 
   return (
     <header className="w-full flex items-center justify-between fixed top-0 left-0 px-4 py-2 bg-green-800 shadow-lg z-50 h-16">
@@ -25,16 +22,6 @@ const DashHeader: React.FC<DashHeaderProps> = ({ toggleSidebar, isSidebarOpen, o
       </button>
 
       <div className="flex items-center gap-4">
-        {/* Ícone de Notificações */}
-        <button 
-          type="button"
-          title="Notificações"
-          className="text-white hover:text-green-200 transition-colors"
-          onClick={() => navigate("/notificacao")}
-        >
-          <IoNotificationsCircleOutline size={26} />
-        </button>
-
         {/* Perfil do Usuário */}
         <div className="cursor-pointer">
           <PersonalPerfil />

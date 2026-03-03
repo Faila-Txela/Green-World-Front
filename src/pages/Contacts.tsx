@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import image from '../assets/contactos.jpg';
-import { FiPhone } from "react-icons/fi";
+import { FiSend, FiPhone, FiInstagram, FiFacebook, FiLinkedin } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
-import contactImage from "../assets/Contact us-pana.png";
 import PrimaryButton from "../components/ui/PrimaryButton";
+import Input from "../components/ui/Input";
 import TextArea from "../components/ui/TextArea";
 import Toast from "../components/ui/Toast";
 import { contactoService } from "../modules/service/api/contact";
@@ -17,6 +17,7 @@ interface contactoData {
 }
 
 export default function Contacts() {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<contactoData>({
     nome: "",
     email: "",
@@ -75,119 +76,135 @@ export default function Contacts() {
       console.error("Erro ao enviar mensagem:", error);
       setToast({ message: "Erro ao enviar sua mensagem", type: "error" });
     }
+    finally{
+      setLoading(false)
+    }
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
 
-      {/* Imagem e Título */}
-      <div className="relative h-[60vh] w-full">
-        <img src={image} className="object-cover w-full h-full" alt="alguemFalandoAoTelemovél" />
-        <h1 className="absolute text-white top-1/4 left-1/2 transform -translate-x-1/2 text-4xl md:text-5xl font-bold whitespace-nowrap">
-          Contactos
-        </h1>
-      </div>
-
-      {/* Cards de contato */}
-      <div className="flex justify-center gap-8 mt-14 flex-wrap">
-        <div className="flex flex-col justify-center items-center gap-3 p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-          <FiPhone color="green" size={40} />
-          <a href="https://wa.link/pgmlf7" target="_blank" rel="noopener noreferrer" className="text-lg">
-            (+244) 934 156 335
-          </a>
-        </div>
-
-        <div className="flex flex-col justify-center items-center gap-3 p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-          <MdOutlineEmail color="green" size={40} />
-          <a href="mailto:albertinasauimbo17@gmail.com" className="text-lg">
-            greenworld70@gmail.com
-          </a>
+      {/* Hero Section */}
+      <div className="relative h-[40vh] md:h-[60vh] w-full">
+        <img src={image} className="object-cover w-full h-full" alt="Contactos" />
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <h1 className="text-white text-4xl md:text-5xl font-bold">Contactos</h1>
         </div>
       </div>
 
-      {/* Formulário e Imagem */}
-      <div className="flex justify-center items-center mt-12 mb-12 px-4">
-        <div className="w-full max-w-6xl flex flex-col md:flex-row gap-10 items-center justify-center">
-          {/* Imagem (só em telas md ou maiores) */}
-          <div className="hidden md:flex md:w-1/2 justify-center">
-            <img src={contactImage} alt="mulherAoTelemóvel" className="max-w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition duration-200" />
+      {/* Main Content Container */}
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          
+          {/* Lado Esquerdo: Formulário */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-green-700">Entre em contacto</h2>
+              <p className="text-gray-500 mt-2">Estamos aqui para ajudar. Envie sua mensagem!</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-700">Nome completo</label>
+                <Input
+                  id="nome"
+                  name="nome"
+                  type="text"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  placeholder="Seu nome"
+                  addClassName="focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="seu@email.com"
+                  addClassName="focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                />
+                {emailError && <p className="text-red-600 text-xs mt-1">{emailError}</p>}
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-700">Mensagem</label>
+                <TextArea
+                  id="mensagem"
+                  name="mensagem"
+                  value={formData.mensagem}
+                  onChange={handleChange}
+                  placeholder="Como podemos ajudar?"
+                  className="focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                />
+              </div>
+
+              <PrimaryButton
+                type="submit"
+                name="Enviar mensagem"
+                addClassName="bg-green-700 hover:bg-green-800 text-white py-4"
+              >
+                <FiSend size={18} />
+              </PrimaryButton>
+            </form>
           </div>
 
-          {/* Formulário */}
-          <form
-            id="contact-form"
-            name="contact"
-            className="w-full md:w-1/2 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-200 p-6"
-            onSubmit={handleSubmit}
-          >
-            <div className="text-center mb-6">
-              <h2 className="text-3xl font-semibold text-green-700">Entre em contacto connosco</h2>
-              <p className="text-[14px] mt-2 md:text-lg text-gray-600">Envie suas dúvidas para nós</p>
+          {/* Lado Direito: Info e Redes */}
+          <div className="flex flex-col gap-6">
+            
+            {/* Grid de Contatos Diretos */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white p-8 rounded-2xl shadow-md border-b-4 border-green-600 flex flex-col items-center text-center transition-transform hover:-translate-y-2">
+                <div className="bg-green-100 p-4 rounded-full mb-4">
+                  <FiPhone className="text-green-700" size={30} />
+                </div>
+                <h3 className="font-bold text-gray-800 mb-2">Telefone</h3>
+                <a href="tel:+244934156335" className="text-gray-600 hover:text-green-700 transition-colors">
+                  (+244) 934 156 335
+                </a>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md border-t-4 border-green-600 flex flex-col items-center text-center transition-transform hover:-translate-y-2">
+                <div className="bg-green-100 p-4 rounded-full mb-4">
+                  <MdOutlineEmail className="text-green-700" size={30} />
+                </div>
+                <h3 className="font-bold text-gray-800 mb-2">Email</h3>
+                <a href="mailto:greenworld70@gmail.com" className="text-gray-600 hover:text-green-700 transition-colors break-all">
+                  greenworld70@gmail.com
+                </a>
+              </div>
             </div>
 
-            {/* Nome */}
-            <div className="mb-4">
-              <label htmlFor="nome" className="block font-medium mb-2 text-gray-700">Nome completo</label>
-              <input
-                type="text"
-                id="nome"
-                name="nome"
-                value={formData.nome}
-                onChange={handleChange}
-                maxLength={100}
-                placeholder="Nome completo"
-                className="w-full py-2 px-3 outline-none border border-gray-300 focus:border-green-600 rounded"
-              />
+            {/* Card de Redes Sociais */}
+            <div className="bg-green-700 p-10 rounded-2xl shadow-lg text-white text-center">
+              <h3 className="text-2xl font-bold mb-4">Siga-nos nas nossas redes</h3>
+              <p className="text-green-100 mb-8 text-sm">Acompanhe nossas novidades e projetos de perto.</p>
+              
+              <div className="flex justify-center gap-6">
+                <a href="#" title="instagram" className="bg-white/10 p-4 rounded-full hover:bg-white hover:text-green-700 transition-all">
+                  <FiInstagram size={24} />
+                </a>
+                <a href="#" title="facebook" className="bg-white/10 p-4 rounded-full hover:bg-white hover:text-green-700 transition-all">
+                  <FiFacebook size={24} />
+                </a>
+                <a href="#" title="linkedln" className="bg-white/10 p-4 rounded-full hover:bg-white hover:text-green-700 transition-all">
+                  <FiLinkedin size={24} />
+                </a>
+              </div>
             </div>
 
-            {/* Email */}
-            <div className="mb-4">
-              <label htmlFor="email" className="block font-medium mb-2 text-gray-700">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                maxLength={100}
-                placeholder="Email"
-                className="w-full py-2 px-3 outline-none border border-gray-300 focus:border-green-600 rounded"
-              />
-              {emailError && <p className="text-red-600 text-sm mt-1">{emailError}</p>}
-            </div>
+          </div> {/* Fim da coluna direita */}
 
-            {/* Mensagem */}
-            <div className="mb-4">
-              <label htmlFor="mensagem" className="block font-medium mb-2 text-gray-700">Mensagem</label>
-              <TextArea
-                name="mensagem"
-                id="mensagem"
-                value={formData.mensagem}
-                onChange={handleChange}
-                className="w-full py-2 px-3 outline-none border focus:outline-none focus:border-green-600 border-gray-300 rounded"
-                placeholder="Mensagem"
-              />
-            </div>
-
-            {/* Botão */}
-            <div className="flex justify-center mt-6">
-              <PrimaryButton type="submit" name="Enviar" addClassName="w-full md:w-60" />
-            </div>
-          </form>
         </div>
       </div>
 
-      {/* Toast */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
-
       <Footer />
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }

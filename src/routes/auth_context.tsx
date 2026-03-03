@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
-  // Defina as propriedades para o tipo `user`
   id: string;
   name: string;
 }
 
 interface Empresa {
-  // Defina as propriedades para o tipo `empresa`
   id: string;
   companyName: string;
 }

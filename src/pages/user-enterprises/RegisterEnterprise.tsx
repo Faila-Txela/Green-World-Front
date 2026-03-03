@@ -18,6 +18,7 @@ import { addressService } from "../../modules/service/api/address";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 
+
 const InputField = ({
   label,
   type,
@@ -25,8 +26,8 @@ const InputField = ({
   value,
   onChange,
   icon,
-  extraPaddingRight = false,
-  required = true
+  required = true,
+  placeholder
 }: {
   label: string;
   type: string;
@@ -34,37 +35,51 @@ const InputField = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon: JSX.Element;
-  extraPaddingRight?: boolean;
   autoComplete?: string;
   required?: boolean;
-}) => (
-  <div className="relative">
-    <label htmlFor={name} className="block text-gray-600 font-semibold mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
-    </label>
-    <div className="relative">
-      <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-        {icon}
-      </span>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        title={`Enter your ${label.toLowerCase()}`}
-        placeholder={`Enter your ${label.toLowerCase()}`}
-        className={`w-full p-3 ${extraPaddingRight ? "pr-10" : "pr-3"} pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
-      />
+  placeholder: string;
+}) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = name === "senha";
+  const inputType = isPasswordField ? (showPassword ? "text" : "password") : type;
+
+  return (
+    <div className="w-full">
+      <label htmlFor={name} className="block text-gray-600 text-sm mb-2">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <div className="relative flex items-center">
+        <span className="absolute left-3 flex items-center text-gray-500">
+          {icon}
+        </span>
+        <input
+          id={name}
+          type={inputType}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required={required}
+          placeholder={placeholder}
+          className={`w-full p-3 pl-10 ${isPasswordField ? "pr-10" : "pr-3"} border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent`}
+        />
+        {isPasswordField && (
+          <button
+            type="button"
+            className="absolute right-3 flex items-center text-gray-600 hover:text-gray-800 focus:outline-none"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+          </button>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface EnterpriseFormData {
   nome: string;
   email: string;
   senha: string;
-  tipoEmpresa_id: string;
   enderecoId: string;
   bairro: string;
   municipio: string;
@@ -74,26 +89,22 @@ interface EnterpriseFormData {
   provinciaId: string;
 }
 
+interface Provincia { id: string; nome: string; }
+interface Municipio { id: string; nome: string; }
+
 export default function EnterpriseForm() {
   const navigate = useNavigate();
-  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [provincia, setProvincia] = useState<string>("");
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
   const [municipio, setMunicipio] = useState<string>("");
-  const [typeGarbages, setTypeGarbages] = useState<Municipio[]>([]);
-  const [typeGarbage, setTypeGarbage] = useState<string>("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-   const { name, value } = e.target;
-    setFormData((formData) => ({ ...formData, [name]: value }));
-};
 
   const [formData, setFormData] = useState<EnterpriseFormData>({
     nome: "",
     email: "",
     senha: "",
-    tipoEmpresa_id: "",
     enderecoId: "",
     municipio: "",
     phone: "",
@@ -103,292 +114,246 @@ export default function EnterpriseForm() {
     provinciaId: ""
   });
 
-  // Função para pegar as províncias
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const fetchProvincias = async () => {
-    const response = await axios.get("/provincia");
-    if (response.status === 200) {
-      setProvincias(response.data);
-    }
+    try {
+      const response = await axios.get("/provincia");
+      if (response.status === 200) setProvincias(response.data);
+    } catch (err) { console.error(err); }
   };
 
-  // Função para pegar os municípios
   const fetchMunicipio = async (id: string) => {
-    const response = await axios.get(`/municipio/provincia/${id}`);
-    //console.log(response.data);
-    if (response.status === 200) {
-      setMunicipios(response.data);
-    }
+    try {
+      const response = await axios.get(`/municipio/provincia/${id}`);
+      if (response.status === 200) setMunicipios(response.data);
+    } catch (err) { console.error(err); }
   };
 
-  // Função para pegar os tipos de empresa
-  const fetchTypeGarbages = async () => {
-    const response = await axios.get("/tipo-empresa");
-    if (response.status === 200) {
-      setTypeGarbages(response.data);
-    }
-  };
-
-  // Função para o cadastro de empresas
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //console.log("Dados enviados:", formData);
-    setToast({ message: "Empresa cadastrada com sucesso!", type: "success" })
+    setLoading(true);
 
-    // Validações
-  if (!formData.nome.trim()) {
-    setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
-    return;
-  }
+    if (!formData.nome.trim()) {
+      setToast({ message: "O nome da empresa é obrigatório!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
-    return;
-  }
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setToast({ message: "Por favor, insira um e-mail válido!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!formData.senha.trim() || formData.senha.length < 6) {
-    setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
-    return;
-  }
+    if (!formData.senha.trim() || formData.senha.length < 6) {
+      setToast({ message: "A senha deve ter pelo menos 6 caracteres!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!formData.phone.trim() || !/^\d{9,}$/.test(formData.phone)) {
-    setToast({ message: "Por favor, insira um número de telefone válido!", type: "error" });
-    return;
-  }
+    if (!formData.phone.trim() || !/^\d{9,}$/.test(formData.phone)) {
+      setToast({ message: "Por favor, insira um número de telefone válido!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  //const nifLimpo = formData.nif.replace(/\s+/g, '');
-  if (!formData.nif.trim() || !/^\d{9}$/.test(formData.nif)) {
-    setToast({ message: "O NIF da empresa deve conter 9 dígitos válidos!", type: "error" });
-    return;
-  }
+    if (!formData.nif.trim() || !/^\d{9}$/.test(formData.nif)) {
+      setToast({ message: "O NIF da empresa deve conter 9 dígitos válidos!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!provincia) {
-    setToast({ message: "Selecione uma província!", type: "error" });
-    return;
-  }
+    if (!provincia) {
+      setToast({ message: "Selecione uma província!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!municipio) {
-    setToast({ message: "Selecione um município!", type: "error" });
-    return;
-  }
+    if (!municipio) {
+      setToast({ message: "Selecione um município!", type: "error" });
+      setLoading(false);
+      return;
+    }
 
-  if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
-    setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
-    return;
-  }
-    
+    if (!(document.getElementById("terms") as HTMLInputElement)?.checked) {
+      setToast({ message: "Você deve concordar com os termos e política de privacidade!", type: "error" });
+      setLoading(false);
+      return;
+    }
+
     try {
-      const empresaData = {
-        ...formData,
-      };
+      const { data } = await addressService.create({ bairro: formData.bairro, municipioId: municipio, provinciaId: provincia, telefone: formData.phone, rua: formData.bairro });
+      const response = await empresaService.create({ email: formData.email, enderecoId: data.id, nif: formData.nif, nome: formData.nome, senha: formData.senha, site: formData.site });
 
-      const {data} = await addressService.create({bairro: formData.bairro, municipioId: municipio, provinciaId: provincia, telefone: formData.phone, rua: formData.bairro})
-      const response = await empresaService.create({email: empresaData.email, enderecoId:data.id, nif: empresaData.nif, nome: empresaData.nome, senha: empresaData.senha, site: empresaData.site});
-      
-      //console.log("Resposta do servidor:", response);
       if (response.status === 201) {
-        setTimeout(() => navigate("/enterprise-login"), 2000)
+        setToast({ message: "Empresa cadastrada com sucesso!", type: "success" });
+        setTimeout(() => navigate("/enterprise-login"), 2000);
       }
     } catch (error) {
       console.error("❌ Erro ao cadastrar sua empresa:", error);
-      setToast({ message: "Erro ao cadastrar sua empresa", type: "error" })
+      setToast({ message: "Erro ao cadastrar sua empresa", type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchProvincias();
-    fetchTypeGarbages();
-  }, []);
+  useEffect(() => { fetchProvincias(); }, []);
 
   useEffect(() => {
-    if (provincia.trim() === "") return setMunicipios([])    
-      
+    if (provincia.trim() === "") return setMunicipios([]);
     fetchMunicipio(provincia);
-
   }, [provincia]);
 
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-2xl p-8 bg-white shadow-xl rounded-2xl">
-        <div className="text-center mb-6 flex flex-col items-center justify-center gap-2">
-          <Logo className="w-20 h-20" />
-          <h2 className="text-2xl font-bold text-gray-800">
-            Cadastro da Empresa
-          </h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 md:p-10">
+      <div className="w-full max-w-4xl p-8 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-3xl border border-gray-50">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4 text-green-700">
+            <Logo className="w-16 h-16" />
+          </div>
+          <h2 className="text-3xl font-extrabold text-gray-800">Cadastro da Empresa</h2>
+          <p className="text-gray-500 mt-2">Faça parte da nossa comunidade sustentável</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
-          <Link
-            to="/register-personal"
-            className="text-lg font-semibold flex items-center justify-center hover:text-green-800"
-          >
+        <div className="flex border-b mb-8">
+          <Link to="/register-personal" className="flex-1 text-center py-3 text-gray-400 font-medium hover:text-green-600 transition-colors">
             Cidadão Comum
           </Link>
-          <Link
-            to="/register-enterprise"
-            className="text-lg font-semibold flex items-center justify-center underline hover:text-green-800"
-          >
+          <div className="flex-1 text-center py-3 text-green-700 font-bold border-b-4 border-green-600">
             Empresa
-          </Link>
+          </div>
         </div>
 
-          {/* Adicionei este texto informativo */}
-        <p className="text-sm text-gray-600 mb-4">
-          Campos marcados com <span className="text-red-500">*</span> são obrigatórios
-        </p>
-
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit} action="Admindashboard">
-          <InputField
-            label="Nome da Empresa"
-            type="text"
-            name="nome"
-            autoComplete="on"
-            value={formData.nome}
-            onChange={handleChange}
-            icon={<FaUser />}
-          />
-          <InputField
-            label="Email da Empresa"
-            type="email"
-            name="email"
-            autoComplete="on"
-            value={formData.email}
-            onChange={handleChange}
-            icon={<FaEnvelope />}
-          />
-
-          <div className="relative">
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InputField
+              placeholder="Ex: Green Tech Lda"
+              label="Nome da Empresa"
+              type="text"
+              name="nome"
+              value={formData.nome}
+              onChange={handleChange}
+              icon={<FaUser />}
+            />
+            <InputField
+              placeholder="empresa@email.com"
+              label="Email da Empresa"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              icon={<FaEnvelope />}
+            />
+
+            <InputField
+              placeholder="******"
               label="Senha"
-              type={isShowPassword ? "text" : "password"}
+              type="password"
               name="senha"
-              autoComplete="on"
               value={formData.senha}
               onChange={handleChange}
               icon={<FaLock />}
-              extraPaddingRight
             />
-            <button
-              type="button"
-              className="absolute inset-y-7 top-14 right-3 flex items-center text-gray-600 hover:text-gray-800"
-              onClick={() => setIsShowPassword(!isShowPassword)}
-            >
-              {isShowPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-            </button>
-          </div>
-
-          <InputField
-            label="Telefone da Empresa"
-            type="phone"
-            name="phone"
-            autoComplete="on"
-            value={formData.phone}
-            onChange={handleChange}
-            icon={<FaPhone />}
-          />
-
-          <InputField
-            label="Bairro"
-            type="text"
-            name="bairro"
-            autoComplete="on"
-            value={formData.bairro}
-            onChange={handleChange}
-            icon={<FaCity />}
-          />
 
             <InputField
+              placeholder="9xx xxx xxx"
+              label="Telefone da Empresa"
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              icon={<FaPhone />}
+            />
+
+            <InputField
+              placeholder="NIF da Instituição"
               label="NIF"
-              type="number"
+              type="text"
               name="nif"
-              autoComplete="on"
               value={formData.nif}
               onChange={handleChange}
               icon={<HiMiniIdentification />}
             />
             <InputField
+              placeholder="https://..."
               label="Site da Empresa"
               type="url"
               name="site"
-              autoComplete="on"
               value={formData.site}
               onChange={handleChange}
               icon={<SiSitepoint />}
               required={false}
             />
-  
-          <div>
-            <label
-              htmlFor="provincia"
-              className="block text-gray-600 font-semibold mb-2"
-            >
-              Sua Provincia <span className="text-red-500">*</span>
-            </label>
-            <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={provincia}
-              autoComplete="on"
-              onChange={(e) => setProvincia(e.target.value)}
-              title="Selecione sua província"
-              required
-            >
-              <option className="" key="" value="">Selecione a provincia</option>
-              {provincias.map((provincia) => (
-                <option value={provincia.id}>{provincia.nome}</option>
-              ))}
-            </select>
+
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-gray-100">
+              <div className="flex flex-col">
+                <label className="block text-gray-600 font-semibold mb-2 text-sm">
+                  Sua Provincia <span className="text-red-500">*</span>
+                </label>
+                <select
+                  title="provincia"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+                  value={provincia}
+                  onChange={(e) => setProvincia(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione a provincia</option>
+                  {provincias.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
+                </select>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="block text-gray-600 font-semibold mb-2 text-sm">
+                  Seu Municipio <span className="text-red-500">*</span>
+                </label>
+                <select
+                  title="municipio"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
+                  value={municipio}
+                  onChange={(e) => setMunicipio(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione o município</option>
+                  {municipios.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
+                </select>
+              </div>
+
+              <InputField
+                placeholder="Bairro/rua"
+                label="Bairro"
+                type="text"
+                name="bairro"
+                value={formData.bairro}
+                onChange={handleChange}
+                icon={<FaCity />}
+              />
+            </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="municipio"
-              className="font-semibold mb-2 block text-gray-600"
-            >
-              Seu Municipio <span className="text-red-500">*</span>
-            </label>
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" name="terms" id="terms" required />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                Concordo com os <Link to="/terms" className="text-green-700 font-semibold hover:underline">termos e políticas</Link> da Green World.
+              </label>
+            </div>
 
-            <select
-            className="flex w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent"
-              value={municipio}
-              autoComplete="on"
-              onChange={(e) => setMunicipio(e.target.value)}
-              title="Selecione seu município"
-              required
-            >
-              <option value="" key="" className="">Selecione o município</option>
-              {municipios.map((municipio) => (
-                <option value={municipio.id}>{municipio.nome}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-2">
-            <span>
-              <input type="checkbox" name="terms" id="terms" className="bg-green-600" title="Agree to terms and privacy policy" required />
-            </span>
-            <Link to="/Terms" className="text-[#068a5b] text-sm hover:underline transition duration-500">Concordo com os termos e política de privacidade da Green World <span className="text-red-500">*</span></Link>
-          </div>
-
-          <div className="col-span-1 md:col-span-2 mt-4">
-            <PrimaryButton addClassName="" name="Cadastrar" />
-          </div>
-
-          <div className="flex items-center justify-start col-span-1 md:col-span-2 gap-3">
-            <span>Já tem uma conta?</span>
-            <Link
-              to="/enterprise-login"
-              className="text-[#068a5b] text-base hover:underline transition duration-500"
-            >
-              Entrar
-            </Link>
+            <PrimaryButton 
+              addClassName="bg-primary text-white mt-6 font-semibold w-full" 
+              name={loading ? "Processando..." : "Criar Conta"} 
+            />
+          
+            <div className="text-center text-gray-600 text-sm">
+              Já tem uma conta? <Link to="/enterprise-login" className="text-primary hover:underline transition duration-500">Entrar agora</Link>
+            </div>
           </div>
         </form>
 
-          {/* Exibe o Toast se houver mensagem */}
-            {toast && 
-            <Toast message={toast.message}
-            type={toast.type}
-            onClose={() => setToast(null)} />}
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </div>
     </div>
   );

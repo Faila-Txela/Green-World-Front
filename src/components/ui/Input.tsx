@@ -4,13 +4,15 @@ interface InputProps {
   id: string;
   type: string;
   value: string;
+  name?: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   placeholder: string;
+  maxlenght?: number
   autoComplete?: string;
   addClassName: string;
 }
 
-export default function Input({ id, type, placeholder, addClassName, onChange }: InputProps) {
+export default function Input({ id, type, placeholder, addClassName, onChange, name, maxlenght }: InputProps) {
   return (
     <div>
       <input
@@ -19,6 +21,9 @@ export default function Input({ id, type, placeholder, addClassName, onChange }:
         type={type}
         onChange={onChange}
         placeholder={placeholder}
+        name={name}
+        required
+        maxLength={maxlenght}
        />
     </div>
   )

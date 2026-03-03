@@ -3,8 +3,11 @@ import Skeleton from "../components/ui/Skeleton";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 
+
+// Implementar a ideia
+
 function News() {
-  const [news, setNews] = useState<{ title: string; description: string }[]>([]); // Estado para armazenar as notícias
+  const [news, setNews] = useState<{ title: string; description: string }[]>([]); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ function News() {
     <div>
       <Header />
       <div className="min-h-screen flex flex-col justify-center items-center py-8">
-        <h1 className="text-lg md:text-3xl font-bold text-global-color-three mb-4 p-20">
+        <h1 className="text-2xl md:text-3xl font-semibold text-primary mb-4 p-20">
           Últimas Notícias
         </h1>
 
@@ -41,7 +44,7 @@ function News() {
             ))}
           </div>
         ) : (
-          // Renderiza as notícias reais em 2 colunas responsivas
+          // Renderiza as notícias em 2 colunas responsivas
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-6xl">
             {news.length > 0 ? (
               news.map((item, index) => (

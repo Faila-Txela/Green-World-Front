@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import image1 from '../assets/11.png';
-import video1 from '../assets/video/greenWorld.mp4'
+import { useState, useEffect } from 'react';
+import image1 from '../assets/dashboard.png';
+import video1 from '../assets/video/greenWorld.mp4';
 
 type Midia = {
   id: number;
@@ -16,55 +15,54 @@ const midias: Midia[] = [
 
 export default function Slide() {
   const [indiceAtual, setIndiceAtual] = useState<number>(0);
+  const [visivel, setVisivel] = useState<boolean>(true);
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setVisivel(false);
+
+      setTimeout(() => {
+        setIndiceAtual((prev) => (prev + 1) % midias.length);
+        setVisivel(true); 
+      }, 500);
+      
+    }, 5000); 
+
+    return () => clearInterval(intervalo);
+  }, []);
+
   const midiaSelecionada = midias[indiceAtual];
 
-  const irParaAnterior = () => {
-    setIndiceAtual((prev) => (prev - 1 + midias.length) % midias.length);
-  };
-
-  const irParaProximo = () => {
-    setIndiceAtual((prev) => (prev + 1) % midias.length);
-  };
-
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-white p-4">
+      <div className="relative w-full max-w-5xl aspect-[16/10] md:aspect-video flex items-center justify-center">
+        
+        {/* Fundo Gradiente */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-green-400 to-red-400 rounded-[2rem] shadow-2xl opacity-90" />
 
-      <div className="flex items-center justify-between gap-6">
-        <button
-          type='button'
-          title="Anterior"
-          onClick={irParaAnterior}
-          className="p-4 rounded-full bg-green-100 hover:bg-green-200 transition-colors shadow-md"
+        {/* Container da Mídia */}
+        <div 
+          className={`relative z-10 w-full h-full flex justify-center p-4 md:p-10 transition-opacity duration-500 ease-in-out ${
+            visivel ? 'opacity-100' : 'opacity-0'
+          }`}
         >
-          <FaChevronLeft size={28} className="text-green-700" />
-        </button>
-
-        <div className="flex-1 max-h-[70vh] flex items-center justify-center p-4 transition-all duration-500 ease-in-out">
           {midiaSelecionada.tipo === 'imagem' ? (
             <img
               src={midiaSelecionada.url}
-              alt="Green Wolrd Celular"
-              className="max-h-[65vh] object-contain rounded-xl shadow-lg transition-transform duration-500"
+              alt="Preview"
+              className="h-full w-full object-contain"
             />
           ) : (
             <video
               src={midiaSelecionada.url}
-              controls
               autoPlay
               muted
-              className="max-h-[65vh] object-contain rounded-xl shadow-lg transition-transform duration-500"
+              loop
+              playsInline
+              className="h-full w-full object-contain"
             />
           )}
         </div>
-
-        <button
-          type='button'
-          title="Próximo"
-          onClick={irParaProximo}
-          className="p-4 rounded-full bg-green-100 hover:bg-green-200 transition-colors shadow-md"
-        >
-          <FaChevronRight size={28} className="text-green-700" />
-        </button>
       </div>
     </div>
   );

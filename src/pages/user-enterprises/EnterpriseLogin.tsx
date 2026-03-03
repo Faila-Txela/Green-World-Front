@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import Header from "../../components/layout/Header";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import background from "../../assets/enterprise.png";
@@ -121,27 +122,21 @@ export default function EnterpriseLogin() {
   };
 
   return (
-    <div className="flex-row items-center justify-center h-screen gap-6">
-      <div className="flex items-center justify-center h-screen gap-6 flex-wrap px-4">
-        <div className={`hidden sm:flex items-center justify-center w-[60vh] bg-[#007f5b] rounded-lg shadow-md transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}>
-          <img
-            src={background}
-            className={`w-[30rem] h-[30rem] self-center flip-rtl babybear:hidden transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
-            alt="loginImagem"
-          />
-        </div>
+    <div className="">
+      <Header />
+      <div className="flex items-center justify-center min-h-screen pt-20">
 
         <form
           onClick={(e) => e.preventDefault()}
           className={`flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
         >
           <h3 
-          className="text-2xl font-semibold text-[#068a5b]">
-            Login de Empresas
+          className="text-2xl font-semibold text-primary">
+            Login da Empresa
           </h3>
 
           <div className="flex flex-col w-full gap-3">
-            <label htmlFor="email" className="p-1">
+            <label htmlFor="email" className="p-1 text-gray-600 text-sm">
               Seu e-mail
             </label>
             <Input
@@ -157,7 +152,7 @@ export default function EnterpriseLogin() {
               <span className="text-red-500 text-sm">{emailError}</span>
             )}
 
-            <label htmlFor="senha" className="p-1">
+            <label htmlFor="senha" className="p-1 text-gray-600 text-sm">
               Sua senha
             </label>
             <div className="relative w-full">
@@ -170,9 +165,6 @@ export default function EnterpriseLogin() {
                 onChange={handleSenhaChange}
                 addClassName="w-full border-2 focus:border-green-400 rounded-md"
               />
-              {senhaError && (
-                <span className="text-red-500 text-sm">{senhaError}</span>
-              )}
 
               <button
                 type="button"
@@ -182,11 +174,13 @@ export default function EnterpriseLogin() {
                 {isShowPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+
+              {senhaError && ( <span className="text-red-500 text-sm">{senhaError}</span>)}
           </div>
 
           <div className="w-full flex justify-end">
             <a
-              className="text-[#068a5b] hover:underline transition duration-500"
+              className="text-primary text-sm hover:underline transition duration-500"
               href="#"
             >
               Esqueci minha senha
@@ -195,7 +189,7 @@ export default function EnterpriseLogin() {
 
           <div className="w-full">
             <PrimaryButton
-              addClassName={`w-[18rem] py-3 text-sm font-medium ${loading ? "opacity-60 cursor-not-allowed" : ""}`} 
+              addClassName={`font-semibold text-white bg-primary ${loading ? "opacity-60 cursor-not-allowed" : ""}`} 
               name={loading ? "Carregando..." : "Entrar"}
               onClick={Enter}
               disabled={loading} 
@@ -204,9 +198,9 @@ export default function EnterpriseLogin() {
 
           <div className="w-full">
             <PrimaryButton
-              addClassName="w-[18rem] py-3 text-sm font-medium"
+              addClassName="font-semibold text-white bg-primary"
               name="Cadastrar-se"
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.preventDefault();
                 navigate("/register-enterprise");
               }}

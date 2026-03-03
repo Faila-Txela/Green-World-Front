@@ -1,97 +1,79 @@
 import { useState, useEffect, useRef } from 'react';
-import { MdAccountCircle } from 'react-icons/md';
-import { IoIosArrowDown } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
-import { empresaService } from '../../../modules/service/api/empresa';
+import { useProfile } from '../../../routes/profileContext';
+import defaultPic from '../../../assets/default-avatar-profile-picture-male-icon.png';
 
 function EnterprisePerfil() {
-  const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null); 
-  const profileRef = useRef<HTMLDivElement | null>(null);  
+  const { profilePic, setProfilePic } = useProfile();
+  const [foto, setFoto] = useState<string>(defaultPic);
+  const profileRef = useRef<HTMLDivElement | null>(null);
 
-  // Fecha o dropdown se clicar fora
+  // Carregar foto do localStorage
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current && !dropdownRef.current.contains(event.target as Node) &&
-        profileRef.current && !profileRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    const fotoUrl = localStorage.getItem("userFoto");
+    setFoto(fotoUrl || defaultPic);
   }, []);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(prevState => !prevState);
+
+  // Novo handler para selecionar imagem
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        // Salva no localStorage e atualiza o estado
+       setProfilePic(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleLogout = async () => {
-    alert("Logout feito")
-    try {
-
-        //const userId = localStorage.getItem('userId');
-        const empresaId = localStorage.getItem('empresaId');
-
-        if (!empresaId) {
-            throw new Error("Usuário não encontrados.");
-        }
-
-        await empresaService.logOut(); 
-
-        //localStorage.removeItem('userId'); // Remove o id da empresa (se tiver)
-        //localStorage.removeItem('user');
-        localStorage.removeItem('empresaId');   
-        localStorage.removeItem('empresa');  
-        localStorage.removeItem('token');     
-        navigate("/enterprise/login"); 
-      } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-      }
+  // No componente onde mostra a foto de perfil
+useEffect(() => {
+  const handleStorageChange = () => {
+    const novaFoto = localStorage.getItem("userFoto");
+    setProfilePic(novaFoto);
   };
 
-  const goToSettings = () => {
-    navigate('/settings')
+  window.addEventListener("storage", handleStorageChange);
+
+  return () => {
+    window.removeEventListener("storage", handleStorageChange);
   };
+}, []);
+
 
   return (
     <div className="p-3 flex items-center gap-3 cursor-pointer relative z-20">
-      {/* Card de Perfil com Ícone e Nome */}
-      <div 
-        ref={profileRef} 
-        className="flex items-center gap-3 p-3 rounded-lg shadow-lg cursor-pointer"
-        onClick={toggleDropdown}
+
+      {/* Perfil dropdown */}
+      <div
+        ref={profileRef}
+        className="flex items-center gap-2 p-2 rounded-full cursor-pointer"
       >
-        <MdAccountCircle size={28} className="" />
-        <div>
-          <div className="text-sm font-semibold">Nome do Usuário</div>
-        </div>
-        <IoIosArrowDown size={18} className="" />
+        <img
+          src={profilePic || defaultPic}
+          alt="Perfil"
+          className="w-10 h-10 rounded-full border-2 border-green-500 object-cover hover:opacity-80"
+        />
       </div>
 
-      {/* Dropdown Menu Lateral */}
-      {isDropdownOpen && (
-        <div ref={dropdownRef} className="absolute left-0 top-0 mt-3 bg-white p-4 rounded-lg shadow-lg w-48 z-30">
-          <div 
-            onClick={goToSettings}
-            className="text-black hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all"
-          >
-            Configurações
-          </div>
-          <div 
-            onClick={handleLogout}
-            className="text-red-500 hover:bg-gray-200 p-2 rounded-md cursor-pointer transition-all mt-1"
-          >
-            Terminar Sessão
-          </div>
-        </div>
-      )}
+      {/* Input de imagem*/}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="hidden"
+        id="inputFotoPerfil"
+      />
+
+      {/* Ícone para abrir o seletor de imagem */}
+      <label
+        htmlFor="inputFotoPerfil"
+        className="bg-green-500 text-white text-xs rounded-md p-1 cursor-pointer hover:bg-green-600"
+      >
+        Alterar Foto
+      </label>
     </div>
   );
 }

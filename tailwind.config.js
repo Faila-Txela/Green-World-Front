@@ -8,30 +8,38 @@ export default {
 
   theme: {
     extend: {
-      animation: {
-        "marquee": "marquee 20s infinite linear",
-      },
       backgroundImage: {
         bannerImg: "url('/mine.png')",
         garbageImage: "url('/garbageImage.jpg')"
       },
-      keyframes:{
+      keyframes: {
         marquee: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-100%)' },
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-12px)' },
+        },
+        floatSlow: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        }
+      },
+      animation: {
+        float: 'float 4s ease-in-out infinite',
+        floatSlow: 'floatSlow 6s ease-in-out infinite',
+        marquee: "marquee 14s linear infinite",
       },
       colors: {
-        'global-color-primary': '#00160E',
-        'global-color-secondary': '#006943',
-        'global-color-three': '#007f5b'
+        'primary': '#117923',
       },
       fontSize: {
         'title': '40px',
         'body': '16px',
       },
       fontFamily: {
-        Quicksand: ['Quicksand', 'serif']
+        Raleway: ['Raleway', 'sans-serif']
       }
     },
   },

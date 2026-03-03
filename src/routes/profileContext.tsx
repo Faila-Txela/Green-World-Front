@@ -1,5 +1,4 @@
-// profileContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface ProfileContextProps {
   profilePic: string | null;

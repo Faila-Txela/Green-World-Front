@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/Logo";
-import Skeleton from "../ui/Skeleton";
 import FooterLinks from "../../components/FooterLinks";
-import { CiInstagram, CiLinkedin } from "react-icons/ci";
+import { CiInstagram, CiLinkedin, CiFacebook } from "react-icons/ci";
 
 export default function Footer() {
 
@@ -13,21 +12,20 @@ export default function Footer() {
   const groupLinks1 = {
     title: "Mapa do site",
     links: [
-      { label: "Inicio", link: "" },
-      { label: "Notícias", link: "news" },
-      { label: "Blog", link: "blog" },
+      { label: "Inicio", link: "/" },
+      { label: "Notícias", link: "/news" },
       { label: "Empresas", link: "/enterprises" },
-      { label: "Contactos", link: "contacts" },
+      { label: "Contactos", link: "/contacts" },
     ],
   };
 
-  const groupLinks2 = {
-    title: "Links úteis",
-    links: [
-      { label: "Sites Greens", link: "https://www.elisal.ao/" },
-      { label: "Contacte-nos", link: "contacts" },
-    ],
-  };
+  // const groupLinks2 = {
+  //   title: "Links úteis",
+  //   links: [
+  //     { label: "Sites Greens", link: "https://www.elisal.ao/" },
+  //     { label: "Contacte-nos", link: "/contacts" },
+  //   ],
+  // };
 
   return (
     <div className="flex flex-col items-center p-10 text-white bg-black/75">
@@ -39,27 +37,27 @@ export default function Footer() {
 
           <span className="text-center">Siga-nos nas redes sociais</span>
           <div className="flex gap-4 mx-auto">
-            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/albertinafaila/" title="Instagram">
+            <a href="https://www.instagram.com/albertinafaila/" target="_blank" rel="noopener noreferrer" title="Instagram" className="hover:scale-105 transition-all duration-200 inline-block">
               <CiInstagram size={40} color="white" />
             </a>
 
-            <a href="#" title="LinkedIn">
+            <a href="#" rel="noopener noreferrer" target="_blank" title="Facebook" className="hover:scale-105 transition-all duration-200 inline-block">
+              <CiFacebook size={40} color="white" />
+            </a>
+
+            <a href="https://www.linkedin.com/in/txela-sauimbo-a6357730b/" target="_blank" rel="noopener noreferrer" title="LinkedIn" className="hover:scale-105 transition-all duration-200 inline-block">
               <CiLinkedin size={40} color="white" />
             </a>
           </div>
         </div>
-        <FooterLinks data={[groupLinks1, groupLinks2]} />
+        <FooterLinks data={[groupLinks1]} />
       </div>
 
-      {isLoading ? (
-        <Skeleton width="100%" height="20px" />
-      ) : (
         <div className="flex justify-center w-full border-t border-white/30 mt-6 pt-4 gap-2">
-          <Link to="/Terms" className="text-green-600 hover:underline transition duration-500">Termos e política de privacidade da Green World</Link>
+          <Link to="/terms" className="text-green-600 hover:underline transition duration-500">Termos e política de privacidade</Link>
           <p>|</p>
-          <p>Green World © 2025 - Direitos reservados</p>
+          <p>Green World © 2026 - Direitos reservados</p>
         </div>
-      )}
     </div>
   );
 }

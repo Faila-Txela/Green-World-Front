@@ -10,22 +10,12 @@ class EmpresaService {
     });
   }
 
-  async logOut() {
-    return await axios.post("/empresas/logOut");
-  }
-
   async getAll(){
     return await axios.get("/empresas");
   }
 
-  async getTipoEmpresaIdByNome() {
-    try {
-      const response = await axios.get(`/type/empresa`)
-      return response.data;
-    } catch (error) {
-      console.error("Erro ao buscar tipoEmpresaId:", error);
-      throw error;
-    }
+  async logOut() {
+    return await axios.post("/empresas/logOut");
   }
 
   async verifyPassword(senha: string) {

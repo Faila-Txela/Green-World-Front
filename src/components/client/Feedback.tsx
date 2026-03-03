@@ -128,7 +128,7 @@ function Feedback() {
           onChange={(e) => setNovoFeedback(e.target.value)}
         />
         <div className="mt-3">
-          <PrimaryButton name="Enviar Feedback" addClassName="" onClick={adicionarFeedback} />
+          <PrimaryButton name="Enviar Feedback" addClassName="text-white bg-primary" onClick={adicionarFeedback} />
         </div>
       </div>
 

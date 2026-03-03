@@ -121,13 +121,13 @@ import { pt } from 'date-fns/locale';
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full md:w-auto justify-center md:justify-end">
               <PrimaryButton 
                 name="Atualizar Relatos" 
-                addClassName="w-full sm:w-auto" 
+                addClassName="w-full sm:w-auto text-white bg-primary" 
                 onClick={fetchRelatos} 
                 disabled={loading}
               />
               <PrimaryButton 
                 name="Relatar Novo Amontoado" 
-                addClassName="w-full sm:w-auto" 
+                addClassName="w-full sm:w-auto text-white bg-primary" 
                 onClick={openModal} 
               />
             </div>
@@ -155,7 +155,7 @@ import { pt } from 'date-fns/locale';
         <PrimaryButton 
           name="Relatar Primeiro Amontoado" 
           onClick={openModal}
-          addClassName="w-auto"
+          addClassName="w-auto text-white bg-primary"
         />
       </div>
     ) : (
