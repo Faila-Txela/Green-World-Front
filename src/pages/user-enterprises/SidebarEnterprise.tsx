@@ -99,7 +99,7 @@ const EnterpriseSidebar = () => {
         {/* Botão de Logout */}
         <div className="mb-5">
           <div 
-            className="flex items-center gap-3 p-2 rounded-md cursor-pointer transition text-red-300 hover:bg-red-700 hover:text-white"
+            className="flex items-center gap-3 p-2 rounded-md cursor-pointer transition text-red-300 hover:text-white"
             onClick={handleLogout}
           >
             <CiLogout size={24} />
