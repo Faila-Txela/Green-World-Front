@@ -15,7 +15,7 @@ export default function Footer() {
       { label: "Inicio", link: "/" },
       { label: "Notícias", link: "/news" },
       { label: "Empresas", link: "/enterprises" },
-      { label: "Contactos", link: "/contacts" },
+      { label: "Suporte", link: "/suporte" },
     ],
   };
 
@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
 
         <div className="flex justify-center w-full border-t border-white/30 mt-6 pt-4 gap-2">
-          <Link to="/terms" className="text-green-600 hover:underline transition duration-500">Termos e política de privacidade</Link>
+          <Link to="/terms" className="text-gray-300 hover:underline transition duration-500">Termos e política de privacidade</Link>
           <p>|</p>
           <p>Green World © 2026 - Direitos reservados</p>
         </div>

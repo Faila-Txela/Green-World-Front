@@ -42,17 +42,17 @@
   }
 }
 
-/* ::-webkit-scrollbar{
+::-webkit-scrollbar{
   width: 4px;
   overflow-x: hidden;
 }
 
 ::-webkit-scrollbar-thumb{
   width: 4px;
-  background-color: #006943;
+  background-color: #117923;
   border-radius: 15px;
   border-radius: 0px 15px 0px 15px;
-} */
+} 
 
 html {
   font-family: 'Raleway', sans-serif;

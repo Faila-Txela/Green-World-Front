@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { contactoService } from "../../modules/service/api/contact";
+import { contactoService } from "../../modules/service/api/suporte";
 import { MdPhone } from "react-icons/md";
 
 type Contato = {

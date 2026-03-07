@@ -8,7 +8,7 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import Input from "../components/ui/Input";
 import TextArea from "../components/ui/TextArea";
 import Toast from "../components/ui/Toast";
-import { contactoService } from "../modules/service/api/contact";
+import { contactoService } from "../modules/service/api/suporte";
 
 interface contactoData {
   email: string;
@@ -89,7 +89,7 @@ export default function Contacts() {
       <div className="relative h-[40vh] md:h-[60vh] w-full">
         <img src={image} className="object-cover w-full h-full" alt="Contactos" />
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <h1 className="text-white text-4xl md:text-5xl font-bold">Contactos</h1>
+          <h1 className="text-white text-4xl md:text-5xl font-bold">Suporte</h1>
         </div>
       </div>
 

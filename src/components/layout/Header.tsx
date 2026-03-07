@@ -87,7 +87,7 @@ export default function Header() {
             <Link className={commonLinkStylesBlack} to="/">Início</Link>
             <Link className={commonLinkStylesBlack} to="/enterprises">Empresas</Link>
             <Link className={commonLinkStylesBlack} to="/news">Notícias</Link>
-            <Link className={commonLinkStylesBlack} to="/contacts">Contactos</Link>
+            <Link className={commonLinkStylesBlack} to="/suporte">Suporte</Link>
           </div>
 
         </nav>

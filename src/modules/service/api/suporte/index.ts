@@ -1,14 +1,14 @@
 import axios from "../../../../lib/axios";
-import { type contacto } from "modules/types/contact";
+import { type suporte } from "modules/types/suporte";
 
 class ContactoService{
-    async create(contactoData: contacto){
+    async create(contactoData: suporte){
         const { data } = await axios.post("/contacto", contactoData);
         return data;
     }
 
     async getAll(){
-        return await axios.get("/contacto")
+        return await axios.get("/suporte")
     }
 
     // Envio de email, sem funcionamento ainda

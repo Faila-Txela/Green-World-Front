@@ -3,19 +3,22 @@ import "@radix-ui/themes/styles.css";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./routes/private_routes";
 import PrivateRoute2 from "./routes/private_routes2";
+
 import Home from "./pages/Home";
-import Contacts from "./pages/Contacts";
+import Empresas from "./pages/Enterprises";
+import Suporte from "./pages/Suporte";
+import News from "./pages/News";
+import NotFound from "./pages/ErrorPage";
+import Terms from "./pages/Terms";
+
 import PersonalLogin from "./pages/user-personal/PersoanlLogin";
 import EnterpriseLogin from "./pages/user-enterprises/EnterpriseLogin";
-import Empresas from "./pages/Enterprises";
 import PersonalSidebar from "./pages/user-personal/SidebarPersonal";
 import EnterpriseSidebar from "./pages/user-enterprises/SidebarEnterprise";
 import RegisterPersonal from "./pages/user-personal/RegisterPersonal";
 import RegisterEnterprise from "./pages/user-enterprises/RegisterEnterprise";
 import SidebarAdmin from "./pages/admin/SidebarAdmin";
-import News from "./pages/News";
-import NotFound from "./pages/ErrorPage";
-import Terms from "./pages/Terms";
+
 import PublicRoutesPersonal from "./routes/public_routes_personal";
 import Notifications from "./pages/Notifications";
 import {ProfileProvider} from './routes/profileContext'
@@ -26,7 +29,7 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/news" element={<News />} />
       <Route path="/enterprises" element={<Empresas />} />
-      <Route path="/contacts" element={<Contacts />} />
+      <Route path="/suporte" element={<Suporte />} />
       <Route path="/register-enterprise" element={<RegisterEnterprise />} />
       <Route path="/register-personal" element={<RegisterPersonal />} />
       <Route path="/terms" element={<Terms />} />

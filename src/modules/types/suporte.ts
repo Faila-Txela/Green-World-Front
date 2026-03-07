@@ -1,4 +1,4 @@
-export type contacto = {
+export type suporte = {
     nome: string
     mensagem: string
     email: string
