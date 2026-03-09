@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import image1 from '../assets/dashboard.png';
-import video1 from '../assets/video/greenWorld.mp4';
+import image1 from '../../../assets/dashboard.png';
+import video1 from '../../../assets/video/greenWorld.mp4';
 
 type Midia = {
   id: number;

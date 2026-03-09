@@ -1,20 +1,20 @@
 import { useState } from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
+import Header from "../../components/layout/Header";
+import Footer from "../../components/layout/Footer";
 import { useNavigate, Link } from "react-router-dom";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import banner from "../assets/banner-hero.png"
-import video from '../assets/video/coletaSelectiva.mp4';
-import image from '../assets/world.png'
-import image2 from '../assets/coleta.jpg';
-import video2 from '../assets/video/catadores.mp4';
-import image4 from '../assets/carta.jpg';
-import CardBeneficios from "../components/Vantagens";
-import RelatosResolvidos from "../components/RelatosResolvidos";
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import banner from "../../assets/banner-hero.png"
+import video from '../../assets/video/coletaSelectiva.mp4';
+import image from '../../assets/world.png'
+import image2 from '../../assets/coleta.jpg';
+import video2 from '../../assets/video/catadores.mp4';
+import image4 from '../../assets/carta.jpg';
+import CardBeneficios from "./Components/Vantagens";
+import RelatosResolvidos from "./Components/RelatosResolvidos";
 import { motion } from "framer-motion"; 
-import Slide from "../components/slide";
-import { faqs } from "../data/models"
-import { FloatingBadge } from "../components/FloatingBadge";
+import Slide from "./Components/slide";
+import { faqs } from "../../data/models"
+import { FloatingBadge } from "../../components/FloatingBadge";
 
 interface ModalProps {
   item: {
@@ -277,28 +277,48 @@ export default function Home() {
         </div>
         
         <div className="w-full max-w-2xl space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-gray-200 py-2">
-              <button
-                type="button"
-                className="w-full flex justify-between items-center py-4 text-left text-lg font-medium hover:text-green-600 transition-colors"
-                onClick={() => setSelectedFAQ(selectedFAQ === index ? null : index)}
-              >
-                <span>{faq.question}</span>
-                <span className="text-green-600 text-2xl">{selectedFAQ === index ? "-" : "+"}</span>
-              </button>
-              {selectedFAQ === index && (
-                <motion.p 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="text-gray-600 pb-4 text-sm md:text-base leading-relaxed"
-                >
-                  {faq.answer}
-                </motion.p>
-              )}
-            </div>
-          ))}
-        </div>
+  {faqs.map((faq, index) => {
+    const isOpen = selectedFAQ === index;
+
+    return (
+      <div key={index} className="border-b border-gray-200 py-2">
+        <button
+          type="button"
+          className="w-full flex justify-between items-center py-4 text-left text-lg font-medium hover:text-green-600 transition-colors"
+          onClick={() => setSelectedFAQ(isOpen ? null : index)}
+        >
+          <span>{faq.question}</span>
+          <span className={`text-green-600 transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </span>
+        </button>
+
+        {isOpen && (
+          <motion.p 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }} // Adicionado para suavizar ao fechar
+            className="text-gray-600 pb-4 text-sm md:text-base leading-relaxed"
+          >
+            {faq.answer}
+          </motion.p>
+        )}
+      </div>
+    );
+  })}
+</div>
       </section>
 
       <Footer />

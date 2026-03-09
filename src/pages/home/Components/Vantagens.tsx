@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { vantagens } from "../data/models";
+import { vantagens } from "../../../data/models";
 
 export default function Vantagens() {
 

@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./routes/private_routes";
 import PrivateRoute2 from "./routes/private_routes2";
 
-import Home from "./pages/Home";
+import Home from "./pages/home"
 import Empresas from "./pages/Enterprises";
 import Suporte from "./pages/Suporte";
 import News from "./pages/News";

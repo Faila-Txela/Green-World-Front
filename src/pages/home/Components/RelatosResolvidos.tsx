@@ -1,4 +1,4 @@
-import { cardRelatos } from "../data/models";
+import { cardRelatos } from "../../../data/models";
 
 function RelatosResolvidos() {
 
