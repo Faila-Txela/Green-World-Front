@@ -8,7 +8,7 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import Input from "../components/ui/Input";
 import TextArea from "../components/ui/TextArea";
 import Toast from "../components/ui/Toast";
-import { contactoService } from "../modules/service/api/suporte";
+import { suporteService } from "../modules/service/api/suporte";
 
 interface contactoData {
   email: string;
@@ -66,7 +66,7 @@ export default function Contacts() {
     }
 
     try {
-      const { data, status } = await contactoService.create({ ...formData });
+      const { data, status } = await suporteService.create({ ...formData });
       if (status === 201 || data?.success) {
         console.log("Mensagem envida com sucesso.")
         setToast({ message: "Mensagem enviada com sucesso", type: "success" });

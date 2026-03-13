@@ -12,7 +12,7 @@ import Users from "../../components/client/users";
 import Feedback from "../../components/client/Feedback";
 import Provincia from "../../components/client/Provincia";
 import Municipio from "../../components/client/Municipio";
-import Contactos from "../../components/client/contacts";
+import Contactos from "../../components/client/suporte";
 import Terms from "../Terms";
 
 type ComponentKey = "AdminDashboard" | "Feedback" | "Provincias" | "Municipios" | "Users" | "Contactos" | "Terms";

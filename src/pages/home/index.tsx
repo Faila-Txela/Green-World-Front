@@ -272,7 +272,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3 text-sm">
-            <span className="font-semibold">Ficou com dúvida?</span> <Link to="/contacts" className="text-primary underline">Entre em contacto</Link>
+            <span className="font-semibold">Ficou com dúvida?</span> <Link to="/suporte" className="text-primary underline">Entre em contacto</Link>
           </div>
         </div>
         

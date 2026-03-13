@@ -1,9 +1,9 @@
 import axios from "../../../../lib/axios";
 import { type suporte } from "modules/types/suporte";
 
-class ContactoService{
-    async create(contactoData: suporte){
-        const { data } = await axios.post("/contacto", contactoData);
+class SuporteService{
+    async create(suporteData: suporte){
+        const { data } = await axios.post("/suporte", suporteData);
         return data;
     }
 
@@ -19,4 +19,4 @@ class ContactoService{
 
  }
 
-export const contactoService = new ContactoService()
+export const suporteService = new SuporteService()

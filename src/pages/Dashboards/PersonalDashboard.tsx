@@ -1,28 +1,15 @@
-   import { useState, useEffect } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
+import { useState, useEffect } from "react";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import MapComponent from "../../components/Map";
 import { FaTrashAlt, FaMapMarkerAlt, FaChartLine } from "react-icons/fa";
 import { relatarService } from "../../modules/service/api/relatar/index";
+import NotificacaoCard from "components/notificacao/notificacao_card";
 
 export default function PersonalDashboard() {
-  const userReportsData = [
-    { month: "Março", relatos: 2 },
-    { month: "Abril", relatos: 2 },
-    { month: "Junho", relatos: 1 },
-  ];
 
   const [relatosAll, setRelatosAll] = useState([]);
   const [ultimoLocal, setUltimoLocal] = useState("");
-  const tipoMaisComum = "Orgânico";
+  const notificações = 10;
 
   useEffect(() => {
     relatarService.getAll().then((response) => {
@@ -60,21 +47,21 @@ export default function PersonalDashboard() {
           <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
             <FaTrashAlt className="text-4xl text-green-600 mb-2" />
             <h3 className="text-lg font-semibold">Total de Relatos</h3>
-            <p className="text-2xl text-blue-500 font-bold">
+            <p className="text-2xl text-primary font-bold">
               {relatosAll.length}
             </p>
-          </div>
-
-          <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
-            <FaChartLine className="text-4xl text-green-600 mb-2" />
-            <h3 className="text-lg font-semibold">Tipo Mais Comum</h3>
-            <p className="text-xl text-gray-700">{tipoMaisComum}</p>
           </div>
 
           <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
             <FaMapMarkerAlt className="text-4xl text-green-600 mb-2" />
             <h3 className="text-lg font-semibold">Último Local Registrado</h3>
             <p className="text-xl text-gray-700">{ultimoLocal}</p>
+          </div>
+
+          <div className="bg-white p-6 shadow rounded-xl flex flex-col items-center text-center hover:shadow-lg transition-all duration-300">
+            <FaChartLine className="text-4xl text-green-600 mb-2" />
+            <h3 className="text-lg font-semibold">Notificações</h3>
+            <p className="text-2xl text-primary font-bold">{notificações}</p>
           </div>
         </div>
 

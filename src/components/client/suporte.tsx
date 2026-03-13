@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { contactoService } from "../../modules/service/api/suporte";
+import { suporteService } from "../../modules/service/api/suporte";
 import { MdPhone } from "react-icons/md";
 
 type Contato = {
@@ -24,10 +24,10 @@ function Contacts() {
 
   async function buscarContatos() {
     try {
-      const response = await contactoService.getAll();
+      const response = await suporteService.getAll();
       setContacto(response.data);
     } catch (error) {
-      console.error("Erro ao buscar contatos:", error);
+      console.error("Erro ao buscar mensagens:", error);
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ async function enviarResposta() {
 
   try {
     setEnviando(true);
-    await contactoService.sendReply({
+    await suporteService.sendReply({
       email: contatoSelecionado.email,
       subject: "Resposta ao seu contacto com o Green World",
       message: resposta,
