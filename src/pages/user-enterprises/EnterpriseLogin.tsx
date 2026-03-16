@@ -4,7 +4,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Header from "../../components/layout/Header";
 import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import background from "../../assets/enterprise.png";
+import Footer from "../../components/layout/Footer";
 import Toast from "../../components/ui/Toast";
 import axios from "../../lib/axios";
 import { useAuth } from "../../routes/auth_context";
@@ -124,16 +124,15 @@ export default function EnterpriseLogin() {
   return (
     <div className="">
       <Header />
-      <div className="flex items-center justify-center min-h-screen pt-20">
-
+      <div className="flex flex-col gap-12 items-center justify-center min-h-screen bg-gray-50 pt-20">
+        <div className="flex flex-col gap-3 items-center">
+          <h3 className="text-2xl font-semibold">Login da Empresa</h3>
+          <p className="text-sm text-gray-600">Seja bem-vindo de volta! Faça login para ver o relatório dos amontoados!</p>
+        </div>
         <form
           onClick={(e) => e.preventDefault()}
           className={`flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white border shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
         >
-          <h3 
-          className="text-2xl font-semibold text-primary">
-            Login da Empresa
-          </h3>
 
           <div className="flex flex-col w-full gap-3">
             <label htmlFor="email" className="p-1 text-gray-600 text-sm">
@@ -146,10 +145,14 @@ export default function EnterpriseLogin() {
               autoComplete="on"
               value={email}
               onChange={handleEmailChange}
-              addClassName="w-full border-2 focus:border-green-400 p-2 rounded-md"
+              addClassName={`w-full border-2 rounded-md transition-colors ${
+                emailError 
+                  ? "border-red-500 focus:border-red-500 outline-none" 
+                  : "border-gray-300 focus:border-green-400"
+              }`}
             />
             {emailError && (
-              <span className="text-red-500 text-sm">{emailError}</span>
+              <span className="text-red-500 text-sm outline-red-500">{emailError}</span>
             )}
 
             <label htmlFor="senha" className="p-1 text-gray-600 text-sm">
@@ -163,7 +166,11 @@ export default function EnterpriseLogin() {
                 autoComplete="on"
                 value={senha}
                 onChange={handleSenhaChange}
-                addClassName="w-full border-2 focus:border-green-400 rounded-md"
+                addClassName={`w-full border-2 rounded-md transition-colors ${
+                  senhaError 
+                    ? "border-red-500 focus:border-red-500 outline-none" 
+                    : "border-gray-300 focus:border-green-400"
+                }`}
               />
 
               <button
@@ -218,6 +225,7 @@ export default function EnterpriseLogin() {
         )}
 
       </div>
+      <Footer />
     </div>
   );
 }
