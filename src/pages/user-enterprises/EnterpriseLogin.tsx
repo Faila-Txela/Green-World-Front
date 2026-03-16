@@ -141,7 +141,7 @@ export default function EnterpriseLogin() {
             <Input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder="empresa@gmail.com"
               autoComplete="on"
               value={email}
               onChange={handleEmailChange}
@@ -162,7 +162,7 @@ export default function EnterpriseLogin() {
               <Input
                 id="senha"
                 type={isShowPassword ? "text" : "password"}
-                placeholder="Senha"
+                placeholder="••••••"
                 autoComplete="on"
                 value={senha}
                 onChange={handleSenhaChange}

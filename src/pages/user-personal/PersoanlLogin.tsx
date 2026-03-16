@@ -133,7 +133,7 @@ export default function PersonalLogin() {
             <Input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder="seu@gmail.com"
               autoComplete="on"
               value={email}
               onChange={handleEmailChange}
@@ -152,7 +152,7 @@ export default function PersonalLogin() {
               <Input
                 id="senha"
                 type={isShowPassword ? "text" : "password"}
-                placeholder="Senha"
+                placeholder="••••••"
                 autoComplete="on"
                 value={senha}
                 onChange={handleSenhaChange}
