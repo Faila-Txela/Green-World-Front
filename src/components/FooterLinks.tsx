@@ -15,7 +15,7 @@ export default function FooterLinks({ data }: { data: LinkGroup[] }) {
     <div className="flex gap-10 flex-wrap">
       {data.map((group, i) => (
         <div key={i} className="flex flex-col gap-2 min-w-[150px]">
-          <h4 className="font-semibold text-primary">{group.title}</h4>
+          <h3 className="font-semibold text-primary">{group.title}</h3>
           {group.links.map(({ label, link }, j) =>
             link.startsWith("http") ? (
               <a

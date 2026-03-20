@@ -90,25 +90,25 @@ export default function Home() {
     <FloatingBadge
       className="top-20 left-8 md:top-24 md:left-20 animate-floatSlow [animation-delay:0.6s]"
     >
-      🌍
+      <span aria-label="earth" role="img">🌍</span>
     </FloatingBadge>
 
     <FloatingBadge
       className="top-40 right-10 md:top-32 md:right-32 animate-float [animation-delay:1s]"
     >
-      ★★★★★
+      <span aria-label="stars" role="img">★★★★★</span>
     </FloatingBadge>
 
     <FloatingBadge
       className="bottom-32 left-12 md:bottom-40 md:left-40 animate-floatSlow [animation-delay:0.8s]"
     >
-      ♻️
+      <span aria-label="recycle" role="img">♻️</span>
     </FloatingBadge>
 
     <FloatingBadge
       className="bottom-20 right-6 md:bottom-32 md:right-24 animate-float [animation-delay:0.5s]"
     >
-      🌱
+      <span aria-label="plant" role="img">🌱</span>
     </FloatingBadge>
 
   </div>
@@ -135,7 +135,7 @@ export default function Home() {
         </span>
       </h1>
 
-      <p className="text-gray-600 text-base md:text-lg max-w-md mx-auto md:mx-0">
+      <p className="text-gray-700 text-base md:text-lg max-w-md mx-auto md:mx-0">
         Relate amontoados de lixo nas ruas e ajude a manter sua comunidade mais limpa.
       </p>
 
@@ -152,7 +152,7 @@ export default function Home() {
     <div className="hidden md:flex justify-center">
       <img
         src={banner}
-        className="w-full max-w-md lg:max-w-xl object-contain"
+        className="w-full h-auto max-w-md lg:max-w-xl object-contain"
         alt="mulher com celular na mão"
       />
     </div>
@@ -244,7 +244,7 @@ export default function Home() {
                   {item.type === "image" ? (
                     <img className="w-full md:h-70 h-52 md:w-[32rem] rounded-md" src={item.src} alt={item.title} />
                   ) : (
-                    <video className="w-full md:h-70 md:w-[32rem] rounded-md" src={item.src} autoPlay muted loop playsInline />
+                    <video className="w-full md:h-70 md:w-[32rem] rounded-md" src={item.src} autoPlay muted loop playsInline></video>
                   )}
                 </motion.div>
               ))}
@@ -309,7 +309,7 @@ export default function Home() {
           <motion.p 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }} // Adicionado para suavizar ao fechar
+            exit={{ opacity: 0, height: 0 }} 
             className="text-gray-600 pb-4 text-sm md:text-base leading-relaxed"
           >
             {faq.answer}
