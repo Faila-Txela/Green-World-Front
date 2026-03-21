@@ -119,11 +119,11 @@ export default function PersonalLogin() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 gap-12 pt-20">
         <div className="flex flex-col gap-3 items-center">
           <h3 className="text-2xl font-semibold">Acesse sua conta</h3>
-          <p className="text-sm text-gray-600">Seja bem-vindo de volta! Faça login para relatar novos amontoados!</p>
+          <p className="text-sm text-center max-w-[280px] md:max-w-none text-gray-600">Seja bem-vindo de volta! Faça login para relatar novos amontoados!</p>
         </div>
         <form
           onClick={(e) => e.preventDefault()}
-          className={`flex items-center flex-col justify-center w-full max-w-[30rem] min-w-[18rem] h-auto gap-6 p-6 bg-white border shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
+          className={`flex items-center flex-col justify-center w-[92%] max-w-md h-auto gap-6 p-6 bg-white border shadow-md rounded-lg transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
         >
 
           <div className="flex flex-col w-full gap-3">

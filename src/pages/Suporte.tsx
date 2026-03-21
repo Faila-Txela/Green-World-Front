@@ -149,7 +149,7 @@ export default function Contacts() {
                 name="Enviar mensagem"
                 addClassName="bg-green-700 hover:bg-green-800 text-white py-4"
               >
-                <FiSend size={18} />
+                <FiSend size={18} className="hover:-translate-y-2 transition duration-300" />
               </PrimaryButton>
             </form>
           </div>
