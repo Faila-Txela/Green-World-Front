@@ -15,6 +15,8 @@
     "@radix-ui/themes": "^3.2.1",
     "@tanstack/react-query": "^5.69.0",
     "axios": "^1.7.9",
+    "baseline-browser-mapping": "^2.10.9",
+    "caniuse-lite": "^1.0.30001780",
     "class-variance-authority": "^0.7.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.0.6",
